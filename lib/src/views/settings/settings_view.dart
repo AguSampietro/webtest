@@ -26,15 +26,16 @@ class _SettingsViewState extends State<SettingsView> {
   @override
   Widget build(BuildContext context) {
     if (prefs.maquinaId.isEmpty) {
-      _maquina = Maquina(id: '0', nombre: 'SELECCIONE UNA MAQUINA');
+      _maquina = Maquina(id: '0', maquina: 'SELECCIONE UNA MAQUINA');
     } else {
-      _maquina = Maquina(id: prefs.maquinaId, nombre: prefs.maquinaNombre);
+      _maquina = Maquina(id: prefs.maquinaId, maquina: prefs.maquinaNombre);
     }
 
     if (prefs.operarioId.isEmpty) {
-      _operario = Operario(id: '0', nombre: 'SELECCIONE UN OPERARIO');
+      _operario = Operario(legajo: '0', nombre: 'SELECCIONE UN OPERARIO');
     } else {
-      _operario = Operario(id: prefs.operarioId, nombre: prefs.operarioNombre);
+      _operario =
+          Operario(legajo: prefs.operarioId, nombre: prefs.operarioNombre);
     }
     return Scaffold(
       appBar: AppBar(
@@ -61,7 +62,7 @@ class _SettingsViewState extends State<SettingsView> {
                       setState(() {
                         _maquina = maquina;
                         prefs.maquinaId = maquina.id!;
-                        prefs.maquinaNombre = maquina.nombre!;
+                        prefs.maquinaNombre = maquina.maquina!;
                       });
                     }
                   },
@@ -71,7 +72,7 @@ class _SettingsViewState extends State<SettingsView> {
                   ),
                   title: _maquina == null
                       ? const Text('SELECCIONE UNA MAQUINA')
-                      : Text(_maquina!.nombre!),
+                      : Text(_maquina!.maquina!),
                   subtitle: const Text('Maquina configurada'),
                   trailing: const Icon(Icons.arrow_drop_down_circle_outlined),
                 ),
@@ -87,7 +88,7 @@ class _SettingsViewState extends State<SettingsView> {
                     if (operario != null) {
                       setState(() {
                         _operario = operario;
-                        prefs.operarioId = operario.id!;
+                        prefs.operarioId = operario.legajo!;
                         prefs.operarioNombre = operario.nombre!;
                       });
                     }
@@ -108,6 +109,13 @@ class _SettingsViewState extends State<SettingsView> {
                   onTap: () async {
                     final prefs = AppPreferences();
                     prefs.logged = false;
+                    prefs.operarioId = '';
+                    prefs.operarioNombre = '';
+                    prefs.maquinaId = '';
+                    prefs.maquinaNombre = '';
+                    prefs.maquinaTipo = '';
+                    prefs.productoNombre = '';
+                    prefs.productoId = '';
                     Navigator.of(context)
                         .pushReplacementNamed(VerificacionView.routeName);
                   },

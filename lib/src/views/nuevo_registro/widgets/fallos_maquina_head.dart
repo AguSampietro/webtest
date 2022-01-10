@@ -5,7 +5,6 @@ import 'package:webtest/src/utils/utils.dart';
 class FallosMaquinaHead extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final double altoCelda = 45.0;
     return Container(
       padding: const EdgeInsets.only(
         left: 5,
@@ -16,7 +15,7 @@ class FallosMaquinaHead extends StatelessWidget {
           Expanded(
             flex: 4,
             child: Container(
-              height: altoCelda,
+              height: Utils.cellHeight,
               padding: const EdgeInsets.symmetric(horizontal: 5),
               decoration: BoxDecoration(
                 border: Utils.borderApp,
@@ -38,7 +37,7 @@ class FallosMaquinaHead extends StatelessWidget {
           Expanded(
             flex: 2,
             child: Container(
-              height: altoCelda,
+              height: Utils.cellHeight,
               padding: const EdgeInsets.symmetric(horizontal: 5),
               decoration: BoxDecoration(
                 border: Utils.borderApp,
@@ -60,7 +59,7 @@ class FallosMaquinaHead extends StatelessWidget {
           Expanded(
             flex: 5,
             child: Container(
-              height: altoCelda,
+              height: Utils.cellHeight,
               padding: const EdgeInsets.symmetric(horizontal: 5),
               decoration: BoxDecoration(
                 border: Utils.borderApp,
@@ -82,7 +81,7 @@ class FallosMaquinaHead extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Container(
-              height: altoCelda,
+              height: Utils.cellHeight,
               padding: const EdgeInsets.symmetric(horizontal: 5),
               decoration: BoxDecoration(
                 border: Utils.borderApp,

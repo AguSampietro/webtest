@@ -1,18 +1,27 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'dart:convert';
 
-part 'operario.freezed.dart';
-part 'operario.g.dart';
+List<Operario> operariosFromJson(String str) =>
+    List<Operario>.from(json.decode(str).map((x) => Operario.fromJson(x)));
 
-@freezed
-class Operario with _$Operario {
-  Operario._();
+String operarioToJson(List<Operario> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-  factory Operario({
-    String? id,
-    String? nombre,
-    String? clave,
-  }) = _Operario;
+class Operario {
+  Operario({
+    this.legajo,
+    this.nombre,
+  });
 
-  factory Operario.fromJson(Map<String, dynamic> json) =>
-      _$OperarioFromJson(json);
+  String? legajo;
+  String? nombre;
+
+  factory Operario.fromJson(Map<String, dynamic> json) => Operario(
+        legajo: json["LEGAJO"],
+        nombre: json["NOMBRE"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "LEGAJO": legajo,
+        "NOMBRE": nombre,
+      };
 }

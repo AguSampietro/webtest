@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class Utils {
-  static String api_url = 'https://atila.online/apinutri/api/rest';
+  static double cellHeight = 45.0;
+
+  static String api_url = 'https://atila.online/dev/hores/api/rest';
 
   static Border borderApp = Border.all(color: Colors.black45, width: 0.5);
 
@@ -190,13 +192,13 @@ class Utils {
     double porcAncho = 0.6;
     print('newWidth: $newWidth');
     if (newWidth > 1000) {
-      porcAncho = 0.50;
-    } else if (newWidth > 800 && newWidth > 600) {
       porcAncho = 0.60;
-    } else if (newWidth < 600 && newWidth > 400) {
+    } else if (newWidth > 800 && newWidth > 600) {
       porcAncho = 0.70;
-    } else if (newWidth < 400) {
+    } else if (newWidth < 600 && newWidth > 400) {
       porcAncho = 0.80;
+    } else if (newWidth < 400) {
+      porcAncho = 0.90;
     }
     double ancho = width * porcAncho;
     return ancho;
@@ -209,13 +211,13 @@ class Utils {
     double porcAlto = 0.6;
     print('newheight: $newheight');
     if (newheight > 1000) {
-      porcAlto = 0.35;
-    } else if (newheight < 800 && newheight > 600) {
       porcAlto = 0.45;
-    } else if (newheight < 600 && newheight > 400) {
+    } else if (newheight < 800 && newheight > 600) {
       porcAlto = 0.55;
+    } else if (newheight < 600 && newheight > 400) {
+      porcAlto = 0.65;
     } else if (newheight < 400) {
-      porcAlto = 0.75;
+      porcAlto = 0.85;
     }
     double alto = height * porcAlto;
     return alto;

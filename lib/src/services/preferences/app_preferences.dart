@@ -58,4 +58,17 @@ class AppPreferences {
       this._prefs.getString('ati_prod_maquinaNombre') ?? '';
   set maquinaNombre(String value) =>
       this._prefs.setString('ati_prod_maquinaNombre', value);
+
+  String get maquinaTipo => this._prefs.getString('ati_prod_maquinaTipo') ?? '';
+  set maquinaTipo(String value) =>
+      this._prefs.setString('ati_prod_maquinaTipo', value);
+
+  String get productoId => this._prefs.getString('ati_prod_productoId') ?? '';
+  set productoId(String value) =>
+      this._prefs.setString('ati_prod_productoId', value);
+
+  String get productoNombre =>
+      this._prefs.getString('ati_prod_productoNombre') ?? '';
+  set productoNombre(String value) =>
+      this._prefs.setString('ati_prod_productoNombre', value);
 }

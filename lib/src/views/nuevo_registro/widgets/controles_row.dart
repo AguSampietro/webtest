@@ -20,7 +20,7 @@ class ControlesRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double altoCelda = 45.0;
+    //final double altoCelda = 45.0;
     return Container(
       padding: const EdgeInsets.only(
         left: 5,
@@ -31,7 +31,7 @@ class ControlesRow extends StatelessWidget {
           Expanded(
             flex: 2,
             child: Container(
-              height: altoCelda,
+              height: Utils.cellHeight,
               padding: const EdgeInsets.symmetric(horizontal: 5),
               decoration: BoxDecoration(
                 border: Utils.borderApp,
@@ -53,7 +53,7 @@ class ControlesRow extends StatelessWidget {
             child: InkWell(
               onTap: onPressed1,
               child: Container(
-                height: altoCelda,
+                height: Utils.cellHeight,
                 padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
                 decoration: BoxDecoration(
                   border: Utils.borderApp,
@@ -67,7 +67,7 @@ class ControlesRow extends StatelessWidget {
             child: InkWell(
               onTap: onPressed2,
               child: Container(
-                height: altoCelda,
+                height: Utils.cellHeight,
                 padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
                 decoration: BoxDecoration(
                   border: Utils.borderApp,

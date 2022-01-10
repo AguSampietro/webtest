@@ -42,41 +42,52 @@ class _HomeViewState extends State<HomeView> {
       body: Column(
         children: [
           SizedBox(height: 10),
-          Row(
-            children: [
-              Container(
-                  margin: const EdgeInsets.only(left: 10, right: 5),
-                  child:
-                      Image.asset('assets/images/logo_hores.png', width: 110)),
-              MaquinaCard(),
-              OperarioCard(),
-            ],
-          ),
+          // Row(
+          //   children: [
+          //     Container(
+          //         margin: const EdgeInsets.only(left: 10, right: 5),
+          //         child:
+          //             Image.asset('assets/images/logo_hores.png', width: 110)),
+          //     MaquinaCard(),
+          //     OperarioCard(),
+          //   ],
+          // ),
           Expanded(
             child: Container(
-              child: SingleChildScrollView(
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Text('REGISTROS CARGADOS'),
-                    ],
+              width: double.infinity,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.pushNamed(context, NuevoRegistroView.routeName)
+                          .then((value) {
+                        setState(() {});
+                      });
+                    },
+                    icon: const Icon(
+                      Icons.add,
+                      size: 35,
+                    ),
+                    label: const Text('NUEVO REGISTRO'),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.purple,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 50,
+                        vertical: 20,
+                      ),
+                      textStyle: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, NuevoRegistroView.routeName)
-              .then((value) {
-            setState(() {});
-          });
-        },
-        child: Icon(Icons.add),
       ),
     );
   }

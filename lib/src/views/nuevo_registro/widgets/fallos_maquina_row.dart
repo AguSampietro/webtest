@@ -79,7 +79,7 @@ class FallosMaquinaRow extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 14,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w500,
                     color: Colors.black,
                   ),
                 ),
@@ -100,7 +100,7 @@ class FallosMaquinaRow extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w500,
                     color: Colors.black,
                   ),
                 ),
@@ -121,7 +121,7 @@ class FallosMaquinaRow extends StatelessWidget {
               child: Center(
                 child: Text(
                   fallo.observaciones!,
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.start,
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -180,7 +180,7 @@ class FallosMaquinaTotalHoras extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Container(
-          height: 45,
+          height: Utils.cellHeight,
           width: 300,
           padding: const EdgeInsets.symmetric(horizontal: 10),
           decoration: BoxDecoration(

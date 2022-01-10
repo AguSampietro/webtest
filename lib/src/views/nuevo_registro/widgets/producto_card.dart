@@ -1,37 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:webtest/src/models/bobina.dart';
 import 'package:webtest/src/models/maquina.dart';
 import 'package:webtest/src/services/preferences/app_preferences.dart';
 import 'package:webtest/src/utils/modal.dart';
 import 'package:webtest/src/utils/utils.dart';
 
-class MaquinaCard extends StatefulWidget {
-  MaquinaCard({Key? key}) : super(key: key);
+class ProductoCard extends StatefulWidget {
+  ProductoCard({Key? key}) : super(key: key);
 
   @override
-  _MaquinaCardState createState() => _MaquinaCardState();
+  _ProductoCardState createState() => _ProductoCardState();
 }
 
-class _MaquinaCardState extends State<MaquinaCard> {
+class _ProductoCardState extends State<ProductoCard> {
   final double radious = 5;
 
   @override
   Widget build(BuildContext context) {
     final prefs = AppPreferences();
-    print('prefs.maquina: ${prefs.maquinaNombre}');
-    String maq = (prefs.maquinaId.isEmpty)
-        ? 'CONFIGURE UNA MAQUINA'
-        : prefs.maquinaNombre;
+    print('prefs.producto: ${prefs.productoNombre}');
+    String maq = (prefs.productoId.isEmpty)
+        ? 'CONFIGURE UN PRODUCTO'
+        : prefs.productoNombre;
     return Expanded(
       child: GestureDetector(
         onTap: () async {
           final prefs = AppPreferences();
-          Maquina? maquina =
-              await Modal.seleccionarMaquina(context) as Maquina?;
-          if (maquina != null) {
+          Bobina? prod = await Modal.seleccionarProducto(context) as Bobina?;
+          if (prod != null) {
             setState(() {
-              prefs.maquinaId = maquina.id!;
-              prefs.maquinaNombre = maquina.maquina!;
-              prefs.maquinaTipo = maquina.tipo!;
+              prefs.productoId = prod.codproducto!;
+              prefs.productoNombre = prod.nombre!;
             });
           }
         },
@@ -48,7 +47,7 @@ class _MaquinaCardState extends State<MaquinaCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'MAQUINA UTILIZADA:',
+                'PRODUCTO PRODUCIDO:',
                 style: TextStyle(
                   fontSize: 16,
                 ),

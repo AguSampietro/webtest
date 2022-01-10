@@ -1,17 +1,31 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'dart:convert';
 
-part 'maquina.freezed.dart';
-part 'maquina.g.dart';
+List<Maquina> maquinasFromJson(String str) =>
+    List<Maquina>.from(json.decode(str).map((x) => Maquina.fromJson(x)));
 
-@freezed
-class Maquina with _$Maquina {
-  Maquina._();
+String maquinaToJson(List<Maquina> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-  factory Maquina({
-    String? id,
-    String? nombre,
-  }) = _Maquina;
+class Maquina {
+  Maquina({
+    this.id,
+    this.maquina,
+    this.tipo,
+  });
 
-  factory Maquina.fromJson(Map<String, dynamic> json) =>
-      _$MaquinaFromJson(json);
+  String? id;
+  String? maquina;
+  String? tipo;
+
+  factory Maquina.fromJson(Map<String, dynamic> json) => Maquina(
+        id: json["ID"],
+        maquina: json["MAQUINA"],
+        tipo: json["TIPO"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "ID": id,
+        "MAQUINA": maquina,
+        "TIPO": tipo,
+      };
 }

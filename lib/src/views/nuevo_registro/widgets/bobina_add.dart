@@ -19,7 +19,7 @@ class BobinaAdd extends StatelessWidget {
     return InkWell(
       onTap: onPressed,
       child: Container(
-        height: 50,
+        height: Utils.cellHeight,
         padding: const EdgeInsets.only(right: 5),
         decoration: BoxDecoration(
           border: Utils.borderApp,
@@ -42,6 +42,7 @@ class BobinaAdd extends StatelessWidget {
             Center(
               child: Text(
                 bobina.nombre!,
+                textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,

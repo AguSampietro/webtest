@@ -3,6 +3,8 @@ import 'package:webtest/src/models/bobina.dart';
 
 import 'package:webtest/src/models/fallo_maquina_model.dart';
 import 'package:webtest/src/models/fallo.dart';
+import 'package:webtest/src/models/registro_produccion.dart';
+import 'package:webtest/src/utils/maquina_type.dart';
 
 import 'package:webtest/src/views/nuevo_registro/widgets/adhesivo_add.dart';
 import 'package:webtest/src/views/nuevo_registro/widgets/adhesivo_label.dart';
@@ -22,6 +24,7 @@ import 'package:webtest/src/services/preferences/app_preferences.dart';
 import 'package:webtest/src/utils/modal.dart';
 import 'package:webtest/src/utils/sizes.dart';
 import 'package:webtest/src/utils/utils.dart';
+import 'package:webtest/src/views/nuevo_registro/widgets/producto_card.dart';
 
 import 'package:webtest/src/widgets/finish_button.dart';
 
@@ -42,66 +45,7 @@ class NuevoRegistroView extends StatefulWidget {
 
 class _NuevoRegistroViewState extends State<NuevoRegistroView> {
   final double radious = 5;
-
-  String _contadorInicial = '';
-  String _lote = '';
-  String _contadorFinal = '';
-  String _cantidadMoldes = '';
-  String _cantidadCajas = '';
-
-  String _adhesivoTrasero1 = '';
-  String _adhesivoTrasero2 = '';
-  String _adhesivoTrasero3 = '';
-  String _adhesivoTrasero4 = '';
-  String _adhesivoTrasero5 = '';
-
-  String _adhesivoDelantero1 = '';
-  String _adhesivoDelantero2 = '';
-  String _adhesivoDelantero3 = '';
-  String _adhesivoDelantero4 = '';
-  String _adhesivoDelantero5 = '';
-
-  Bobina _bobina1 = Bobina(id: '', nombre: '');
-  Bobina _bobina2 = Bobina(id: '', nombre: '');
-  Bobina _bobina3 = Bobina(id: '', nombre: '');
-  Bobina _bobina4 = Bobina(id: '', nombre: '');
-  Bobina _bobina5 = Bobina(id: '', nombre: '');
-  Bobina _bobina6 = Bobina(id: '', nombre: '');
-
-  String _cruce_1 = '';
-  String _cruce_2 = '';
-
-  String _rulo_1 = '';
-  String _rulo_2 = '';
-
-  String _pegado_trasero_1 = '';
-  String _pegado_trasero_2 = '';
-
-  String _pegado_delantero_1 = '';
-  String _pegado_delantero_2 = '';
-
-  String _cant_cono_1 = '';
-  String _cant_cono_2 = '';
-
-  String _grafica_1 = '';
-  String _grafica_2 = '';
-
-  String _troquelado_1 = '';
-  String _troquelado_2 = '';
-
-  String _materias_1 = '';
-  String _materias_2 = '';
-
-  String _ppr3_1 = '';
-  String _ppr3_2 = '';
-
-  String _ppr4_1 = '';
-  String _ppr4_2 = '';
-
-  String _ppr6_1 = '';
-  String _ppr6_2 = '';
-
-  List<FalloMaquina> _fallosMaquina = [];
+  RegistroProduccion _reg = RegistroProduccion.init();
 
   @override
   Widget build(BuildContext context) {
@@ -111,6 +55,12 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
       appBar: AppBar(
         title: const Text('NUEVO REGISTRO DE PRODUCCIÓN'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () {
+              setState(() {});
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
@@ -129,838 +79,1310 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
               Sizes.espacioAlto10,
               Row(
                 children: [
+                  Container(
+                    margin: const EdgeInsets.only(left: 10, right: 5),
+                    child: Image.asset(
+                      'assets/images/logo_hores.png',
+                      width: 110,
+                    ),
+                  ),
                   MaquinaCard(),
+                ],
+              ),
+              Row(
+                children: [
+                  ProductoCard(),
                   OperarioCard(),
                 ],
               ),
-              Row(
-                children: [
-                  ContadorCard(
-                    label: 'LOTE: ',
-                    value: _lote,
-                    onPressed: () async {
-                      String result =
-                          await Modal.addModal(context: context, title: 'LOTE');
-                      if (result.isNotEmpty) {
-                        if (result == 'delete') {
-                          _lote = '';
-                        } else {
-                          _lote = result;
-                        }
-                        setState(() {});
-                      }
-                    },
-                  ),
-                  ContadorCard(
-                    label: 'CONTADOR INICIAL: ',
-                    value: _contadorInicial,
-                    onPressed: () async {
-                      String result = await Modal.addModal(
-                          context: context, title: 'CONTADOR INICIAL');
-                      if (result.isNotEmpty) {
-                        if (result == 'delete') {
-                          _contadorInicial = '';
-                        } else {
-                          _contadorInicial = result;
-                        }
-                        setState(() {});
-                      }
-                    },
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child:
-                        _buildSubTituloCard(context, 'MATERIA PRIMA UTILIZADA'),
-                  ),
-                ],
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 5, left: 5, right: 5),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: Sizes.mpLabelWidth,
-                      child: AdhesivoLabel(text: 'Adhesivo\ntrasero:'),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: AdhesivoAdd(
-                        text: _adhesivoTrasero1,
-                        onPressed: () async {
-                          String result = await Modal.addModal(
-                              context: context, title: 'ADHESIVO TRASERO');
-                          if (result.isNotEmpty) {
-                            if (result == 'delete') {
-                              _adhesivoTrasero1 = '';
-                            } else {
-                              _adhesivoTrasero1 = result;
-                            }
-                            setState(() {});
-                          }
-                        },
+              (prefs.maquinaTipo.isEmpty ||
+                      prefs.operarioId.isEmpty ||
+                      prefs.productoId.isEmpty)
+                  ? Container(
+                      width: double.infinity,
+                      margin: EdgeInsets.symmetric(horizontal: 5),
+                      color: Colors.amber[100],
+                      height: 250,
+                      padding: const EdgeInsets.all(30),
+                      child: Column(
+                        children: [
+                          const Spacer(),
+                          const Center(
+                            child: Text(
+                              'Debe seleccionar una maquina, un producto y un operario para poder continuar. Una vez seleccionados, presione confirmar.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          const Spacer(),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              setState(() {});
+                            },
+                            label: const Text('CONFIRMAR'),
+                            icon: const Icon(Icons.check, color: Colors.white),
+                          ),
+                          const Spacer(),
+                        ],
                       ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: AdhesivoAdd(
-                        text: _adhesivoTrasero2,
-                        onPressed: () async {
-                          String result = await Modal.addModal(
-                              context: context, title: 'ADHESIVO TRASERO');
-                          if (result.isNotEmpty) {
-                            if (result == 'delete') {
-                              _adhesivoTrasero2 = '';
-                            } else {
-                              _adhesivoTrasero2 = result;
-                            }
-                            setState(() {});
-                          }
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: AdhesivoAdd(
-                        text: _adhesivoTrasero3,
-                        onPressed: () async {
-                          String result = await Modal.addModal(
-                              context: context, title: 'ADHESIVO TRASERO');
-                          if (result.isNotEmpty) {
-                            if (result == 'delete') {
-                              _adhesivoTrasero3 = '';
-                            } else {
-                              _adhesivoTrasero3 = result;
-                            }
-                            setState(() {});
-                          }
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: AdhesivoAdd(
-                        text: _adhesivoTrasero4,
-                        onPressed: () async {
-                          String result = await Modal.addModal(
-                              context: context, title: 'ADHESIVO TRASERO');
-                          if (result.isNotEmpty) {
-                            if (result == 'delete') {
-                              _adhesivoTrasero4 = '';
-                            } else {
-                              _adhesivoTrasero4 = result;
-                            }
-                            setState(() {});
-                          }
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: AdhesivoAdd(
-                        text: _adhesivoTrasero5,
-                        onPressed: () async {
-                          String result = await Modal.addModal(
-                              context: context, title: 'ADHESIVO TRASERO');
-                          if (result.isNotEmpty) {
-                            if (result == 'delete') {
-                              _adhesivoTrasero5 = '';
-                            } else {
-                              _adhesivoTrasero5 = result;
-                            }
-                            setState(() {});
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 5, left: 5, right: 5),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: Sizes.mpLabelWidth,
-                      child: AdhesivoLabel(text: 'Adhesivo\ndelantero:'),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: AdhesivoAdd(
-                        text: _adhesivoDelantero1,
-                        onPressed: () async {
-                          String result = await Modal.addModal(
-                              context: context, title: 'ADHESIVO DELANTERO');
-                          if (result.isNotEmpty) {
-                            if (result == 'delete') {
-                              _adhesivoDelantero1 = '';
-                            } else {
-                              _adhesivoDelantero1 = result;
-                            }
-                            setState(() {});
-                          }
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: AdhesivoAdd(
-                        text: _adhesivoDelantero2,
-                        onPressed: () async {
-                          String result = await Modal.addModal(
-                              context: context, title: 'ADHESIVO DELANTERO');
-                          if (result.isNotEmpty) {
-                            if (result == 'delete') {
-                              _adhesivoDelantero2 = '';
-                            } else {
-                              _adhesivoDelantero2 = result;
-                            }
-                            setState(() {});
-                          }
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: AdhesivoAdd(
-                        text: _adhesivoDelantero3,
-                        onPressed: () async {
-                          String result = await Modal.addModal(
-                              context: context, title: 'ADHESIVO DELANTERO');
-                          if (result.isNotEmpty) {
-                            if (result == 'delete') {
-                              _adhesivoDelantero3 = '';
-                            } else {
-                              _adhesivoDelantero3 = result;
-                            }
-                            setState(() {});
-                          }
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: AdhesivoAdd(
-                        text: _adhesivoDelantero4,
-                        onPressed: () async {
-                          String result = await Modal.addModal(
-                              context: context, title: 'ADHESIVO DELANTERO');
-                          if (result.isNotEmpty) {
-                            if (result == 'delete') {
-                              _adhesivoDelantero4 = '';
-                            } else {
-                              _adhesivoDelantero4 = result;
-                            }
-                            setState(() {});
-                          }
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: AdhesivoAdd(
-                        text: _adhesivoDelantero5,
-                        onPressed: () async {
-                          String result = await Modal.addModal(
-                              context: context, title: 'ADHESIVO DELANTERO');
-                          if (result.isNotEmpty) {
-                            if (result == 'delete') {
-                              _adhesivoDelantero5 = '';
-                            } else {
-                              _adhesivoDelantero5 = result;
-                            }
-                            setState(() {});
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 5, left: 5, right: 5),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: Sizes.mpLabelWidth,
-                      child: BobinaLabel(text: 'Bobina\npapel:'),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: BobinaAdd(
-                        bobina: _bobina1,
-                        nro: '1',
-                        onPressed: () async {
-                          Bobina? bobina =
-                              await Modal.seleccionarBobina(context);
-                          if (bobina != null) {
-                            setState(() {
-                              _bobina1 = bobina;
-                            });
-                          }
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: BobinaAdd(
-                        bobina: _bobina2,
-                        nro: '2',
-                        onPressed: () async {
-                          Bobina? bobina =
-                              await Modal.seleccionarBobina(context);
-                          if (bobina != null) {
-                            setState(() {
-                              _bobina2 = bobina;
-                            });
-                          }
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: BobinaAdd(
-                        bobina: _bobina3,
-                        nro: '3',
-                        onPressed: () async {
-                          Bobina? bobina =
-                              await Modal.seleccionarBobina(context);
-                          if (bobina != null) {
-                            setState(() {
-                              _bobina3 = bobina;
-                            });
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(bottom: 5, left: 5, right: 5),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: Sizes.mpLabelWidth,
-                      child: AdhesivoAdd(text: '', onPressed: () {}),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: BobinaAdd(
-                        bobina: _bobina4,
-                        nro: '4',
-                        onPressed: () async {
-                          Bobina? bobina =
-                              await Modal.seleccionarBobina(context);
-                          if (bobina != null) {
-                            setState(() {
-                              _bobina4 = bobina;
-                            });
-                          }
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: BobinaAdd(
-                        bobina: _bobina5,
-                        nro: '5',
-                        onPressed: () async {
-                          Bobina? bobina =
-                              await Modal.seleccionarBobina(context);
-                          if (bobina != null) {
-                            setState(() {
-                              _bobina5 = bobina;
-                            });
-                          }
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: BobinaAdd(
-                        bobina: _bobina6,
-                        nro: '6',
-                        onPressed: () async {
-                          Bobina? bobina =
-                              await Modal.seleccionarBobina(context);
-                          if (bobina != null) {
-                            setState(() {
-                              _bobina6 = bobina;
-                            });
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //CONTROLES
-                  Expanded(
-                    flex: 3,
-                    child: _buildSubTituloCard(context, 'CONTROLES'),
-                  ),
-                  // FALLOS
-                  Expanded(
-                    flex: 5,
-                    child:
-                        _buildSubTituloFallos(context, 'FALLOS DE LA MAQUINA'),
-                  ),
-                ],
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //CONTROLES DETALLE
-                  Expanded(
-                    flex: 3,
-                    // child: DataTableControles(),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                    )
+                  : Column(
                       children: [
-                        ControlesRow(
-                          label: 'CRUCE',
-                          nro1: _cruce_1,
-                          nro2: _cruce_2,
-                          onPressed1: () async {
-                            String result = await Modal.addModal(
-                                context: context, title: 'CRUCE - NRO 1');
-                            if (result.isNotEmpty) {
-                              if (result == 'delete') {
-                                _cruce_1 = '';
-                              } else {
-                                _cruce_1 = result;
-                              }
-                              setState(() {});
-                            }
-                          },
-                          onPressed2: () async {
-                            String result = await Modal.addModal(
-                                context: context, title: 'CRUCE - NRO 2');
-                            if (result.isNotEmpty) {
-                              if (result == 'delete') {
-                                _cruce_2 = '';
-                              } else {
-                                _cruce_2 = result;
-                              }
-                              setState(() {});
-                            }
-                          },
+                        Row(
+                          children: [
+                            ContadorCard(
+                              label: 'LOTE: ',
+                              value: _reg.lote!,
+                              onPressed: () async {
+                                String result = await Modal.addModal(
+                                    context: context, title: 'LOTE');
+                                if (result.isNotEmpty) {
+                                  if (result == 'delete') {
+                                    _reg.lote = '';
+                                  } else {
+                                    _reg.lote = result;
+                                  }
+                                  setState(() {});
+                                }
+                              },
+                            ),
+                            ContadorCard(
+                              label: 'CONTADOR INICIAL: ',
+                              value: _reg.contadorInicial!,
+                              onPressed: () async {
+                                String result = await Modal.addModal(
+                                    context: context,
+                                    title: 'CONTADOR INICIAL');
+                                if (result.isNotEmpty) {
+                                  if (result == 'delete') {
+                                    _reg.contadorInicial = '';
+                                  } else {
+                                    _reg.contadorInicial = result;
+                                  }
+                                  setState(() {});
+                                }
+                              },
+                            ),
+                          ],
                         ),
-                        ControlesRow(
-                          label: 'RULO/PESTAÑA',
-                          nro1: _rulo_1,
-                          nro2: _rulo_2,
-                          onPressed1: () async {
-                            String result = await Modal.addModal(
-                                context: context,
-                                title: 'RULO/PESTAÑA - NRO 1');
-                            if (result.isNotEmpty) {
-                              if (result == 'delete') {
-                                _rulo_1 = '';
-                              } else {
-                                _rulo_1 = result;
-                              }
-                              setState(() {});
-                            }
-                          },
-                          onPressed2: () async {
-                            String result = await Modal.addModal(
-                                context: context,
-                                title: 'RULO/PESTAÑA - NRO 2');
-                            if (result.isNotEmpty) {
-                              if (result == 'delete') {
-                                _rulo_2 = '';
-                              } else {
-                                _rulo_2 = result;
-                              }
-                              setState(() {});
-                            }
-                          },
+                        // MATERIA PRIMA
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _buildSubTituloCard(
+                                  context, 'MATERIA PRIMA UTILIZADA'),
+                            ),
+                          ],
                         ),
-                        ControlesRow(
-                          label: 'PEGADO TRASERO',
-                          nro1: _pegado_trasero_1,
-                          nro2: _pegado_trasero_2,
-                          onPressed1: () async {
-                            String result = await Modal.addModal(
-                                context: context,
-                                title: 'PEGADO TRASERO - NRO 1');
-                            if (result.isNotEmpty) {
-                              if (result == 'delete') {
-                                _pegado_trasero_1 = '';
-                              } else {
-                                _pegado_trasero_1 = result;
-                              }
-                              setState(() {});
-                            }
-                          },
-                          onPressed2: () async {
-                            String result = await Modal.addModal(
-                                context: context,
-                                title: 'PEGADO TRASERO - NRO 2');
-                            if (result.isNotEmpty) {
-                              if (result == 'delete') {
-                                _pegado_trasero_2 = '';
-                              } else {
-                                _pegado_trasero_2 = result;
-                              }
-                              setState(() {});
-                            }
-                          },
+
+                        if (prefs.maquinaTipo == MaquinaType.UNA_BOBINA)
+                          Column(
+                            children: [
+                              Container(
+                                margin:
+                                    EdgeInsets.only(top: 5, left: 5, right: 5),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: Sizes.mpLabelWidth,
+                                      child: AdhesivoLabel(
+                                          text: 'Adhesivo\ntrasero:'),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: AdhesivoAdd(
+                                        text: _reg.adhesivoTrasero1!,
+                                        onPressed: () async {
+                                          String result = await Modal.addModal(
+                                              context: context,
+                                              title: 'ADHESIVO TRASERO');
+                                          if (result.isNotEmpty) {
+                                            if (result == 'delete') {
+                                              _reg.adhesivoTrasero1 = '';
+                                            } else {
+                                              _reg.adhesivoTrasero1 = result;
+                                            }
+                                            setState(() {});
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: AdhesivoAdd(
+                                        text: _reg.adhesivoTrasero2!,
+                                        onPressed: () async {
+                                          String result = await Modal.addModal(
+                                              context: context,
+                                              title: 'ADHESIVO TRASERO');
+                                          if (result.isNotEmpty) {
+                                            if (result == 'delete') {
+                                              _reg.adhesivoTrasero2 = '';
+                                            } else {
+                                              _reg.adhesivoTrasero2 = result;
+                                            }
+                                            setState(() {});
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: AdhesivoAdd(
+                                        text: _reg.adhesivoTrasero3!,
+                                        onPressed: () async {
+                                          String result = await Modal.addModal(
+                                              context: context,
+                                              title: 'ADHESIVO TRASERO');
+                                          if (result.isNotEmpty) {
+                                            if (result == 'delete') {
+                                              _reg.adhesivoTrasero3 = '';
+                                            } else {
+                                              _reg.adhesivoTrasero3 = result;
+                                            }
+                                            setState(() {});
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: AdhesivoAdd(
+                                        text: _reg.adhesivoTrasero4!,
+                                        onPressed: () async {
+                                          String result = await Modal.addModal(
+                                              context: context,
+                                              title: 'ADHESIVO TRASERO');
+                                          if (result.isNotEmpty) {
+                                            if (result == 'delete') {
+                                              _reg.adhesivoTrasero4 = '';
+                                            } else {
+                                              _reg.adhesivoTrasero4 = result;
+                                            }
+                                            setState(() {});
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: AdhesivoAdd(
+                                        text: _reg.adhesivoTrasero5!,
+                                        onPressed: () async {
+                                          String result = await Modal.addModal(
+                                              context: context,
+                                              title: 'ADHESIVO TRASERO');
+                                          if (result.isNotEmpty) {
+                                            if (result == 'delete') {
+                                              _reg.adhesivoTrasero5 = '';
+                                            } else {
+                                              _reg.adhesivoTrasero5 = result;
+                                            }
+                                            setState(() {});
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin:
+                                    EdgeInsets.only(top: 5, left: 5, right: 5),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: Sizes.mpLabelWidth,
+                                      child: AdhesivoLabel(
+                                          text: 'Adhesivo\ndelantero:'),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: AdhesivoAdd(
+                                        text: _reg.adhesivoDelantero1!,
+                                        onPressed: () async {
+                                          String result = await Modal.addModal(
+                                              context: context,
+                                              title: 'ADHESIVO DELANTERO');
+                                          if (result.isNotEmpty) {
+                                            if (result == 'delete') {
+                                              _reg.adhesivoDelantero1 = '';
+                                            } else {
+                                              _reg.adhesivoDelantero1 = result;
+                                            }
+                                            setState(() {});
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: AdhesivoAdd(
+                                        text: _reg.adhesivoDelantero2!,
+                                        onPressed: () async {
+                                          String result = await Modal.addModal(
+                                              context: context,
+                                              title: 'ADHESIVO DELANTERO');
+                                          if (result.isNotEmpty) {
+                                            if (result == 'delete') {
+                                              _reg.adhesivoDelantero2 = '';
+                                            } else {
+                                              _reg.adhesivoDelantero2 = result;
+                                            }
+                                            setState(() {});
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: AdhesivoAdd(
+                                        text: _reg.adhesivoDelantero3!,
+                                        onPressed: () async {
+                                          String result = await Modal.addModal(
+                                              context: context,
+                                              title: 'ADHESIVO DELANTERO');
+                                          if (result.isNotEmpty) {
+                                            if (result == 'delete') {
+                                              _reg.adhesivoDelantero3 = '';
+                                            } else {
+                                              _reg.adhesivoDelantero3 = result;
+                                            }
+                                            setState(() {});
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: AdhesivoAdd(
+                                        text: _reg.adhesivoDelantero4!,
+                                        onPressed: () async {
+                                          String result = await Modal.addModal(
+                                              context: context,
+                                              title: 'ADHESIVO DELANTERO');
+                                          if (result.isNotEmpty) {
+                                            if (result == 'delete') {
+                                              _reg.adhesivoDelantero4 = '';
+                                            } else {
+                                              _reg.adhesivoDelantero4 = result;
+                                            }
+                                            setState(() {});
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: AdhesivoAdd(
+                                        text: _reg.adhesivoDelantero5!,
+                                        onPressed: () async {
+                                          String result = await Modal.addModal(
+                                              context: context,
+                                              title: 'ADHESIVO DELANTERO');
+                                          if (result.isNotEmpty) {
+                                            if (result == 'delete') {
+                                              _reg.adhesivoDelantero5 = '';
+                                            } else {
+                                              _reg.adhesivoDelantero5 = result;
+                                            }
+                                            setState(() {});
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin:
+                                    EdgeInsets.only(top: 5, left: 5, right: 5),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: Sizes.mpLabelWidth,
+                                      child:
+                                          BobinaLabel(text: 'Bobina\npapel:'),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: BobinaAdd(
+                                        bobina: _reg.bobina1!,
+                                        nro: '1',
+                                        onPressed: () async {
+                                          Bobina? bobina =
+                                              await Modal.seleccionarBobina(
+                                                  context);
+                                          if (bobina != null) {
+                                            setState(() {
+                                              _reg.bobina1 = bobina;
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: BobinaAdd(
+                                        bobina: _reg.bobina2!,
+                                        nro: '2',
+                                        onPressed: () async {
+                                          Bobina? bobina =
+                                              await Modal.seleccionarBobina(
+                                                  context);
+                                          if (bobina != null) {
+                                            setState(() {
+                                              _reg.bobina2 = bobina;
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: BobinaAdd(
+                                        bobina: _reg.bobina3!,
+                                        nro: '3',
+                                        onPressed: () async {
+                                          Bobina? bobina =
+                                              await Modal.seleccionarBobina(
+                                                  context);
+                                          if (bobina != null) {
+                                            setState(() {
+                                              _reg.bobina3 = bobina;
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(
+                                    bottom: 5, left: 5, right: 5),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: Sizes.mpLabelWidth,
+                                      child: AdhesivoAdd(
+                                          text: '', onPressed: () {}),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: BobinaAdd(
+                                        bobina: _reg.bobina4!,
+                                        nro: '4',
+                                        onPressed: () async {
+                                          Bobina? bobina =
+                                              await Modal.seleccionarBobina(
+                                                  context);
+                                          if (bobina != null) {
+                                            setState(() {
+                                              _reg.bobina4 = bobina;
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: BobinaAdd(
+                                        bobina: _reg.bobina5!,
+                                        nro: '5',
+                                        onPressed: () async {
+                                          Bobina? bobina =
+                                              await Modal.seleccionarBobina(
+                                                  context);
+                                          if (bobina != null) {
+                                            setState(() {
+                                              _reg.bobina5 = bobina;
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: BobinaAdd(
+                                        bobina: _reg.bobina6!,
+                                        nro: '6',
+                                        onPressed: () async {
+                                          Bobina? bobina =
+                                              await Modal.seleccionarBobina(
+                                                  context);
+                                          if (bobina != null) {
+                                            setState(() {
+                                              _reg.bobina6 = bobina;
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+
+                        if (prefs.maquinaTipo == MaquinaType.TRES_BOBINAS)
+                          Column(
+                            children: [
+                              Container(
+                                margin:
+                                    EdgeInsets.only(top: 5, left: 5, right: 5),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: Sizes.mpLabelWidth,
+                                      child: AdhesivoLabel(
+                                          text: 'Adhesivo\nfondo:'),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: AdhesivoAdd(
+                                        text: _reg.adhesivoFondo1!,
+                                        onPressed: () async {
+                                          String result = await Modal.addModal(
+                                              context: context,
+                                              title: 'ADHESIVO FONDO');
+                                          if (result.isNotEmpty) {
+                                            if (result == 'delete') {
+                                              _reg.adhesivoFondo1 = '';
+                                            } else {
+                                              _reg.adhesivoFondo1 = result;
+                                            }
+                                            setState(() {});
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: AdhesivoAdd(
+                                        text: _reg.adhesivoFondo2!,
+                                        onPressed: () async {
+                                          String result = await Modal.addModal(
+                                              context: context,
+                                              title: 'ADHESIVO FONDO');
+                                          if (result.isNotEmpty) {
+                                            if (result == 'delete') {
+                                              _reg.adhesivoFondo2 = '';
+                                            } else {
+                                              _reg.adhesivoFondo2 = result;
+                                            }
+                                            setState(() {});
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: Container(
+                                        width: Sizes.mpLabelWidth,
+                                        child: AdhesivoLabel(
+                                            text: 'Adhesivo\ncorrugado:'),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: AdhesivoAdd(
+                                        text: _reg.adhesivoCorrugado!,
+                                        onPressed: () async {
+                                          String result = await Modal.addModal(
+                                              context: context,
+                                              title: 'ADHESIVO CORRUGADO');
+                                          if (result.isNotEmpty) {
+                                            if (result == 'delete') {
+                                              _reg.adhesivoCorrugado = '';
+                                            } else {
+                                              _reg.adhesivoCorrugado = result;
+                                            }
+                                            setState(() {});
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin:
+                                    EdgeInsets.only(top: 5, left: 5, right: 5),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: Sizes.mpLabelWidth,
+                                      child: AdhesivoLabel(
+                                          text: 'Adhesivo\nlateral:'),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: AdhesivoAdd(
+                                        text: _reg.adhesivoLateral1!,
+                                        onPressed: () async {
+                                          String result = await Modal.addModal(
+                                              context: context,
+                                              title: 'ADHESIVO LATERAL');
+                                          if (result.isNotEmpty) {
+                                            if (result == 'delete') {
+                                              _reg.adhesivoLateral1 = '';
+                                            } else {
+                                              _reg.adhesivoLateral1 = result;
+                                            }
+                                            setState(() {});
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: AdhesivoAdd(
+                                        text: _reg.adhesivoLateral2!,
+                                        onPressed: () async {
+                                          String result = await Modal.addModal(
+                                              context: context,
+                                              title: 'ADHESIVO LATERAL');
+                                          if (result.isNotEmpty) {
+                                            if (result == 'delete') {
+                                              _reg.adhesivoLateral2 = '';
+                                            } else {
+                                              _reg.adhesivoLateral2 = result;
+                                            }
+                                            setState(() {});
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: Container(
+                                        width: Sizes.mpLabelWidth,
+                                        child:
+                                            AdhesivoLabel(text: 'Desmoldante:'),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: AdhesivoAdd(
+                                        text: _reg.desmoldante!,
+                                        onPressed: () async {
+                                          String result = await Modal.addModal(
+                                              context: context,
+                                              title: 'DESMOLDANTE');
+                                          if (result.isNotEmpty) {
+                                            if (result == 'delete') {
+                                              _reg.desmoldante = '';
+                                            } else {
+                                              _reg.desmoldante = result;
+                                            }
+                                            setState(() {});
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin:
+                                    EdgeInsets.only(top: 5, left: 5, right: 5),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: Sizes.mpLabelWidth,
+                                      child:
+                                          BobinaLabel(text: 'Bobina\nfondo:'),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: BobinaAdd(
+                                        bobina: _reg.bobinaFondo1!,
+                                        nro: '1',
+                                        onPressed: () async {
+                                          Bobina? bobina =
+                                              await Modal.seleccionarBobina(
+                                                  context);
+                                          if (bobina != null) {
+                                            setState(() {
+                                              _reg.bobinaFondo1 = bobina;
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: BobinaAdd(
+                                        bobina: _reg.bobinaFondo2!,
+                                        nro: '2',
+                                        onPressed: () async {
+                                          Bobina? bobina =
+                                              await Modal.seleccionarBobina(
+                                                  context);
+                                          if (bobina != null) {
+                                            setState(() {
+                                              _reg.bobinaFondo2 = bobina;
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: BobinaAdd(
+                                        bobina: _reg.bobinaFondo3!,
+                                        nro: '3',
+                                        onPressed: () async {
+                                          Bobina? bobina =
+                                              await Modal.seleccionarBobina(
+                                                  context);
+                                          if (bobina != null) {
+                                            setState(() {
+                                              _reg.bobinaFondo3 = bobina;
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin:
+                                    EdgeInsets.only(top: 5, left: 5, right: 5),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: Sizes.mpLabelWidth,
+                                      child:
+                                          BobinaLabel(text: 'Bobina\nlateral:'),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: BobinaAdd(
+                                        bobina: _reg.bobinaLateral1!,
+                                        nro: '1',
+                                        onPressed: () async {
+                                          Bobina? bobina =
+                                              await Modal.seleccionarBobina(
+                                                  context);
+                                          if (bobina != null) {
+                                            setState(() {
+                                              _reg.bobinaLateral1 = bobina;
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: BobinaAdd(
+                                        bobina: _reg.bobinaLateral2!,
+                                        nro: '2',
+                                        onPressed: () async {
+                                          Bobina? bobina =
+                                              await Modal.seleccionarBobina(
+                                                  context);
+                                          if (bobina != null) {
+                                            setState(() {
+                                              _reg.bobinaLateral2 = bobina;
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: BobinaAdd(
+                                        bobina: _reg.bobinaLateral3!,
+                                        nro: '3',
+                                        onPressed: () async {
+                                          Bobina? bobina =
+                                              await Modal.seleccionarBobina(
+                                                  context);
+                                          if (bobina != null) {
+                                            setState(() {
+                                              _reg.bobinaLateral3 = bobina;
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin:
+                                    EdgeInsets.only(top: 5, left: 5, right: 5),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: Sizes.mpLabelWidth,
+                                      child: BobinaLabel(text: 'Bobina\ncono:'),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: BobinaAdd(
+                                        bobina: _reg.bobinaCono1!,
+                                        nro: '1',
+                                        onPressed: () async {
+                                          Bobina? bobina =
+                                              await Modal.seleccionarBobina(
+                                                  context);
+                                          if (bobina != null) {
+                                            setState(() {
+                                              _reg.bobinaCono1 = bobina;
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: BobinaAdd(
+                                        bobina: _reg.bobinaCono2!,
+                                        nro: '2',
+                                        onPressed: () async {
+                                          Bobina? bobina =
+                                              await Modal.seleccionarBobina(
+                                                  context);
+                                          if (bobina != null) {
+                                            setState(() {
+                                              _reg.bobinaCono2 = bobina;
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: BobinaAdd(
+                                        bobina: _reg.bobinaCono3!,
+                                        nro: '3',
+                                        onPressed: () async {
+                                          Bobina? bobina =
+                                              await Modal.seleccionarBobina(
+                                                  context);
+                                          if (bobina != null) {
+                                            setState(() {
+                                              _reg.bobinaCono3 = bobina;
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+
+                        // END MATERIA PRIMA
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            //CONTROLES
+                            Expanded(
+                              flex: 3,
+                              child: _buildSubTituloCard(context, 'CONTROLES'),
+                            ),
+                            // FALLOS
+                            Expanded(
+                              flex: 5,
+                              child: _buildSubTituloFallos(
+                                  context, 'FALLOS DE LA MAQUINA'),
+                            ),
+                          ],
                         ),
-                        ControlesRow(
-                          label: 'PEGADO DELANTERO',
-                          nro1: _pegado_delantero_1,
-                          nro2: _pegado_delantero_2,
-                          onPressed1: () async {
-                            String result = await Modal.addModal(
-                                context: context,
-                                title: 'PEGADO DELANTERO - NRO 1');
-                            if (result.isNotEmpty) {
-                              if (result == 'delete') {
-                                _pegado_delantero_1 = '';
-                              } else {
-                                _pegado_delantero_1 = result;
-                              }
-                              setState(() {});
-                            }
-                          },
-                          onPressed2: () async {
-                            String result = await Modal.addModal(
-                                context: context,
-                                title: 'PEGADO DELANTERO - NRO 2');
-                            if (result.isNotEmpty) {
-                              if (result == 'delete') {
-                                _pegado_delantero_2 = '';
-                              } else {
-                                _pegado_delantero_2 = result;
-                              }
-                              setState(() {});
-                            }
-                          },
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            //CONTROLES DETALLE
+                            Expanded(
+                              flex: 3,
+                              // child: DataTableControles(),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  ControlesRow(
+                                    label: 'CRUCE',
+                                    nro1: _reg.cruce_1!,
+                                    nro2: _reg.cruce_2!,
+                                    onPressed1: () async {
+                                      String result = await Modal.addModal(
+                                          context: context,
+                                          title: 'CRUCE - NRO 1');
+                                      if (result.isNotEmpty) {
+                                        if (result == 'delete') {
+                                          _reg.cruce_1 = '';
+                                        } else {
+                                          _reg.cruce_1 = result;
+                                        }
+                                        setState(() {});
+                                      }
+                                    },
+                                    onPressed2: () async {
+                                      String result = await Modal.addModal(
+                                          context: context,
+                                          title: 'CRUCE - NRO 2');
+                                      if (result.isNotEmpty) {
+                                        if (result == 'delete') {
+                                          _reg.cruce_2 = '';
+                                        } else {
+                                          _reg.cruce_2 = result;
+                                        }
+                                        setState(() {});
+                                      }
+                                    },
+                                  ),
+                                  ControlesRow(
+                                    label: 'RULO/PESTAÑA',
+                                    nro1: _reg.rulo_1!,
+                                    nro2: _reg.rulo_2!,
+                                    onPressed1: () async {
+                                      String result = await Modal.addModal(
+                                          context: context,
+                                          title: 'RULO/PESTAÑA - NRO 1');
+                                      if (result.isNotEmpty) {
+                                        if (result == 'delete') {
+                                          _reg.rulo_1 = '';
+                                        } else {
+                                          _reg.rulo_1 = result;
+                                        }
+                                        setState(() {});
+                                      }
+                                    },
+                                    onPressed2: () async {
+                                      String result = await Modal.addModal(
+                                          context: context,
+                                          title: 'RULO/PESTAÑA - NRO 2');
+                                      if (result.isNotEmpty) {
+                                        if (result == 'delete') {
+                                          _reg.rulo_2 = '';
+                                        } else {
+                                          _reg.rulo_2 = result;
+                                        }
+                                        setState(() {});
+                                      }
+                                    },
+                                  ),
+                                  ControlesRow(
+                                    label: 'PEGADO TRASERO',
+                                    nro1: _reg.pegado_trasero_1!,
+                                    nro2: _reg.pegado_trasero_2!,
+                                    onPressed1: () async {
+                                      String result = await Modal.addModal(
+                                          context: context,
+                                          title: 'PEGADO TRASERO - NRO 1');
+                                      if (result.isNotEmpty) {
+                                        if (result == 'delete') {
+                                          _reg.pegado_trasero_1 = '';
+                                        } else {
+                                          _reg.pegado_trasero_1 = result;
+                                        }
+                                        setState(() {});
+                                      }
+                                    },
+                                    onPressed2: () async {
+                                      String result = await Modal.addModal(
+                                          context: context,
+                                          title: 'PEGADO TRASERO - NRO 2');
+                                      if (result.isNotEmpty) {
+                                        if (result == 'delete') {
+                                          _reg.pegado_trasero_2 = '';
+                                        } else {
+                                          _reg.pegado_trasero_2 = result;
+                                        }
+                                        setState(() {});
+                                      }
+                                    },
+                                  ),
+                                  ControlesRow(
+                                    label: 'PEGADO DELANTERO',
+                                    nro1: _reg.pegado_delantero_1!,
+                                    nro2: _reg.pegado_delantero_2!,
+                                    onPressed1: () async {
+                                      String result = await Modal.addModal(
+                                          context: context,
+                                          title: 'PEGADO DELANTERO - NRO 1');
+                                      if (result.isNotEmpty) {
+                                        if (result == 'delete') {
+                                          _reg.pegado_delantero_1 = '';
+                                        } else {
+                                          _reg.pegado_delantero_1 = result;
+                                        }
+                                        setState(() {});
+                                      }
+                                    },
+                                    onPressed2: () async {
+                                      String result = await Modal.addModal(
+                                          context: context,
+                                          title: 'PEGADO DELANTERO - NRO 2');
+                                      if (result.isNotEmpty) {
+                                        if (result == 'delete') {
+                                          _reg.pegado_delantero_2 = '';
+                                        } else {
+                                          _reg.pegado_delantero_2 = result;
+                                        }
+                                        setState(() {});
+                                      }
+                                    },
+                                  ),
+                                  ControlesRow(
+                                    label: 'CANTIDAD EN CONO',
+                                    nro1: _reg.cant_cono_1!,
+                                    nro2: _reg.cant_cono_2!,
+                                    onPressed1: () async {
+                                      String result = await Modal.addModal(
+                                          context: context,
+                                          title: 'CANTIDAD EN CONO - NRO 1');
+                                      if (result.isNotEmpty) {
+                                        if (result == 'delete') {
+                                          _reg.cant_cono_1 = '';
+                                        } else {
+                                          _reg.cant_cono_1 = result;
+                                        }
+                                        setState(() {});
+                                      }
+                                    },
+                                    onPressed2: () async {
+                                      String result = await Modal.addModal(
+                                          context: context,
+                                          title: 'CANTIDAD EN CONO - NRO 2');
+                                      if (result.isNotEmpty) {
+                                        if (result == 'delete') {
+                                          _reg.cant_cono_2 = '';
+                                        } else {
+                                          _reg.cant_cono_2 = result;
+                                        }
+                                        setState(() {});
+                                      }
+                                    },
+                                  ),
+                                  ControlesRow(
+                                    label: 'GRAFICA',
+                                    nro1: _reg.grafica_1!,
+                                    nro2: _reg.grafica_2!,
+                                    onPressed1: () async {
+                                      String result = await Modal.addModal(
+                                          context: context,
+                                          title: 'GRAFICA - NRO 1');
+                                      if (result.isNotEmpty) {
+                                        if (result == 'delete') {
+                                          _reg.grafica_1 = '';
+                                        } else {
+                                          _reg.grafica_1 = result;
+                                        }
+                                        setState(() {});
+                                      }
+                                    },
+                                    onPressed2: () async {
+                                      String result = await Modal.addModal(
+                                          context: context,
+                                          title: 'GRAFICA - NRO 2');
+                                      if (result.isNotEmpty) {
+                                        if (result == 'delete') {
+                                          _reg.grafica_2 = '';
+                                        } else {
+                                          _reg.grafica_2 = result;
+                                        }
+                                        setState(() {});
+                                      }
+                                    },
+                                  ),
+                                  ControlesRow(
+                                    label: 'TROQUELADO',
+                                    nro1: _reg.troquelado_1!,
+                                    nro2: _reg.troquelado_2!,
+                                    onPressed1: () async {
+                                      String result = await Modal.addModal(
+                                          context: context,
+                                          title: 'TROQUELADO - NRO 1');
+                                      if (result.isNotEmpty) {
+                                        if (result == 'delete') {
+                                          _reg.troquelado_1 = '';
+                                        } else {
+                                          _reg.troquelado_1 = result;
+                                        }
+                                        setState(() {});
+                                      }
+                                    },
+                                    onPressed2: () async {
+                                      String result = await Modal.addModal(
+                                          context: context,
+                                          title: 'TROQUELADO - NRO 2');
+                                      if (result.isNotEmpty) {
+                                        if (result == 'delete') {
+                                          _reg.troquelado_2 = '';
+                                        } else {
+                                          _reg.troquelado_2 = result;
+                                        }
+                                        setState(() {});
+                                      }
+                                    },
+                                  ),
+                                  ControlesRow(
+                                    label: 'MATERIAS EXTRAÑAS',
+                                    nro1: _reg.materias_1!,
+                                    nro2: _reg.materias_2!,
+                                    onPressed1: () async {
+                                      String result = await Modal.addModal(
+                                          context: context,
+                                          title: 'MATERIAS EXTRAÑAS - NRO 1');
+                                      if (result.isNotEmpty) {
+                                        if (result == 'delete') {
+                                          _reg.materias_1 = '';
+                                        } else {
+                                          _reg.materias_1 = result;
+                                        }
+                                        setState(() {});
+                                      }
+                                    },
+                                    onPressed2: () async {
+                                      String result = await Modal.addModal(
+                                          context: context,
+                                          title: 'MATERIAS EXTRAÑAS - NRO 2');
+                                      if (result.isNotEmpty) {
+                                        if (result == 'delete') {
+                                          _reg.materias_2 = '';
+                                        } else {
+                                          _reg.materias_2 = result;
+                                        }
+                                        setState(() {});
+                                      }
+                                    },
+                                  ),
+                                  ControlesRow(
+                                    label: 'PPR3',
+                                    nro1: _reg.ppr3_1!,
+                                    nro2: _reg.ppr3_2!,
+                                    onPressed1: () async {
+                                      String result = await Modal.addModal(
+                                          context: context,
+                                          title: 'PPR3 - NRO 1');
+                                      if (result.isNotEmpty) {
+                                        if (result == 'delete') {
+                                          _reg.ppr3_1 = '';
+                                        } else {
+                                          _reg.ppr3_1 = result;
+                                        }
+                                        setState(() {});
+                                      }
+                                    },
+                                    onPressed2: () async {
+                                      String result = await Modal.addModal(
+                                          context: context,
+                                          title: 'PPR3 - NRO 2');
+                                      if (result.isNotEmpty) {
+                                        if (result == 'delete') {
+                                          _reg.ppr3_2 = '';
+                                        } else {
+                                          _reg.ppr3_2 = result;
+                                        }
+                                        setState(() {});
+                                      }
+                                    },
+                                  ),
+                                  ControlesRow(
+                                    label: 'PPR4',
+                                    nro1: _reg.ppr4_1!,
+                                    nro2: _reg.ppr4_2!,
+                                    onPressed1: () async {
+                                      String result = await Modal.addModal(
+                                          context: context,
+                                          title: 'PPR4 - NRO 1');
+                                      if (result.isNotEmpty) {
+                                        if (result == 'delete') {
+                                          _reg.ppr4_1 = '';
+                                        } else {
+                                          _reg.ppr4_1 = result;
+                                        }
+                                        setState(() {});
+                                      }
+                                    },
+                                    onPressed2: () async {
+                                      String result = await Modal.addModal(
+                                          context: context,
+                                          title: 'PPR4 - NRO 2');
+                                      if (result.isNotEmpty) {
+                                        if (result == 'delete') {
+                                          _reg.ppr4_2 = '';
+                                        } else {
+                                          _reg.ppr4_2 = result;
+                                        }
+                                        setState(() {});
+                                      }
+                                    },
+                                  ),
+                                  ControlesRow(
+                                    label: 'PPR6',
+                                    nro1: _reg.ppr6_1!,
+                                    nro2: _reg.ppr6_2!,
+                                    onPressed1: () async {
+                                      String result = await Modal.addModal(
+                                          context: context,
+                                          title: 'PPR6 - NRO 1');
+                                      if (result.isNotEmpty) {
+                                        if (result == 'delete') {
+                                          _reg.ppr6_1 = '';
+                                        } else {
+                                          _reg.ppr6_1 = result;
+                                        }
+                                        setState(() {});
+                                      }
+                                    },
+                                    onPressed2: () async {
+                                      String result = await Modal.addModal(
+                                          context: context,
+                                          title: 'PPR6 - NRO 2');
+                                      if (result.isNotEmpty) {
+                                        if (result == 'delete') {
+                                          _reg.ppr6_2 = '';
+                                        } else {
+                                          _reg.ppr6_2 = result;
+                                        }
+                                        setState(() {});
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            // FALLOS DETALLE
+                            Expanded(
+                              flex: 5,
+                              child: Container(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    FallosMaquinaHead(),
+                                    FallosMaquinaLista(
+                                      fallos: _reg.fallosMaquina!,
+                                      onRefresh: () {
+                                        setState(() {});
+                                      },
+                                    ),
+                                    FallosMaquinaTotalHoras(
+                                        fallos: _reg.fallosMaquina!),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        ControlesRow(
-                          label: 'CANTIDAD EN CONO',
-                          nro1: _cant_cono_1,
-                          nro2: _cant_cono_2,
-                          onPressed1: () async {
-                            String result = await Modal.addModal(
-                                context: context,
-                                title: 'CANTIDAD EN CONO - NRO 1');
-                            if (result.isNotEmpty) {
-                              if (result == 'delete') {
-                                _cant_cono_1 = '';
-                              } else {
-                                _cant_cono_1 = result;
-                              }
-                              setState(() {});
-                            }
-                          },
-                          onPressed2: () async {
-                            String result = await Modal.addModal(
-                                context: context,
-                                title: 'CANTIDAD EN CONO - NRO 2');
-                            if (result.isNotEmpty) {
-                              if (result == 'delete') {
-                                _cant_cono_2 = '';
-                              } else {
-                                _cant_cono_2 = result;
-                              }
-                              setState(() {});
-                            }
-                          },
+                        Row(
+                          children: [
+                            ContadorCard(
+                              label: 'CANT. MOLDES FABRICADOS: ',
+                              value: _reg.cantidadMoldes!,
+                              onPressed: () async {
+                                String result = await Modal.addModal(
+                                    context: context, title: 'MODEL FABICADOS');
+                                if (result.isNotEmpty) {
+                                  if (result == 'delete') {
+                                    _reg.cantidadMoldes = '';
+                                  } else {
+                                    _reg.cantidadMoldes = result;
+                                  }
+                                  setState(() {});
+                                }
+                              },
+                            ),
+                            ContadorCard(
+                              label: 'CONTADOR FINAL: ',
+                              value: _reg.contadorFinal!,
+                              onPressed: () async {
+                                String result = await Modal.addModal(
+                                    context: context, title: 'CONTADOR FINAL');
+                                if (result.isNotEmpty) {
+                                  if (result == 'delete') {
+                                    _reg.contadorFinal = '';
+                                  } else {
+                                    _reg.contadorFinal = result;
+                                  }
+                                  setState(() {});
+                                }
+                              },
+                            ),
+                          ],
                         ),
-                        ControlesRow(
-                          label: 'GRAFICA',
-                          nro1: _grafica_1,
-                          nro2: _grafica_2,
-                          onPressed1: () async {
-                            String result = await Modal.addModal(
-                                context: context, title: 'GRAFICA - NRO 1');
-                            if (result.isNotEmpty) {
-                              if (result == 'delete') {
-                                _grafica_1 = '';
-                              } else {
-                                _grafica_1 = result;
-                              }
-                              setState(() {});
-                            }
-                          },
-                          onPressed2: () async {
-                            String result = await Modal.addModal(
-                                context: context, title: 'GRAFICA - NRO 2');
-                            if (result.isNotEmpty) {
-                              if (result == 'delete') {
-                                _grafica_2 = '';
-                              } else {
-                                _grafica_2 = result;
-                              }
-                              setState(() {});
-                            }
-                          },
+                        Row(
+                          children: [
+                            ContadorCard(
+                              label: 'CANT. CAJAS COMPLETADAS: ',
+                              value: _reg.cantidadCajas!,
+                              onPressed: () async {
+                                String result = await Modal.addModal(
+                                    context: context,
+                                    title: 'CAJAS COMPLETADAS');
+                                if (result.isNotEmpty) {
+                                  if (result == 'delete') {
+                                    _reg.cantidadCajas = '';
+                                  } else {
+                                    _reg.cantidadCajas = result;
+                                  }
+                                  setState(() {});
+                                }
+                              },
+                            ),
+                            Expanded(child: Container(height: 1, width: 1)),
+                          ],
                         ),
-                        ControlesRow(
-                          label: 'TROQUELADO',
-                          nro1: _troquelado_1,
-                          nro2: _troquelado_2,
-                          onPressed1: () async {
-                            String result = await Modal.addModal(
-                                context: context, title: 'TROQUELADO - NRO 1');
-                            if (result.isNotEmpty) {
-                              if (result == 'delete') {
-                                _troquelado_1 = '';
-                              } else {
-                                _troquelado_1 = result;
-                              }
-                              setState(() {});
-                            }
-                          },
-                          onPressed2: () async {
-                            String result = await Modal.addModal(
-                                context: context, title: 'TROQUELADO - NRO 2');
-                            if (result.isNotEmpty) {
-                              if (result == 'delete') {
-                                _troquelado_2 = '';
-                              } else {
-                                _troquelado_2 = result;
-                              }
-                              setState(() {});
-                            }
-                          },
+                        const SizedBox(height: 10),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          child: Text(
+                              '(*) SI NO ENCUENTRA EL CODIGO O DESCRIPCION DEL FALLO DE MAQUINA DEBE AGREGARLO EN OBSERVACIONES.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w300,
+                                color: Colors.black,
+                              )),
                         ),
-                        ControlesRow(
-                          label: 'MATERIAS EXTRAÑAS',
-                          nro1: _materias_1,
-                          nro2: _materias_2,
-                          onPressed1: () async {
-                            String result = await Modal.addModal(
-                                context: context,
-                                title: 'MATERIAS EXTRAÑAS - NRO 1');
-                            if (result.isNotEmpty) {
-                              if (result == 'delete') {
-                                _materias_1 = '';
-                              } else {
-                                _materias_1 = result;
-                              }
-                              setState(() {});
-                            }
-                          },
-                          onPressed2: () async {
-                            String result = await Modal.addModal(
-                                context: context,
-                                title: 'MATERIAS EXTRAÑAS - NRO 2');
-                            if (result.isNotEmpty) {
-                              if (result == 'delete') {
-                                _materias_2 = '';
-                              } else {
-                                _materias_2 = result;
-                              }
-                              setState(() {});
-                            }
-                          },
-                        ),
-                        ControlesRow(
-                          label: 'PPR3',
-                          nro1: _ppr3_1,
-                          nro2: _ppr3_2,
-                          onPressed1: () async {
-                            String result = await Modal.addModal(
-                                context: context, title: 'PPR3 - NRO 1');
-                            if (result.isNotEmpty) {
-                              if (result == 'delete') {
-                                _ppr3_1 = '';
-                              } else {
-                                _ppr3_1 = result;
-                              }
-                              setState(() {});
-                            }
-                          },
-                          onPressed2: () async {
-                            String result = await Modal.addModal(
-                                context: context, title: 'PPR3 - NRO 2');
-                            if (result.isNotEmpty) {
-                              if (result == 'delete') {
-                                _ppr3_2 = '';
-                              } else {
-                                _ppr3_2 = result;
-                              }
-                              setState(() {});
-                            }
-                          },
-                        ),
-                        ControlesRow(
-                          label: 'PPR4',
-                          nro1: _ppr4_1,
-                          nro2: _ppr4_2,
-                          onPressed1: () async {
-                            String result = await Modal.addModal(
-                                context: context, title: 'PPR4 - NRO 1');
-                            if (result.isNotEmpty) {
-                              if (result == 'delete') {
-                                _ppr4_1 = '';
-                              } else {
-                                _ppr4_1 = result;
-                              }
-                              setState(() {});
-                            }
-                          },
-                          onPressed2: () async {
-                            String result = await Modal.addModal(
-                                context: context, title: 'PPR4 - NRO 2');
-                            if (result.isNotEmpty) {
-                              if (result == 'delete') {
-                                _ppr4_2 = '';
-                              } else {
-                                _ppr4_2 = result;
-                              }
-                              setState(() {});
-                            }
-                          },
-                        ),
-                        ControlesRow(
-                          label: 'PPR6',
-                          nro1: _ppr6_1,
-                          nro2: _ppr6_2,
-                          onPressed1: () async {
-                            String result = await Modal.addModal(
-                                context: context, title: 'PPR6 - NRO 1');
-                            if (result.isNotEmpty) {
-                              if (result == 'delete') {
-                                _ppr6_1 = '';
-                              } else {
-                                _ppr6_1 = result;
-                              }
-                              setState(() {});
-                            }
-                          },
-                          onPressed2: () async {
-                            String result = await Modal.addModal(
-                                context: context, title: 'PPR6 - NRO 2');
-                            if (result.isNotEmpty) {
-                              if (result == 'delete') {
-                                _ppr6_2 = '';
-                              } else {
-                                _ppr6_2 = result;
-                              }
-                              setState(() {});
-                            }
-                          },
+                        const SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 5, vertical: 10),
+                              child: FinishButton(
+                                text: 'FINALIZAR',
+                                onPressed: () {
+                                  Utils.confirmAlert(
+                                      context,
+                                      'Finalizar registro',
+                                      '¿Esta seguro que desea finalizar el registro de produccion?',
+                                      () {
+                                    Navigator.of(context).pop();
+
+                                    Utils.snackBarWarinig(
+                                        context,
+                                        'Configure una maquina',
+                                        'Desde la configuración puede seleccionar una maquina.');
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ),
-                  // FALLOS DETALLE
-                  Expanded(
-                    flex: 5,
-                    child: Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          FallosMaquinaHead(),
-                          FallosMaquinaLista(
-                            fallos: _fallosMaquina,
-                            onRefresh: () {
-                              setState(() {});
-                            },
-                          ),
-                          FallosMaquinaTotalHoras(fallos: _fallosMaquina),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  ContadorCard(
-                    label: 'CANT. MOLDES FABRICADOS: ',
-                    value: _cantidadMoldes,
-                    onPressed: () async {
-                      String result = await Modal.addModal(
-                          context: context, title: 'MODEL FABICADOS');
-                      if (result.isNotEmpty) {
-                        if (result == 'delete') {
-                          _cantidadMoldes = '';
-                        } else {
-                          _cantidadMoldes = result;
-                        }
-                        setState(() {});
-                      }
-                    },
-                  ),
-                  ContadorCard(
-                    label: 'CONTADOR FINAL: ',
-                    value: _contadorFinal,
-                    onPressed: () async {
-                      String result = await Modal.addModal(
-                          context: context, title: 'CONTADOR FINAL');
-                      if (result.isNotEmpty) {
-                        if (result == 'delete') {
-                          _contadorFinal = '';
-                        } else {
-                          _contadorFinal = result;
-                        }
-                        setState(() {});
-                      }
-                    },
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  ContadorCard(
-                    label: 'CANT. CAJAS COMPLETADAS: ',
-                    value: _cantidadCajas,
-                    onPressed: () async {
-                      String result = await Modal.addModal(
-                          context: context, title: 'CAJAS COMPLETADAS');
-                      if (result.isNotEmpty) {
-                        if (result == 'delete') {
-                          _cantidadCajas = '';
-                        } else {
-                          _cantidadCajas = result;
-                        }
-                        setState(() {});
-                      }
-                    },
-                  ),
-                  Expanded(child: Container()),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                    child: FinishButton(
-                      text: 'FINALIZAR',
-                      onPressed: () {
-                        Utils.confirmAlert(context, 'Finalizar registro',
-                            '¿Esta seguro que desea finalizar el registro de produccion?',
-                            () {
-                          Navigator.of(context).pop();
-
-                          Utils.snackBarWarinig(
-                              context,
-                              'Configure una maquina',
-                              'Desde la configuración puede seleccionar una maquina.');
-                        });
-                      },
-                    ),
-                  ),
-                ],
-              ),
             ],
           ),
         ),
@@ -1030,7 +1452,7 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                 );
 
                 if (falloAdded != null) {
-                  _fallosMaquina.add(falloAdded);
+                  _reg.fallosMaquina!.add(falloAdded);
                   setState(() {});
                 }
                 //setState(() {});

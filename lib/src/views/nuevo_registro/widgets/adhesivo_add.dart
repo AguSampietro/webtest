@@ -17,7 +17,7 @@ class AdhesivoAdd extends StatelessWidget {
     return InkWell(
       onTap: onPressed,
       child: Container(
-        height: 50,
+        height: Utils.cellHeight,
         padding: const EdgeInsets.only(right: 5),
         decoration: BoxDecoration(
           border: Utils.borderApp,

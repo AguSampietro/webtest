@@ -15,7 +15,7 @@ class AdhesivoLabel extends StatelessWidget {
     return Container(
       // margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      height: 50,
+      height: Utils.cellHeight,
       decoration: BoxDecoration(
         border: Utils.borderApp,
         color: Colors.yellow[100],

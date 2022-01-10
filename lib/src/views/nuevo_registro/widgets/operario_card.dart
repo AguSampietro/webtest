@@ -5,7 +5,7 @@ import 'package:webtest/src/utils/utils.dart';
 import 'package:webtest/src/utils/modal.dart';
 
 class OperarioCard extends StatefulWidget {
-  const OperarioCard({Key? key}) : super(key: key);
+  OperarioCard({Key? key}) : super(key: key);
 
   @override
   _OperarioCardState createState() => _OperarioCardState();
@@ -29,22 +29,25 @@ class _OperarioCardState extends State<OperarioCard> {
               await Modal.seleccionarOperario(context) as Operario?;
           if (operario != null) {
             setState(() {
-              prefs.operarioId = operario.id!;
+              prefs.operarioId = operario.legajo!;
               prefs.operarioNombre = operario.nombre!;
             });
           }
         },
         child: Container(
+          height: 80,
           margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
           decoration: BoxDecoration(
             border: Utils.borderApp,
             color: Colors.grey[200],
           ),
-          child: Row(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'OPERARIO: ',
+                'OPERARIO EN TURNO: ',
                 style: TextStyle(
                   fontSize: 16,
                 ),

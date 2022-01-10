@@ -1,14 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:numeric_keyboard/numeric_keyboard.dart';
+import 'package:webtest/src/cubit/bobina_cubit.dart';
+import 'package:webtest/src/cubit/maquina_cubit.dart';
 import 'package:webtest/src/models/bobina.dart';
 import 'package:webtest/src/models/fallo.dart';
 import 'package:webtest/src/models/operario.dart';
 import 'package:webtest/src/models/maquina.dart';
 import 'package:webtest/src/utils/theme.dart';
+import 'package:webtest/src/views/nuevo_registro/widgets/bobina_add.dart';
+import 'package:webtest/src/widgets/bobina/bobina_filtro.dart';
+import 'package:webtest/src/widgets/bobina/bobina_lista.dart';
 import 'package:webtest/src/widgets/cancel_button.dart';
 import 'package:webtest/src/widgets/delete_button.dart';
 import 'package:webtest/src/utils/utils.dart';
 import 'package:webtest/src/widgets/accept_button.dart';
+import 'package:webtest/src/widgets/fallo/fallo_filtro.dart';
+import 'package:webtest/src/widgets/fallo/fallo_lista.dart';
+
+import 'package:webtest/src/widgets/loading.dart';
+import 'package:webtest/src/widgets/maquina/maquina_lista.dart';
+import 'package:webtest/src/widgets/operario/operario_lista.dart';
 
 class Modal {
   static Future<String> addModal({context, String? title}) async {
@@ -88,7 +100,7 @@ class Modal {
                                       _contador == null ? '' : _contador,
                                       textAlign: TextAlign.center,
                                       style: const TextStyle(
-                                        fontSize: 30,
+                                        fontSize: 35,
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -116,7 +128,7 @@ class Modal {
                                     },
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
@@ -138,19 +150,6 @@ class Modal {
   }
 
   static Future<Maquina?> seleccionarMaquina(context) async {
-    List<Maquina> maquinas = [
-      Maquina(id: '1', nombre: 'Maquina 1'),
-      Maquina(id: '2', nombre: 'Maquina 2'),
-      Maquina(id: '3', nombre: 'Maquina 3'),
-      Maquina(id: '4', nombre: 'Maquina 4'),
-      Maquina(id: '5', nombre: 'Maquina 5'),
-      Maquina(id: '6', nombre: 'Maquina 6'),
-      Maquina(id: '7', nombre: 'Maquina 7'),
-      Maquina(id: '8', nombre: 'Maquina 8'),
-      Maquina(id: '9', nombre: 'Maquina 9'),
-      Maquina(id: '10', nombre: 'Maquina 10'),
-    ];
-
     Maquina? result = await showGeneralDialog(
         context: context,
         barrierDismissible: true,
@@ -166,7 +165,7 @@ class Modal {
               height: MediaQuery.of(context).size.height,
               color: Colors.white,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   AppBar(
                     centerTitle: true,
@@ -194,34 +193,7 @@ class Modal {
                       ),
                     ],
                   ),
-                  Expanded(
-                    child: ListView.separated(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      primary: false,
-                      padding: const EdgeInsets.only(
-                          bottom: kFloatingActionButtonMargin + 48),
-                      scrollDirection: Axis.vertical,
-                      itemCount: maquinas.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(maquinas[index].nombre!),
-                          trailing: Text(
-                            'Seleccionar',
-                            style: TextStyle(
-                              color: ThemeApp.modalSelectItem,
-                            ),
-                          ),
-                          onTap: () {
-                            Navigator.of(context).pop(maquinas[index]);
-                          },
-                        );
-                      },
-                      separatorBuilder: (context, index) {
-                        return const Divider(thickness: 1);
-                      },
-                    ),
-                  )
+                  MaquinaLista(),
                 ],
               ),
             ),
@@ -233,16 +205,6 @@ class Modal {
   }
 
   static Future<Operario?> seleccionarOperario(context) async {
-    List<Operario> operarios = [
-      Operario(id: '1', nombre: 'Agustin Sampietro', clave: '111'),
-      Operario(id: '2', nombre: 'Braian Reinaudo', clave: '222'),
-      Operario(id: '3', nombre: 'Joaquin Siro', clave: '333'),
-      Operario(id: '4', nombre: 'Facundo De La Colina', clave: '444'),
-      Operario(id: '5', nombre: 'Agustin Fassio', clave: '555'),
-      Operario(id: '6', nombre: 'Gaston Celiz', clave: '666'),
-      Operario(id: '7', nombre: 'Martin Ballaman', clave: '777'),
-    ];
-
     Operario? result = await showGeneralDialog(
         context: context,
         barrierDismissible: true,
@@ -285,34 +247,7 @@ class Modal {
                       ),
                     ],
                   ),
-                  Expanded(
-                    child: ListView.separated(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      primary: false,
-                      padding: const EdgeInsets.only(
-                          bottom: kFloatingActionButtonMargin + 48),
-                      scrollDirection: Axis.vertical,
-                      itemCount: operarios.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(operarios[index].nombre!),
-                          trailing: Text(
-                            'Seleccionar',
-                            style: TextStyle(
-                              color: ThemeApp.modalSelectItem,
-                            ),
-                          ),
-                          onTap: () {
-                            Navigator.of(context).pop(operarios[index]);
-                          },
-                        );
-                      },
-                      separatorBuilder: (context, index) {
-                        return const Divider(thickness: 1);
-                      },
-                    ),
-                  )
+                  OperarioLista(),
                 ],
               ),
             ),
@@ -324,17 +259,6 @@ class Modal {
   }
 
   static Future<Bobina?> seleccionarBobina(context) async {
-    List<Bobina> bobinas = [
-      Bobina(id: '1', nombre: '26900/c/f/r/4'),
-      Bobina(id: '2', nombre: '26700/c/f/r/3'),
-      Bobina(id: '3', nombre: '35454/c/j/r/5'),
-      Bobina(id: '4', nombre: '67890/c/f/r/6'),
-      Bobina(id: '5', nombre: '34232/c/f/r/7'),
-      Bobina(id: '6', nombre: '43433/c/f/r/8'),
-      Bobina(id: '7', nombre: '11223/c/f/r/9'),
-      Bobina(id: '8', nombre: '23434/c/f/r/1'),
-    ];
-
     Bobina? result = await showGeneralDialog(
         context: context,
         barrierDismissible: true,
@@ -350,7 +274,7 @@ class Modal {
               height: MediaQuery.of(context).size.height,
               color: Colors.white,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   AppBar(
                     centerTitle: true,
@@ -378,34 +302,8 @@ class Modal {
                       ),
                     ],
                   ),
-                  Expanded(
-                    child: ListView.separated(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      primary: false,
-                      padding: const EdgeInsets.only(
-                          bottom: kFloatingActionButtonMargin + 48),
-                      scrollDirection: Axis.vertical,
-                      itemCount: bobinas.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(bobinas[index].nombre!),
-                          trailing: Text(
-                            'Seleccionar',
-                            style: TextStyle(
-                              color: ThemeApp.modalSelectItem,
-                            ),
-                          ),
-                          onTap: () {
-                            Navigator.of(context).pop(bobinas[index]);
-                          },
-                        );
-                      },
-                      separatorBuilder: (context, index) {
-                        return const Divider(thickness: 1);
-                      },
-                    ),
-                  ),
+                  BobinaFiltro(),
+                  BobinaLista(),
                   Container(
                     margin: EdgeInsets.only(bottom: 30),
                     child: DeleteButton(
@@ -426,15 +324,6 @@ class Modal {
   }
 
   static Future<Fallo?> seleccionarFallo(context) async {
-    List<Fallo> fallos = [
-      Fallo(codigo: 'C17', nombre: 'Fallo c17'),
-      Fallo(codigo: 'C41', nombre: 'Fallo c41'),
-      Fallo(codigo: 'C40', nombre: 'Fallo c40'),
-      Fallo(codigo: 'A1', nombre: 'Fallo a1'),
-      Fallo(codigo: 'B', nombre: 'Fallo b'),
-      Fallo(codigo: 'C16', nombre: 'Fallo c16'),
-    ];
-
     Fallo? result = await showGeneralDialog(
         context: context,
         barrierDismissible: true,
@@ -478,34 +367,64 @@ class Modal {
                       ),
                     ],
                   ),
-                  Expanded(
-                    child: ListView.separated(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      primary: false,
-                      padding: const EdgeInsets.only(
-                          bottom: kFloatingActionButtonMargin + 48),
-                      scrollDirection: Axis.vertical,
-                      itemCount: fallos.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(fallos[index].nombre!),
-                          trailing: Text(
-                            'Seleccionar',
-                            style: TextStyle(
-                              color: ThemeApp.modalSelectItem,
-                            ),
-                          ),
-                          onTap: () {
-                            Navigator.of(context).pop(fallos[index]);
-                          },
-                        );
-                      },
-                      separatorBuilder: (context, index) {
-                        return const Divider(thickness: 1);
-                      },
+                  FalloFiltro(),
+                  FalloLista(),
+                ],
+              ),
+            ),
+          );
+        });
+    if (result == null) return null;
+
+    return result;
+  }
+
+  static Future<Bobina?> seleccionarProducto(context) async {
+    Bobina? result = await showGeneralDialog(
+        context: context,
+        barrierDismissible: true,
+        barrierLabel:
+            MaterialLocalizations.of(context).modalBarrierDismissLabel,
+        barrierColor: Colors.black45,
+        transitionDuration: const Duration(milliseconds: 200),
+        pageBuilder: (BuildContext buildContext, Animation animation,
+            Animation secondaryAnimation) {
+          return Material(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              color: Colors.white,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  AppBar(
+                    centerTitle: true,
+                    backgroundColor:
+                        ThemeApp.modalHeadColor, //Colors.pink[400],
+                    elevation: 0,
+                    automaticallyImplyLeading: false,
+                    title: const Text(
+                      'SELECCIONE UN PRODUCTO',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 20,
+                      ),
                     ),
+                    actions: [
+                      IconButton(
+                        iconSize: 34.0,
+                        color: Colors.white,
+                        icon: Icon(Icons.close),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
                   ),
+                  BobinaFiltro(),
+                  BobinaLista(),
                 ],
               ),
             ),

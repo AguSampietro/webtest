@@ -44,8 +44,8 @@ class FalloMaquinaModal {
             AcceptButton(
               onPressed: () {
                 FalloMaquina falloMaquina = FalloMaquina();
-                falloMaquina.codigo = fallo!.codigo;
-                falloMaquina.nombre = fallo.nombre;
+                falloMaquina.codigo = fallo!.codfallo;
+                falloMaquina.nombre = fallo.descripcion;
                 falloMaquina.tiempo = _minutes;
                 falloMaquina.observaciones = _observaciones;
 
@@ -86,7 +86,7 @@ class FalloMaquinaModal {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          fallo!.nombre!,
+                                          fallo!.descripcion!,
                                           textAlign: TextAlign.start,
                                           style: const TextStyle(
                                             fontSize: 22,
@@ -95,7 +95,7 @@ class FalloMaquinaModal {
                                           ),
                                         ),
                                         Text(
-                                          'Codigo: ' + fallo.codigo!,
+                                          'Codigo: ' + fallo.codfallo!,
                                           textAlign: TextAlign.start,
                                           style: const TextStyle(
                                             fontSize: 16,

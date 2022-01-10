@@ -1,16 +1,31 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'dart:convert';
 
-part 'fallo.freezed.dart';
-part 'fallo.g.dart';
+List<Fallo> falloFromJson(String str) =>
+    List<Fallo>.from(json.decode(str).map((x) => Fallo.fromJson(x)));
 
-@freezed
-class Fallo with _$Fallo {
-  Fallo._();
+String falloToJson(List<Fallo> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-  factory Fallo({
-    String? codigo,
-    String? nombre,
-  }) = _Fallo;
+class Fallo {
+  Fallo({
+    this.id,
+    this.codfallo,
+    this.descripcion,
+  });
 
-  factory Fallo.fromJson(Map<String, dynamic> json) => _$FalloFromJson(json);
+  String? id;
+  String? codfallo;
+  String? descripcion;
+
+  factory Fallo.fromJson(Map<String, dynamic> json) => Fallo(
+        id: json["ID"],
+        codfallo: json["CODFALLO"],
+        descripcion: json["DESCRIPCION"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "ID": id,
+        "CODFALLO": codfallo,
+        "DESCRIPCION": descripcion,
+      };
 }
