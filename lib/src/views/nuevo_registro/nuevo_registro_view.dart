@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:webtest/src/models/bobina.dart';
 
@@ -1364,18 +1367,31 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                               child: FinishButton(
                                 text: 'FINALIZAR',
                                 onPressed: () {
-                                  Utils.confirmAlert(
-                                      context,
-                                      'Finalizar registro',
-                                      '¿Esta seguro que desea finalizar el registro de produccion?',
-                                      () {
-                                    Navigator.of(context).pop();
+                                  _reg.idMaquina = prefs.maquinaId;
+                                  _reg.legajoOperario = prefs.operarioId;
+                                  _reg.codProducto = prefs.productoId;
 
-                                    Utils.snackBarWarinig(
+                                  if (_reg.isReady()) {
+                                    Utils.confirmAlert(
                                         context,
-                                        'Configure una maquina',
-                                        'Desde la configuración puede seleccionar una maquina.');
-                                  });
+                                        'Finalizar registro',
+                                        '¿Esta seguro que desea finalizar el registro de produccion?',
+                                        () {
+                                      Navigator.of(context).pop();
+
+                                      log(json
+                                          .encode(_reg.toJson())
+                                          .toString());
+
+                                      Utils.snackBarSuccess(
+                                          context,
+                                          'Excelente',
+                                          'Registro finalizado y descargado correctamente.');
+                                    });
+                                  } else {
+                                    Utils.snackBarWarinig(context, 'Aviso',
+                                        'Debe completar los campos obligatorios.');
+                                  }
                                 },
                               ),
                             ),

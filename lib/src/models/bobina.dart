@@ -3,8 +3,10 @@ import 'dart:convert';
 List<Bobina> bobinasFromJson(String str) =>
     List<Bobina>.from(json.decode(str).map((x) => Bobina.fromJson(x)));
 
-String bobinaToJson(List<Bobina> data) =>
+String bobinasToJson(List<Bobina> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+String bobinaToJson(Bobina data) => json.encode(data.toJson());
 
 class Bobina {
   Bobina({

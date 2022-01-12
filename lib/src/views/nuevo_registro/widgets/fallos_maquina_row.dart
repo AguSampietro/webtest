@@ -14,7 +14,7 @@ class FallosMaquinaLista extends StatelessWidget {
   Widget build(BuildContext context) {
     if (fallos.length == 0) {
       return Container(
-        height: 405,
+        height: 450,
         child: const Padding(
           padding: EdgeInsets.all(15.0),
           child: Center(
@@ -24,7 +24,7 @@ class FallosMaquinaLista extends StatelessWidget {
       );
     }
     return Container(
-      height: 405,
+      height: 450,
       child: ListView.builder(
         itemCount: fallos.length,
         shrinkWrap: true,
@@ -56,7 +56,6 @@ class FallosMaquinaRow extends StatelessWidget {
   final void Function() onDelete;
   @override
   Widget build(BuildContext context) {
-    final double altoCelda = 45.0;
     return Container(
       padding: const EdgeInsets.only(
         left: 5,
@@ -68,7 +67,7 @@ class FallosMaquinaRow extends StatelessWidget {
           Expanded(
             flex: 4,
             child: Container(
-              height: altoCelda,
+              height: Utils.cellHeight,
               padding: const EdgeInsets.symmetric(horizontal: 5),
               decoration: BoxDecoration(
                 border: Utils.borderApp,
@@ -89,7 +88,7 @@ class FallosMaquinaRow extends StatelessWidget {
           Expanded(
             flex: 2,
             child: Container(
-              height: altoCelda,
+              height: Utils.cellHeight,
               padding: const EdgeInsets.symmetric(horizontal: 5),
               decoration: BoxDecoration(
                 border: Utils.borderApp,
@@ -112,7 +111,7 @@ class FallosMaquinaRow extends StatelessWidget {
             child: Container(
               //height: altoCelda,
               constraints: BoxConstraints(
-                minHeight: altoCelda,
+                minHeight: Utils.cellHeight,
               ),
               padding: const EdgeInsets.symmetric(horizontal: 5),
               decoration: BoxDecoration(
@@ -134,7 +133,7 @@ class FallosMaquinaRow extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Container(
-              height: altoCelda,
+              height: Utils.cellHeight,
               padding: const EdgeInsets.symmetric(horizontal: 5),
               decoration: BoxDecoration(
                 border: Utils.borderApp,

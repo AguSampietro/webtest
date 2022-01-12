@@ -1,13 +1,11 @@
 import 'package:webtest/src/models/bobina.dart';
 import 'package:webtest/src/models/fallo_maquina_model.dart';
-import 'package:webtest/src/models/maquina.dart';
-import 'package:webtest/src/models/operario.dart';
 
 class RegistroProduccion {
   RegistroProduccion({
-    this.producto,
-    this.maquina,
-    this.operario,
+    this.codProducto,
+    this.idMaquina,
+    this.legajoOperario,
     this.contadorInicial,
     this.lote,
     this.contadorFinal,
@@ -69,9 +67,9 @@ class RegistroProduccion {
     this.fallosMaquina,
   });
 
-  Bobina? producto = Bobina(id: '', nombre: '');
-  Maquina? maquina = Maquina(id: '', maquina: '');
-  Operario? operario = Operario(legajo: '', nombre: '');
+  String? codProducto = '';
+  String? idMaquina = '';
+  String? legajoOperario = '';
   String? contadorInicial = '';
   String? lote = '';
   String? contadorFinal = '';
@@ -214,4 +212,77 @@ class RegistroProduccion {
         ppr6_2: '',
         fallosMaquina: [],
       );
+
+  Map<String, dynamic> toJson() => {
+        "COD_PRODUCTO": codProducto,
+        "ID_MAQUINA": idMaquina,
+        "LEGAJO_OPERARIO": legajoOperario,
+        "CONTADOR_INICIAL": contadorInicial,
+        "LOTE": lote,
+        "CONTADOR_FINAL": contadorFinal,
+        "CANTIDAD_MOLDES": cantidadMoldes,
+        "CANTIDAD_CAJAS": cantidadCajas,
+        "ADHESIVO_TRASERO1": adhesivoTrasero1,
+        "ADHESIVO_TRASERO2": adhesivoTrasero2,
+        "ADHESIVO_TRASERO3": adhesivoTrasero3,
+        "ADHESIVO_TRASERO4": adhesivoTrasero4,
+        "ADHESIVO_TRASERO5": adhesivoTrasero5,
+        "ADHESIVO_FONDO1": adhesivoFondo1,
+        "ADHESIVO_FONDO2": adhesivoFondo2,
+        "ADHESIVO_LATERAL1": adhesivoLateral1,
+        "ADHESIVO_LATERAL2": adhesivoLateral2,
+        "ADHESIVO_CORRUGADO": adhesivoCorrugado,
+        "DESMOLDANTE": desmoldante,
+        "ADHESIVO_DELANTERO1": adhesivoDelantero1,
+        "ADHESIVO_DELANTERO2": adhesivoDelantero2,
+        "ADHESIVO_DELANTERO3": adhesivoDelantero3,
+        "ADHESIVO_DELANTERO4": adhesivoDelantero4,
+        "ADHESIVO_DELANTERO5": adhesivoDelantero5,
+        "BOBINA1": bobinaToJson(bobina1!),
+        "BOBINA2": bobinaToJson(bobina2!),
+        "BOBINA3": bobinaToJson(bobina3!),
+        "BOBINA4": bobinaToJson(bobina4!),
+        "BOBINA5": bobinaToJson(bobina5!),
+        "BOBINA6": bobinaToJson(bobina6!),
+        "BOBINA_FONDO1": bobinaToJson(bobinaFondo1!),
+        "BOBINA_FONDO2": bobinaToJson(bobinaFondo2!),
+        "BOBINA_FONDO3": bobinaToJson(bobinaFondo3!),
+        "BOBINA_LATERAL1": bobinaToJson(bobinaLateral1!),
+        "BOBINA_LATERAL2": bobinaToJson(bobinaLateral2!),
+        "BOBINA_LATERAL3": bobinaToJson(bobinaLateral3!),
+        "BOBINA_CONO1": bobinaToJson(bobinaCono1!),
+        "BOBINA_CONO2": bobinaToJson(bobinaCono2!),
+        "BOBINA_CONO3": bobinaToJson(bobinaCono3!),
+        "CRUCE1": cruce_1,
+        "CRUCE2": cruce_2,
+        "RULO1": rulo_1,
+        "RULO2": rulo_2,
+        "PEGADO_TRASERO1": pegado_trasero_1,
+        "PEGADO_TRASERO2": pegado_trasero_2,
+        "PEGADO_DELANTERO1": pegado_delantero_1,
+        "PEGADO_DELANTERO2": pegado_delantero_2,
+        "CANT_CONO1": cant_cono_1,
+        "CANT_CONO2": cant_cono_2,
+        "GRAFICA1": grafica_1,
+        "GRAFICA2": grafica_2,
+        "TROQUELADO1": troquelado_1,
+        "TROQUELADO2": troquelado_2,
+        "MATERIAS1": materias_1,
+        "MATERIAS2": materias_2,
+        "PPR3_1": ppr3_1,
+        "PPR3_2": ppr3_2,
+        "PPR4_1": ppr4_1,
+        "PPR4_2": ppr4_2,
+        "PPR6_1": ppr6_1,
+        "PPR6_2": ppr6_2,
+        "FALLOS_MAQUINA": fallosMaquinasToJson(fallosMaquina!),
+      };
+
+  bool isReady() {
+    return contadorInicial != '' &&
+        lote != '' &&
+        codProducto != '' &&
+        idMaquina != '' &&
+        legajoOperario != '';
+  }
 }

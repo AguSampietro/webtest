@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Utils {
-  static double cellHeight = 45.0;
+  static double cellHeight = 50.0;
 
   static String api_url = 'https://atila.online/dev/hores/api/rest';
 
@@ -98,7 +98,7 @@ class Utils {
     double marginBottom = getCenterScreen(context);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        backgroundColor: Colors.grey[900],
+        backgroundColor: Colors.red[700], //Colors.grey[900],
         elevation: 20.0,
         margin: EdgeInsets.only(
           left: 20,
@@ -123,10 +123,66 @@ class Utils {
         behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 5),
         content: ListTile(
-          leading: Icon(
+          leading: const Icon(
             Icons.warning_amber_rounded,
-            color: Colors.red[300],
-            size: 35,
+            color: Colors.white, //Colors.red[300],
+            size: 40,
+          ),
+          title: Text(
+            title,
+            style: const TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 18.0,
+              color: Colors.white,
+            ),
+          ),
+          subtitle: Text(
+            message,
+            style: const TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 16.0,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  static void snackBarSuccess(
+      BuildContext context, String title, String message) {
+    double marginBottom = getCenterScreen(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.green[700], //Colors.grey[900],
+        elevation: 20.0,
+        margin: EdgeInsets.only(
+          left: 20,
+          right: 20,
+          bottom: marginBottom,
+        ),
+        padding: const EdgeInsets.only(
+          left: 20,
+          bottom: 10,
+          top: 10,
+        ),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+        ),
+        action: SnackBarAction(
+          label: 'OK',
+          textColor: Colors.white,
+          onPressed: () {
+            // this block runs when label is pressed
+          },
+        ),
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 5),
+        content: ListTile(
+          leading: const Icon(
+            Icons.warning_amber_rounded,
+            color: Colors.white, //Colors.green[300],
+            size: 40,
           ),
           title: Text(
             title,

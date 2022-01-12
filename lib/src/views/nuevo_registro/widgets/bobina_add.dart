@@ -29,11 +29,11 @@ class BobinaAdd extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              margin: const EdgeInsets.only(left: 2, top: 2),
+              margin: const EdgeInsets.only(left: 1, top: 1),
               child: Text(
                 nro,
                 style: const TextStyle(
-                  fontSize: 11,
+                  fontSize: 10,
                   fontWeight: FontWeight.w600,
                   color: Colors.black,
                 ),
@@ -44,8 +44,8 @@ class BobinaAdd extends StatelessWidget {
                 bobina.nombre!,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
                   color: Colors.black,
                 ),
               ),
