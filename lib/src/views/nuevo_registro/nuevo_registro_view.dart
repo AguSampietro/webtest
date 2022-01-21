@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webtest/src/cubit/registro_add_cubit.dart';
 import 'package:webtest/src/models/bobina.dart';
 
 import 'package:webtest/src/models/fallo_maquina_model.dart';
@@ -1361,47 +1363,69 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Container(
-                              margin: const EdgeInsets.symmetric(
-                                  horizontal: 5, vertical: 10),
-                              child: FinishButton(
-                                text: 'FINALIZAR',
-                                onPressed: () {
-                                  _reg.idMaquina = prefs.maquinaId;
-                                  _reg.legajoOperario = prefs.operarioId;
-                                  _reg.codProducto = prefs.productoId;
-
-                                  if (_reg.isReady()) {
-                                    Utils.confirmAlert(
-                                        context,
-                                        'Finalizar registro',
-                                        '¿Esta seguro que desea finalizar el registro de produccion?',
-                                        () {
-                                      Navigator.of(context).pop();
-
-                                      log(json
-                                          .encode(_reg.toJson())
-                                          .toString());
-
-                                      Utils.snackBarSuccess(
-                                          context,
-                                          'Excelente',
-                                          'Registro finalizado y descargado correctamente.');
-                                    });
-                                  } else {
-                                    Utils.snackBarWarinig(context, 'Aviso',
-                                        'Debe completar los campos obligatorios.');
-                                  }
-                                },
-                              ),
-                            ),
+                            _finalizarButton(context, prefs),
                           ],
                         ),
+
+                        const SizedBox(height: 80),
                       ],
                     ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _finalizarButton(BuildContext context, AppPreferences prefs) {
+    return BlocConsumer<RegistroAddCubit, RegistroAddState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        if (state == null) return Text('State error');
+
+        if (state is RegistroAddInitial) {
+          return _buildFinalizarButton(prefs, context);
+        } else if (state is RegistroAddLoading) {
+          return Text('Loading');
+        } else if (state is RegistroAddError) {
+          return _buildFinalizarButton(prefs, context);
+        } else if (state is RegistroAddLoaded) {
+          return Text(state.mensaje);
+        } else {
+          return _buildFinalizarButton(prefs, context);
+        }
+      },
+    );
+  }
+
+  Container _buildFinalizarButton(AppPreferences prefs, BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+      child: FinishButton(
+        text: 'FINALIZAR',
+        onPressed: () {
+          _reg.idMaquina = prefs.maquinaId;
+          _reg.legajoOperario = prefs.operarioId;
+          _reg.codProducto = prefs.productoId;
+
+          if (_reg.isReady()) {
+            Utils.confirmAlert(context, 'Finalizar registro',
+                '¿Esta seguro que desea finalizar el registro de produccion?',
+                () {
+              Navigator.of(context).pop();
+
+              context.read<RegistroAddCubit>().PRO_insertRegistro(_reg);
+
+              log(json.encode(_reg.toJson()).toString());
+
+              Utils.snackBarSuccess(context, 'Excelente',
+                  'Registro finalizado y descargado correctamente.');
+            });
+          } else {
+            Utils.snackBarWarinig(
+                context, 'Aviso', 'Debe completar los campos obligatorios.');
+          }
+        },
       ),
     );
   }

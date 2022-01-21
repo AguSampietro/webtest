@@ -7,6 +7,7 @@ import 'package:webtest/src/models/bobina.dart';
 import 'package:webtest/src/models/fallo.dart';
 import 'package:webtest/src/models/operario.dart';
 import 'package:webtest/src/models/maquina.dart';
+import 'package:webtest/src/utils/filtro_type.dart';
 import 'package:webtest/src/utils/theme.dart';
 import 'package:webtest/src/views/nuevo_registro/widgets/bobina_add.dart';
 import 'package:webtest/src/widgets/bobina/bobina_filtro.dart';
@@ -23,6 +24,132 @@ import 'package:webtest/src/widgets/maquina/maquina_lista.dart';
 import 'package:webtest/src/widgets/operario/operario_lista.dart';
 
 class Modal {
+  static Future<String?> seleccionarTipoFiltro(context) async {
+    String? result = await showGeneralDialog(
+        context: context,
+        barrierDismissible: true,
+        barrierLabel:
+            MaterialLocalizations.of(context).modalBarrierDismissLabel,
+        barrierColor: Colors.black45,
+        transitionDuration: const Duration(milliseconds: 200),
+        pageBuilder: (BuildContext buildContext, Animation animation,
+            Animation secondaryAnimation) {
+          return Material(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              color: Colors.white,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  AppBar(
+                    centerTitle: true,
+                    backgroundColor: ThemeApp.modalHeadColor,
+                    elevation: 0,
+                    automaticallyImplyLeading: false,
+                    title: const Text(
+                      'SELECCIONE TIPO DE FILTRO',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 20,
+                      ),
+                    ),
+                    actions: [
+                      IconButton(
+                        iconSize: 34.0,
+                        color: Colors.white,
+                        icon: Icon(Icons.close),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: ListView(
+                      children: <Widget>[
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: ListTile(
+                            title: const Text('OPERARIO'),
+                            leading: const Icon(Icons.person_outline, size: 40),
+                            onTap: () {
+                              Navigator.of(context).pop(FiltrosType.OPERARIOS);
+                            },
+                            trailing: Text(
+                              'Seleccionar',
+                              style: TextStyle(
+                                color: ThemeApp.modalSelectItem,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: ListTile(
+                            title: const Text('MAQUINA'),
+                            leading: const Icon(Icons.build_circle_outlined,
+                                size: 40),
+                            onTap: () {
+                              Navigator.of(context).pop(FiltrosType.MAQUINAS);
+                            },
+                            trailing: Text(
+                              'Seleccionar',
+                              style: TextStyle(
+                                color: ThemeApp.modalSelectItem,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: ListTile(
+                            title: const Text('FECHA'),
+                            leading: const Icon(Icons.calendar_today, size: 40),
+                            onTap: () {
+                              Navigator.of(context).pop(FiltrosType.FECHAS);
+                            },
+                            trailing: Text(
+                              'Seleccionar',
+                              style: TextStyle(
+                                color: ThemeApp.modalSelectItem,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+    if (result == null) return null;
+
+    return result;
+  }
+
   static Future<String> addModal({context, String? title}) async {
     final double radious = 5;
 

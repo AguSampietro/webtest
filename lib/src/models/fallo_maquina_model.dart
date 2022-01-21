@@ -13,15 +13,24 @@ class FalloMaquina {
     this.nombre,
     this.tiempo,
     this.observaciones,
+    this.id,
+    this.idRegistro,
+    this.fallo,
   });
 
   String? codigo;
   String? nombre;
   int? tiempo;
   String? observaciones;
+  String? id;
+  String? idRegistro;
+  String? fallo;
 
   factory FalloMaquina.fromJson(Map<String, dynamic> json) => FalloMaquina(
+        id: json["id"],
+        idRegistro: json["id_registro"],
         codigo: json["codigo"],
+        fallo: json["fallo"],
         nombre: json["nombre"],
         tiempo: json["tiempo"],
         observaciones: json["observaciones"],

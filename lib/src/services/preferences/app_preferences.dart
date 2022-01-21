@@ -71,4 +71,8 @@ class AppPreferences {
       this._prefs.getString('ati_prod_productoNombre') ?? '';
   set productoNombre(String value) =>
       this._prefs.setString('ati_prod_productoNombre', value);
+
+  String get tipoFiltro => this._prefs.getString('ati_prod_tipoFiltro') ?? '';
+  set tipoFiltro(String value) =>
+      this._prefs.setString('ati_prod_tipoFiltro', value);
 }

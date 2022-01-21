@@ -1,8 +1,20 @@
+import 'dart:convert';
+
 import 'package:webtest/src/models/bobina.dart';
 import 'package:webtest/src/models/fallo_maquina_model.dart';
 
+RegistroProduccion registroProFromJson(String str) =>
+    RegistroProduccion.fromJson(json.decode(str));
+
 class RegistroProduccion {
   RegistroProduccion({
+    this.id,
+    this.producto,
+    this.maquina,
+    this.operario,
+    this.fecha,
+    this.hora,
+    this.estado,
     this.codProducto,
     this.idMaquina,
     this.legajoOperario,
@@ -66,6 +78,14 @@ class RegistroProduccion {
     this.ppr6_2,
     this.fallosMaquina,
   });
+
+  String? id = '';
+  String? producto = '';
+  String? maquina = '';
+  String? operario = '';
+  String? fecha = '';
+  String? hora = '';
+  String? estado = '';
 
   String? codProducto = '';
   String? idMaquina = '';
@@ -279,10 +299,113 @@ class RegistroProduccion {
       };
 
   bool isReady() {
-    return contadorInicial != '' &&
-        lote != '' &&
-        codProducto != '' &&
-        idMaquina != '' &&
-        legajoOperario != '';
+    return contadorInicial!.isNotEmpty &&
+        lote!.isNotEmpty &&
+        codProducto!.isNotEmpty &&
+        idMaquina!.isNotEmpty &&
+        legajoOperario!.isNotEmpty &&
+        contadorFinal!.isNotEmpty &&
+        cantidadMoldes!.isNotEmpty &&
+        cantidadCajas!.isNotEmpty;
   }
+
+  factory RegistroProduccion.fromJson(Map<String, dynamic> json) =>
+      RegistroProduccion(
+        id: json["ID"],
+        codProducto: json["COD_PRODUCTO"],
+        producto: json["PRODUCTO"],
+        idMaquina: json["ID_MAQUINA"],
+        maquina: json["MAQUINA"],
+        legajoOperario: json["LEGAJO_OPERARIO"],
+        operario: json["OPERARIO"],
+        contadorInicial: json["CONTADOR_INICIAL"],
+        lote: json["LOTE"],
+        contadorFinal: json["CONTADOR_FINAL"],
+        cantidadMoldes: json["CANTIDAD_MOLDES"],
+        cantidadCajas: json["CANTIDAD_CAJAS"],
+        adhesivoTrasero1: json["ADHESIVO_TRASERO1"],
+        adhesivoTrasero2: json["ADHESIVO_TRASERO2"],
+        adhesivoTrasero3: json["ADHESIVO_TRASERO3"],
+        adhesivoTrasero4: json["ADHESIVO_TRASERO4"],
+        adhesivoTrasero5: json["ADHESIVO_TRASERO5"],
+        adhesivoFondo1: json["ADHESIVO_FONDO1"],
+        adhesivoFondo2: json["ADHESIVO_FONDO2"],
+        adhesivoLateral1: json["ADHESIVO_LATERAL1"],
+        adhesivoLateral2: json["ADHESIVO_LATERAL2"],
+        adhesivoCorrugado: json["ADHESIVO_CORRUGADO"],
+        desmoldante: json["DESMOLDANTE"],
+        adhesivoDelantero1: json["ADHESIVO_DELANTERO1"],
+        adhesivoDelantero2: json["ADHESIVO_DELANTERO2"],
+        adhesivoDelantero3: json["ADHESIVO_DELANTERO3"],
+        adhesivoDelantero4: json["ADHESIVO_DELANTERO4"],
+        adhesivoDelantero5: json["ADHESIVO_DELANTERO5"],
+        bobina1: json["BOBINA1"] == null
+            ? Bobina()
+            : Bobina.fromJson(json["BOBINA1"]),
+        bobina2: json["BOBINA2"] == null
+            ? Bobina()
+            : Bobina.fromJson(json["BOBINA2"]),
+        bobina3: json["BOBINA3"] == null
+            ? Bobina()
+            : Bobina.fromJson(json["BOBINA3"]),
+        bobina4: json["BOBINA4"] == null
+            ? Bobina()
+            : Bobina.fromJson(json["BOBINA4"]),
+        bobina5: json["BOBINA5"] == null
+            ? Bobina()
+            : Bobina.fromJson(json["BOBINA5"]),
+        bobina6: json["BOBINA6"] == null
+            ? Bobina()
+            : Bobina.fromJson(json["BOBINA6"]),
+        bobinaFondo1:
+            json["BOBINA_FONDO1"] == null ? Bobina() : json["BOBINA_FONDO1"],
+        bobinaFondo2:
+            json["BOBINA_FONDO2"] == null ? Bobina() : json["BOBINA_FONDO2"],
+        bobinaFondo3:
+            json["BOBINA_FONDO3"] == null ? Bobina() : json["BOBINA_FONDO3"],
+        bobinaLateral1: json["BOBINA_LATERAL1"] == null
+            ? Bobina()
+            : json["BOBINA_LATERAL1"],
+        bobinaLateral2: json["BOBINA_LATERAL2"] == null
+            ? Bobina()
+            : json["BOBINA_LATERAL2"],
+        bobinaLateral3: json["BOBINA_LATERAL3"] == null
+            ? Bobina()
+            : json["BOBINA_LATERAL3"],
+        bobinaCono1:
+            json["BOBINA_CONO1"] == null ? Bobina() : json["BOBINA_CONO1"],
+        bobinaCono2:
+            json["BOBINA_CONO2"] == null ? Bobina() : json["BOBINA_CONO2"],
+        bobinaCono3:
+            json["BOBINA_CONO3"] == null ? Bobina() : json["BOBINA_CONO3"],
+        cruce_1: json["CRUCE1"],
+        cruce_2: json["CRUCE2"],
+        rulo_1: json["RULO1"],
+        rulo_2: json["RULO2"],
+        pegado_trasero_1: json["PEGADO_TRASERO1"],
+        pegado_trasero_2: json["PEGADO_TRASERO2"],
+        pegado_delantero_1: json["PEGADO_DELANTERO1"],
+        pegado_delantero_2: json["PEGADO_DELANTERO2"],
+        cant_cono_1: json["CANT_CONO1"],
+        cant_cono_2: json["CANT_CONO2"],
+        grafica_1: json["GRAFICA1"],
+        grafica_2: json["GRAFICA2"],
+        troquelado_1: json["TROQUELADO1"],
+        troquelado_2: json["TROQUELADO2"],
+        materias_1: json["MATERIAS1"],
+        materias_2: json["MATERIAS2"],
+        ppr3_1: json["PPR3_1"],
+        ppr3_2: json["PPR3_2"],
+        ppr4_1: json["PPR4_1"],
+        ppr4_2: json["PPR4_2"],
+        ppr6_1: json["PPR6_1"],
+        ppr6_2: json["PPR6_2"],
+        fecha: json["FECHA"],
+        hora: json["HORA"],
+        estado: json["ESTADO"],
+        fallosMaquina: json["FALLOS_MAQUINA"] == null
+            ? []
+            : List<FalloMaquina>.from(
+                json["FALLOS_MAQUINA"].map((x) => FalloMaquina.fromJson(x))),
+      );
 }

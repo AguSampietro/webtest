@@ -5,10 +5,14 @@ import 'package:webtest/src/cubit/bobina_cubit.dart';
 import 'package:webtest/src/cubit/fallo_cubit.dart';
 import 'package:webtest/src/cubit/maquina_cubit.dart';
 import 'package:webtest/src/cubit/operario_cubit.dart';
+import 'package:webtest/src/cubit/registro_add_cubit.dart';
+import 'package:webtest/src/cubit/registro_detalle_cubit.dart';
+import 'package:webtest/src/cubit/registro_lista_cubit.dart';
 import 'package:webtest/src/views/home/home.dart';
 import 'package:webtest/src/views/login/login.dart';
 
 import 'package:webtest/src/views/nuevo_registro/nuevo_registro_view.dart';
+import 'package:webtest/src/views/registro/registro.dart';
 import 'package:webtest/src/views/verificacion/verificacion.dart';
 
 import 'views/settings/settings_controller.dart';
@@ -38,6 +42,15 @@ class MyApp extends StatelessWidget {
         BlocProvider<FalloCubit>(
           create: (BuildContext context) => FalloCubit()..PRO_fallos(''),
         ),
+        BlocProvider<RegistroListaCubit>(
+          create: (BuildContext context) => RegistroListaCubit(),
+        ),
+        BlocProvider<RegistroAddCubit>(
+          create: (BuildContext context) => RegistroAddCubit(),
+        ),
+        BlocProvider<RegistroDetalleCubit>(
+          create: (BuildContext context) => RegistroDetalleCubit(),
+        ),
       ],
       child: AnimatedBuilder(
         animation: settingsController,
@@ -63,6 +76,8 @@ class MyApp extends StatelessWidget {
                       return const LoginView();
                     case VerificacionView.routeName:
                       return const VerificacionView();
+                    case RegistroView.routeName:
+                      return const RegistroView();
                     default:
                       return const VerificacionView();
                   }
