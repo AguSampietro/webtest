@@ -22,7 +22,7 @@ class _VerificacionViewState extends State<VerificacionView> {
 
     final prefs = AppPreferences();
 
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 1), () {
       if (prefs.logged) {
         Navigator.of(context).pushReplacementNamed(HomeView.routeName);
       } else {

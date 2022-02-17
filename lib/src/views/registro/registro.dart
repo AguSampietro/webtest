@@ -1,16 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:webtest/src/models/maquina.dart';
-import 'package:webtest/src/models/operario.dart';
-import 'package:webtest/src/utils/filtro_type.dart';
-import 'package:webtest/src/utils/modal.dart';
-import 'package:webtest/src/utils/utils.dart';
-import 'package:webtest/src/views/nuevo_registro/nuevo_registro_view.dart';
-
 import 'package:webtest/src/services/preferences/app_preferences.dart';
 import 'package:webtest/src/widgets/registros/registro_detalle.dart';
-import 'package:webtest/src/widgets/registros/registro_lista.dart';
-
-import '../settings/settings_view.dart';
 
 class RegistroView extends StatefulWidget {
   static const routeName = '/registro';
@@ -40,22 +30,19 @@ class _RegistroViewState extends State<RegistroView> {
 
     final double widthScreen = MediaQuery.of(context).size.width;
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('REGISTRO DE PRODUCCION'),
+      appBar: AppBar(
+        title: const Text('REGISTRO DE PRODUCCION'),
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          child: Column(
+            children: [
+              RegistrosDetalleView(id: _registroId),
+              const SizedBox(height: 100),
+            ],
+          ),
         ),
-        body: CustomScrollView(
-          slivers: [
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: Column(
-                children: <Widget>[
-                  Expanded(
-                    child: RegistrosDetalleView(id: _registroId),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ));
+      ),
+    );
   }
 }

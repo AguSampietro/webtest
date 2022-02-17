@@ -21,7 +21,7 @@ class InfoGrid extends StatelessWidget {
       flex: flex,
       child: Container(
         height: 50,
-        padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+        padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
         decoration: BoxDecoration(
           border: Utils.borderApp,
           color: Colors.grey[200],

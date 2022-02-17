@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart' as http;
-import 'package:webtest/src/models/operario.dart';
+
 import 'package:webtest/src/models/registro_lista.dart';
 import 'package:webtest/src/services/preferences/app_preferences.dart';
-import 'package:webtest/src/utils/filtro_type.dart';
+import 'package:webtest/src/utils/enum_types.dart';
 
 import 'package:webtest/src/utils/utils.dart';
 
@@ -30,6 +30,9 @@ class RegistroListaCubit extends Cubit<RegistroListaState> {
       } else if (prefs.tipoFiltro == FiltrosType.MAQUINAS) {
         url = Uri.parse('${Utils.api_url}/PRO_registros_maquina');
         id = prefs.maquinaId;
+      } else if (prefs.tipoFiltro == FiltrosType.PRODUCTOS) {
+        url = Uri.parse('${Utils.api_url}/PRO_registros_producto');
+        id = prefs.productoId;
       } else {
         emit(RegistroListaLoaded(registros: []));
         return;

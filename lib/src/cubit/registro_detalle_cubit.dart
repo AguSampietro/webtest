@@ -31,7 +31,7 @@ class RegistroDetalleCubit extends Cubit<RegistroDetalleState> {
         }),
       );
 
-      print('RESPONSE CODE ${response.statusCode} - ${response.body}');
+      log('RESPONSE CODE ${response.statusCode} - ${response.body}');
       if (response.statusCode == 200) {
         RegistroProduccion registro = registroProFromJson(response.body);
         emit(RegistroDetalleLoaded(registro: registro));

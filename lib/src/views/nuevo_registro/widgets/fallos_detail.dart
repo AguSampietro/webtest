@@ -12,8 +12,8 @@ class FallosDetail extends StatelessWidget {
   static Widget header(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(
-        left: 5,
-        right: 5,
+        left: 1,
+        right: 1,
       ),
       child: Row(
         children: [
@@ -122,8 +122,8 @@ class FallosDetail extends StatelessWidget {
   }) {
     return Container(
       padding: const EdgeInsets.only(
-        left: 5,
-        right: 5,
+        left: 1,
+        right: 1,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -251,7 +251,7 @@ class FallosDetail extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(width: 5)
+        const SizedBox(width: 1)
       ],
     );
   }

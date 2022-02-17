@@ -22,6 +22,10 @@ class AppPreferences {
   bool get logged => this._prefs.getBool('ati_prod_logged') ?? false;
   set logged(bool value) => this._prefs.setBool('ati_prod_logged', value);
 
+  String get login_tipo => this._prefs.getString('ati_prod_loginTipo') ?? '';
+  set login_tipo(String value) =>
+      this._prefs.setString('ati_prod_loginTipo', value);
+
   String get usuarioId => this._prefs.getString('ati_prod_usuarioId') ?? '';
   set usuarioId(String value) =>
       this._prefs.setString('ati_prod_usuarioId', value);

@@ -7,8 +7,8 @@ class FallosMaquinaHead extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(
-        left: 5,
-        right: 5,
+        left: 1,
+        right: 1,
       ),
       child: Row(
         children: [

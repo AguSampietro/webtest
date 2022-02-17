@@ -35,23 +35,35 @@ class FalloMaquinaModal {
           ),
           contentPadding: const EdgeInsets.all(0),
           actions: [
-            CancelButton(
-              onPressed: () {
-                Navigator.pop(context, null);
-              },
-              text: 'CANCELAR',
-            ),
-            AcceptButton(
-              onPressed: () {
-                FalloMaquina falloMaquina = FalloMaquina();
-                falloMaquina.codigo = fallo!.codfallo;
-                falloMaquina.nombre = fallo.descripcion;
-                falloMaquina.tiempo = _minutes;
-                falloMaquina.observaciones = _observaciones;
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    child: CancelButton(
+                      onPressed: () {
+                        Navigator.pop(context, null);
+                      },
+                      text: 'CANCELAR',
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    child: AcceptButton(
+                      onPressed: () {
+                        FalloMaquina falloMaquina = FalloMaquina();
+                        falloMaquina.codigo = fallo!.codfallo;
+                        falloMaquina.nombre = fallo.descripcion;
+                        falloMaquina.tiempo = _minutes;
+                        falloMaquina.observaciones = _observaciones;
 
-                Navigator.pop(context, falloMaquina);
-              },
-              text: 'ACEPTAR',
+                        Navigator.pop(context, falloMaquina);
+                      },
+                      text: 'ACEPTAR',
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
           content: StatefulBuilder(

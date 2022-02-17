@@ -1,17 +1,17 @@
 import 'dart:convert';
 
-List<Bobina> bobinasFromJson(String str) =>
-    List<Bobina>.from(json.decode(str).map((x) => Bobina.fromJson(x)));
+List<Producto> productosFromJson(String str) =>
+    List<Producto>.from(json.decode(str).map((x) => Producto.fromJson(x)));
 
-String bobinasToJson(List<Bobina> data) =>
+String productosToJson(List<Producto> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-String bobinaToJson(Bobina data) => json.encode(data.toJson());
+String productoToJson(Producto data) => json.encode(data.toJson());
 
-Map<String, dynamic> bobinaMapToJson(Bobina data) => data.toJson();
+Map<String, dynamic> productoMapToJson(Producto data) => data.toJson();
 
-class Bobina {
-  Bobina({
+class Producto {
+  Producto({
     this.id,
     this.codproducto,
     this.nombre,
@@ -29,7 +29,7 @@ class Bobina {
   String? grupo;
   dynamic cantXBulto;
 
-  factory Bobina.fromJson(Map<String, dynamic> json) => Bobina(
+  factory Producto.fromJson(Map<String, dynamic> json) => Producto(
         id: json["ID"],
         codproducto: json["CODPRODUCTO"],
         nombre: json["NOMBRE"],

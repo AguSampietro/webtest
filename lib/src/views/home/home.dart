@@ -1,14 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:webtest/src/models/producto.dart';
 import 'package:webtest/src/models/maquina.dart';
 import 'package:webtest/src/models/operario.dart';
-import 'package:webtest/src/utils/filtro_type.dart';
+import 'package:webtest/src/utils/enum_types.dart';
 import 'package:webtest/src/utils/modal.dart';
 import 'package:webtest/src/utils/utils.dart';
 import 'package:webtest/src/views/nuevo_registro/nuevo_registro_view.dart';
 
-import 'package:webtest/src/views/nuevo_registro/widgets/maquina_card.dart';
-
-import 'package:webtest/src/views/nuevo_registro/widgets/operario_card.dart';
 import 'package:webtest/src/services/preferences/app_preferences.dart';
 import 'package:webtest/src/widgets/registros/registro_lista.dart';
 
@@ -29,6 +29,7 @@ class _HomeViewState extends State<HomeView> {
   final prefs = AppPreferences();
   Maquina? _maquina = null;
   Operario? _operario = null;
+  Producto? _producto = null;
   String _tipoFiltro = '';
 
   @override
@@ -39,18 +40,27 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    String mensaje = '';
+
     if (prefs.tipoFiltro == FiltrosType.MAQUINAS) {
       _tipoFiltro = 'Maquina';
     } else if (prefs.tipoFiltro == FiltrosType.OPERARIOS) {
       _tipoFiltro = 'Operario';
-    } else if (prefs.tipoFiltro == FiltrosType.FECHAS) {
-      _tipoFiltro = 'Fecha';
+    } else if (prefs.tipoFiltro == FiltrosType.PRODUCTOS) {
+      _tipoFiltro = 'Producto';
     } else {
       _tipoFiltro = 'Seleccione un filtro';
     }
 
     if (prefs.maquinaId.isEmpty) {
       _maquina = Maquina(id: '0', maquina: 'SELECCIONE UNA MAQUINA');
+
+      if (prefs.usuarioTipo == UserType.OPERARIO) {
+        mensaje =
+            'Maquina no configurada, por favor contacte a un supervisor para configurarla.';
+      } else {
+        mensaje = 'Maquina no configurada, por favor configurarla.';
+      }
     } else {
       _maquina = Maquina(id: prefs.maquinaId, maquina: prefs.maquinaNombre);
     }
@@ -62,11 +72,24 @@ class _HomeViewState extends State<HomeView> {
           Operario(legajo: prefs.operarioId, nombre: prefs.operarioNombre);
     }
 
+    if (prefs.productoId.isEmpty) {
+      _producto = Producto(codproducto: '0', nombre: 'SELECCIONE UN PRODUCTO');
+    } else {
+      _producto =
+          Producto(codproducto: prefs.productoId, nombre: prefs.productoNombre);
+    }
+
     final double widthScreen = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: const Text('HORES - REGISTRO DE PRODUCCION'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () {
+              setState(() {});
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
@@ -90,16 +113,18 @@ class _HomeViewState extends State<HomeView> {
                   flex: 2,
                   child: Card(
                     child: ListTile(
-                      onTap: () async {
-                        final prefs = AppPreferences();
-                        String? tipoFiltro =
-                            await Modal.seleccionarTipoFiltro(context);
-                        if (tipoFiltro != null) {
-                          setState(() {
-                            prefs.tipoFiltro = tipoFiltro;
-                          });
-                        }
-                      },
+                      onTap: prefs.usuarioTipo == UserType.OPERARIO
+                          ? _noPermisos
+                          : () async {
+                              final prefs = AppPreferences();
+                              String? tipoFiltro =
+                                  await Modal.seleccionarTipoFiltro(context);
+                              if (tipoFiltro != null) {
+                                setState(() {
+                                  prefs.tipoFiltro = tipoFiltro;
+                                });
+                              }
+                            },
                       title: const Text(
                         'filtrar por:',
                         style: TextStyle(
@@ -123,13 +148,29 @@ class _HomeViewState extends State<HomeView> {
                   _buildFiltroOperario(context),
                 if (prefs.tipoFiltro == FiltrosType.MAQUINAS)
                   _buildFiltrMaquina(context),
-                if (prefs.tipoFiltro == FiltrosType.FECHAS)
-                  _buildFiltroFecha(context),
+                if (prefs.tipoFiltro == FiltrosType.PRODUCTOS)
+                  _buildFiltroProducto(context),
               ],
             ),
           ),
+          if (mensaje.isNotEmpty)
+            Container(
+              color: Colors.red,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              margin: const EdgeInsets.symmetric(vertical: 5),
+              child: Text(
+                mensaje,
+                style: const TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
           const Divider(color: Colors.grey, thickness: 1),
-          RegistrosLista(),
+          RegistrosLista(
+            onRefresh: () {
+              setState(() {});
+            },
+          ),
           const Divider(color: Colors.grey, thickness: 1),
           Container(
             margin: EdgeInsets.only(top: 5, bottom: 30),
@@ -163,22 +204,28 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
+  void _noPermisos() {
+    Utils.snackBar(context, 'No tiene permisos para modificar el filtro');
+  }
+
   Widget _buildFiltroOperario(BuildContext context) {
     return Expanded(
       flex: 4,
       child: Card(
         child: ListTile(
-          onTap: () async {
-            final prefs = AppPreferences();
-            Operario? operario = await Modal.seleccionarOperario(context);
-            if (operario != null) {
-              setState(() {
-                _operario = operario;
-                prefs.operarioId = operario.legajo!;
-                prefs.operarioNombre = operario.nombre!;
-              });
-            }
-          },
+          onTap: prefs.usuarioTipo == UserType.OPERARIO
+              ? _noPermisos
+              : () async {
+                  final prefs = AppPreferences();
+                  Operario? operario = await Modal.seleccionarOperario(context);
+                  if (operario != null) {
+                    setState(() {
+                      _operario = operario;
+                      prefs.operarioId = operario.legajo!;
+                      prefs.operarioNombre = operario.nombre!;
+                    });
+                  }
+                },
           leading: const Icon(
             Icons.person_outline,
             size: 40,
@@ -223,20 +270,33 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Widget _buildFiltroFecha(BuildContext context) {
+  Widget _buildFiltroProducto(BuildContext context) {
     return Expanded(
       flex: 4,
       child: Card(
         child: ListTile(
-          onTap: () async {
-            Utils.snackBar(context, 'En desarrollo');
-          },
+          onTap: prefs.usuarioTipo == UserType.OPERARIO
+              ? _noPermisos
+              : () async {
+                  final prefs = AppPreferences();
+                  Producto? producto =
+                      await Modal.seleccionarProducto(context, false);
+                  if (producto != null) {
+                    setState(() {
+                      _producto = producto;
+                      prefs.productoId = producto.codproducto!;
+                      prefs.productoNombre = producto.nombre!;
+                    });
+                  }
+                },
           leading: const Icon(
-            Icons.calendar_today,
+            Icons.snippet_folder_outlined,
             size: 40,
           ),
-          title: const Text('SELECIONE UNA FECHA'),
-          subtitle: const Text('Fecha seleccionada'),
+          title: _operario == null
+              ? const Text('SELECIONE UN PRODUCTO')
+              : Text(_producto!.nombre!),
+          subtitle: const Text('Producto Seleccionado'),
           trailing: const Icon(Icons.arrow_drop_down_circle_outlined),
         ),
       ),

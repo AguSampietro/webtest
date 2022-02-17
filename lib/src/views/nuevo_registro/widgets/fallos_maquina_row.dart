@@ -58,8 +58,8 @@ class FallosMaquinaRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(
-        left: 5,
-        right: 5,
+        left: 1,
+        right: 1,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,7 +181,7 @@ class FallosMaquinaTotalHoras extends StatelessWidget {
         Container(
           height: Utils.cellHeight,
           width: 300,
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 1),
           decoration: BoxDecoration(
             border: Utils.borderApp,
           ),

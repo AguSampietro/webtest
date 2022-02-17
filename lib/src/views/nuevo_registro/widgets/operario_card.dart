@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:webtest/src/models/operario.dart';
 import 'package:webtest/src/services/preferences/app_preferences.dart';
+import 'package:webtest/src/utils/enum_types.dart';
 import 'package:webtest/src/utils/utils.dart';
 import 'package:webtest/src/utils/modal.dart';
 
@@ -23,21 +24,24 @@ class _OperarioCardState extends State<OperarioCard> {
         : prefs.operarioNombre;
     return Expanded(
       child: GestureDetector(
-        onTap: () async {
-          final prefs = AppPreferences();
-          Operario? operario =
-              await Modal.seleccionarOperario(context) as Operario?;
-          if (operario != null) {
-            setState(() {
-              prefs.operarioId = operario.legajo!;
-              prefs.operarioNombre = operario.nombre!;
-            });
-          }
-        },
+        onTap: prefs.usuarioTipo == UserType.OPERARIO
+            ? () => Utils.snackBar(
+                context, 'No tiene permisos para modificar el operario')
+            : () async {
+                final prefs = AppPreferences();
+                Operario? operario =
+                    await Modal.seleccionarOperario(context) as Operario?;
+                if (operario != null) {
+                  setState(() {
+                    prefs.operarioId = operario.legajo!;
+                    prefs.operarioNombre = operario.nombre!;
+                  });
+                }
+              },
         child: Container(
-          height: 80,
-          margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+          height: 60,
+          margin: const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
           decoration: BoxDecoration(
             border: Utils.borderApp,
             color: Colors.grey[200],

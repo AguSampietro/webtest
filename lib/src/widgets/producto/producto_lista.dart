@@ -1,34 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:webtest/src/cubit/bobina_cubit.dart';
-import 'package:webtest/src/models/bobina.dart';
+import 'package:webtest/src/cubit/producto_cubit.dart';
+import 'package:webtest/src/models/producto.dart';
+import 'package:webtest/src/services/preferences/app_preferences.dart';
+
 import 'package:webtest/src/utils/theme.dart';
 import 'package:webtest/src/widgets/loading.dart';
 
-class BobinaLista extends StatelessWidget {
-  BobinaLista({required this.trabajando});
+class ProductoLista extends StatelessWidget {
+  ProductoLista({required this.trabajando});
 
   final bool trabajando;
   @override
   Widget build(BuildContext context) {
-    context.read<BobinaCubit>().PRO_productos('');
+    context.read<ProductoCubit>().PRO_productos('');
 
-    return BlocConsumer<BobinaCubit, BobinaState>(
+    return BlocConsumer<ProductoCubit, ProductoState>(
       listener: (context, state) {},
       builder: (context, state) {
         if (state == null) return Text('State error');
 
-        if (state is BobinaInitial) {
+        if (state is ProductoInitial) {
           return const _MessageSearch(
               mensaje: 'Comenzando busqueda de bobinas');
-        } else if (state is BobinaLoading) {
-          return const _LoadingBobina();
-        } else if (state is BobinaError) {
+        } else if (state is ProductoLoading) {
+          return const _LoadingProducto();
+        } else if (state is ProductoError) {
           return _MessageSearch(mensaje: state.message);
-        } else if (state is BobinaLoaded) {
-          List<Bobina> bobinas = [];
-
-          bobinas = state.bobinas;
+        } else if (state is ProductoLoaded) {
+          List<Producto> productos = [];
+          if (trabajando) {
+            productos = _getProductosPorMaquina(state.productos);
+          } else {
+            productos = state.productos;
+          }
 
           return Expanded(
             child: ListView.separated(
@@ -38,17 +43,17 @@ class BobinaLista extends StatelessWidget {
               padding: const EdgeInsets.only(
                   bottom: kFloatingActionButtonMargin + 48),
               scrollDirection: Axis.vertical,
-              itemCount: bobinas.length,
+              itemCount: productos.length,
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(
-                    bobinas[index].nombre!,
+                    productos[index].nombre!,
                     style: const TextStyle(
                       fontSize: 20,
                     ),
                   ),
                   subtitle: Text(
-                    'Código: ${bobinas[index].codproducto!}',
+                    'Código: ${productos[index].codproducto!}',
                     style: const TextStyle(
                       fontSize: 16,
                       color: Colors.black45,
@@ -61,7 +66,7 @@ class BobinaLista extends StatelessWidget {
                     ),
                   ),
                   onTap: () {
-                    Navigator.of(context).pop(bobinas[index]);
+                    Navigator.of(context).pop(productos[index]);
                   },
                 );
               },
@@ -72,10 +77,37 @@ class BobinaLista extends StatelessWidget {
           );
         } else {
           return const _MessageSearch(
-              mensaje: 'Algo salio mal obteniendo las bobinas.');
+              mensaje: 'Algo salio mal obteniendo los productos.');
         }
       },
     );
+  }
+
+  List<Producto> _getProductosPorMaquina(List<Producto> productos) {
+    List<Producto> lista = [];
+    final prefs = AppPreferences();
+
+    if (prefs.maquinaNombre.contains('BUDIN')) {
+      productos.forEach((element) {
+        if (element.nombre!.contains('BUDIN')) {
+          lista.add(element);
+        }
+      });
+    } else if (prefs.maquinaNombre.contains('DULCE')) {
+      productos.forEach((element) {
+        if (element.nombre!.contains('DULCE')) {
+          lista.add(element);
+        }
+      });
+    } else {
+      productos.forEach((element) {
+        if (element.nombre!.contains('ROSCA') ||
+            element.nombre!.contains('BIZCOCHUELO')) {
+          lista.add(element);
+        }
+      });
+    }
+    return lista;
   }
 }
 
@@ -105,8 +137,8 @@ class _MessageSearch extends StatelessWidget {
   }
 }
 
-class _LoadingBobina extends StatelessWidget {
-  const _LoadingBobina({
+class _LoadingProducto extends StatelessWidget {
+  const _LoadingProducto({
     Key? key,
   }) : super(key: key);
 

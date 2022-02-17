@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:numeric_keyboard/numeric_keyboard.dart';
-import 'package:webtest/src/cubit/bobina_cubit.dart';
-import 'package:webtest/src/cubit/maquina_cubit.dart';
 import 'package:webtest/src/models/bobina.dart';
+
+import 'package:webtest/src/models/producto.dart';
 import 'package:webtest/src/models/fallo.dart';
 import 'package:webtest/src/models/operario.dart';
 import 'package:webtest/src/models/maquina.dart';
-import 'package:webtest/src/utils/filtro_type.dart';
+import 'package:webtest/src/services/preferences/app_preferences.dart';
+import 'package:webtest/src/utils/enum_types.dart';
 import 'package:webtest/src/utils/theme.dart';
-import 'package:webtest/src/views/nuevo_registro/widgets/bobina_add.dart';
 import 'package:webtest/src/widgets/bobina/bobina_filtro.dart';
 import 'package:webtest/src/widgets/bobina/bobina_lista.dart';
+
+import 'package:webtest/src/widgets/producto/producto_filtro.dart';
+import 'package:webtest/src/widgets/producto/producto_lista.dart';
 import 'package:webtest/src/widgets/cancel_button.dart';
 import 'package:webtest/src/widgets/delete_button.dart';
 import 'package:webtest/src/utils/utils.dart';
@@ -19,7 +22,6 @@ import 'package:webtest/src/widgets/accept_button.dart';
 import 'package:webtest/src/widgets/fallo/fallo_filtro.dart';
 import 'package:webtest/src/widgets/fallo/fallo_lista.dart';
 
-import 'package:webtest/src/widgets/loading.dart';
 import 'package:webtest/src/widgets/maquina/maquina_lista.dart';
 import 'package:webtest/src/widgets/operario/operario_lista.dart';
 
@@ -124,10 +126,10 @@ class Modal {
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: ListTile(
-                            title: const Text('FECHA'),
+                            title: const Text('PRODUCTO'),
                             leading: const Icon(Icons.calendar_today, size: 40),
                             onTap: () {
-                              Navigator.of(context).pop(FiltrosType.FECHAS);
+                              Navigator.of(context).pop(FiltrosType.PRODUCTOS);
                             },
                             trailing: Text(
                               'Seleccionar',
@@ -180,23 +182,39 @@ class Modal {
           ),
           contentPadding: const EdgeInsets.all(0),
           actions: [
-            CancelButton(
-              onPressed: () {
-                Navigator.pop(context, 'cancel');
-              },
-              text: 'CANCELAR',
-            ),
-            DeleteButton(
-              onPressed: () {
-                Navigator.pop(context, 'delete');
-              },
-              text: 'BORRAR',
-            ),
-            AcceptButton(
-              onPressed: () {
-                Navigator.pop(context, _contador);
-              },
-              text: 'ACEPTAR',
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    child: CancelButton(
+                      onPressed: () {
+                        Navigator.pop(context, 'cancel');
+                      },
+                      text: 'CANCELAR',
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    child: DeleteButton(
+                      onPressed: () {
+                        Navigator.pop(context, 'delete');
+                      },
+                      text: 'BORRAR',
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    child: AcceptButton(
+                      onPressed: () {
+                        Navigator.pop(context, _contador);
+                      },
+                      text: 'ACEPTAR',
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
           content: StatefulBuilder(
@@ -430,7 +448,9 @@ class Modal {
                     ],
                   ),
                   BobinaFiltro(),
-                  BobinaLista(),
+                  BobinaLista(
+                    trabajando: false,
+                  ),
                   Container(
                     margin: EdgeInsets.only(bottom: 30),
                     child: DeleteButton(
@@ -506,8 +526,10 @@ class Modal {
     return result;
   }
 
-  static Future<Bobina?> seleccionarProducto(context) async {
-    Bobina? result = await showGeneralDialog(
+  static Future<Producto?> seleccionarProducto(context, bool trabajando) async {
+    final prefs = AppPreferences();
+
+    Producto? result = await showGeneralDialog(
         context: context,
         barrierDismissible: true,
         barrierLabel:
@@ -550,8 +572,21 @@ class Modal {
                       ),
                     ],
                   ),
-                  BobinaFiltro(),
-                  BobinaLista(),
+                  ProductoFiltro(),
+                  if (trabajando)
+                    Container(
+                      color: Colors.blue,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 5),
+                      margin: const EdgeInsets.symmetric(vertical: 5),
+                      child: Text(
+                        'Maquina seleccionada: ${prefs.maquinaNombre}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ProductoLista(trabajando: trabajando),
                 ],
               ),
             ),

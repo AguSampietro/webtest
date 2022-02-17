@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:webtest/src/models/maquina.dart';
 import 'package:webtest/src/models/operario.dart';
 import 'package:webtest/src/services/preferences/app_preferences.dart';
+import 'package:webtest/src/utils/enum_types.dart';
+import 'package:webtest/src/utils/utils.dart';
 import 'package:webtest/src/views/verificacion/verificacion.dart';
 
 import 'settings_controller.dart';
@@ -54,18 +56,21 @@ class _SettingsViewState extends State<SettingsView> {
               children: [
                 // MAQUINAS
                 ListTile(
-                  onTap: () async {
-                    final prefs = AppPreferences();
-                    Maquina? maquina =
-                        await Modal.seleccionarMaquina(context) as Maquina?;
-                    if (maquina != null) {
-                      setState(() {
-                        _maquina = maquina;
-                        prefs.maquinaId = maquina.id!;
-                        prefs.maquinaNombre = maquina.maquina!;
-                      });
-                    }
-                  },
+                  onTap: prefs.usuarioTipo == UserType.OPERARIO
+                      ? _noPermisos
+                      : () async {
+                          final prefs = AppPreferences();
+                          Maquina? maquina =
+                              await Modal.seleccionarMaquina(context);
+                          if (maquina != null) {
+                            setState(() {
+                              _maquina = maquina;
+                              prefs.maquinaId = maquina.id!;
+                              prefs.maquinaNombre = maquina.maquina!;
+                              prefs.maquinaTipo = maquina.tipo!;
+                            });
+                          }
+                        },
                   leading: const Icon(
                     Icons.build_circle_outlined,
                     size: 40,
@@ -81,18 +86,21 @@ class _SettingsViewState extends State<SettingsView> {
 
                 // OPERARIOS
                 ListTile(
-                  onTap: () async {
-                    final prefs = AppPreferences();
-                    Operario? operario =
-                        await Modal.seleccionarOperario(context) as Operario?;
-                    if (operario != null) {
-                      setState(() {
-                        _operario = operario;
-                        prefs.operarioId = operario.legajo!;
-                        prefs.operarioNombre = operario.nombre!;
-                      });
-                    }
-                  },
+                  onTap: prefs.usuarioTipo == UserType.OPERARIO
+                      ? _noPermisos
+                      : () async {
+                          final prefs = AppPreferences();
+                          Operario? operario =
+                              await Modal.seleccionarOperario(context)
+                                  as Operario?;
+                          if (operario != null) {
+                            setState(() {
+                              _operario = operario;
+                              prefs.operarioId = operario.legajo!;
+                              prefs.operarioNombre = operario.nombre!;
+                            });
+                          }
+                        },
                   leading: const Icon(
                     Icons.person_outline,
                     size: 40,
@@ -111,9 +119,9 @@ class _SettingsViewState extends State<SettingsView> {
                     prefs.logged = false;
                     prefs.operarioId = '';
                     prefs.operarioNombre = '';
-                    prefs.maquinaId = '';
-                    prefs.maquinaNombre = '';
-                    prefs.maquinaTipo = '';
+                    // prefs.maquinaId = '';
+                    // prefs.maquinaNombre = '';
+                    // prefs.maquinaTipo = '';
                     prefs.productoNombre = '';
                     prefs.productoId = '';
                     Navigator.of(context)
@@ -134,5 +142,10 @@ class _SettingsViewState extends State<SettingsView> {
         ],
       ),
     );
+  }
+
+  void _noPermisos() {
+    Utils.snackBar(
+        context, 'No tiene permisos para modificar la configuracion');
   }
 }

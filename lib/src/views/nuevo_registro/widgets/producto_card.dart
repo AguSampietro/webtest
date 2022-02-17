@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:webtest/src/models/bobina.dart';
+import 'package:webtest/src/models/producto.dart';
 import 'package:webtest/src/models/maquina.dart';
 import 'package:webtest/src/services/preferences/app_preferences.dart';
 import 'package:webtest/src/utils/modal.dart';
@@ -26,7 +26,7 @@ class _ProductoCardState extends State<ProductoCard> {
       child: GestureDetector(
         onTap: () async {
           final prefs = AppPreferences();
-          Bobina? prod = await Modal.seleccionarProducto(context) as Bobina?;
+          Producto? prod = await Modal.seleccionarProducto(context, true);
           if (prod != null) {
             setState(() {
               prefs.productoId = prod.codproducto!;
@@ -35,9 +35,9 @@ class _ProductoCardState extends State<ProductoCard> {
           }
         },
         child: Container(
-          height: 80,
-          margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          height: 60,
+          margin: const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
           decoration: BoxDecoration(
             border: Utils.borderApp,
             color: Colors.grey[200],

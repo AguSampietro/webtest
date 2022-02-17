@@ -16,8 +16,8 @@ class InfoContainer extends StatelessWidget {
     return Expanded(
       child: Container(
         height: 60,
-        margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
         decoration: BoxDecoration(
           border: Utils.borderApp,
           color: Colors.grey[200],
@@ -28,15 +28,16 @@ class InfoContainer extends StatelessWidget {
           children: [
             Text(
               label,
-              style: const TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 14),
             ),
-            Text(
-              value,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            )
+            if (value.isNotEmpty)
+              Text(
+                value,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              )
           ],
         ),
       ),
@@ -48,7 +49,7 @@ class InfoContainer extends StatelessWidget {
       flex: flex,
       child: Container(
         height: 50,
-        margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        margin: const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
         decoration: BoxDecoration(
           border: Utils.borderApp,
@@ -69,6 +70,113 @@ class InfoContainer extends StatelessWidget {
               ),
             ),
             Spacer(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  static Widget bobinaTitulo({required String label}) {
+    return Container(
+      height: 60,
+      width: 110,
+      margin: const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+      decoration: BoxDecoration(
+        border: Utils.borderApp,
+        color: Colors.grey[200],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static Widget bobinaDetalle({required String nro, required String value}) {
+    return Expanded(
+      child: Container(
+        height: 60,
+        margin: const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
+        padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 2),
+        decoration: BoxDecoration(
+          border: Utils.borderApp,
+          //color: Colors.grey[200],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              nro,
+              style: const TextStyle(fontSize: 12),
+            ),
+            const Spacer(),
+            Text(
+              value,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const Spacer(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  static Widget adhesivoTitulo({required String label}) {
+    return Container(
+      height: 40,
+      width: 170,
+      margin: const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+      decoration: BoxDecoration(
+        border: Utils.borderApp,
+        color: Colors.grey[200],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static Widget adhesivoDetalle({required String value}) {
+    return Expanded(
+      child: Container(
+        height: 40,
+        margin: const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
+        padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 2),
+        decoration: BoxDecoration(
+          border: Utils.borderApp,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Spacer(),
+            Text(
+              value,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const Spacer(),
           ],
         ),
       ),

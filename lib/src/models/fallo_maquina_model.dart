@@ -7,6 +7,9 @@ List<FalloMaquina> fallosMaquinasFromJson(String str) =>
 String fallosMaquinasToJson(List<FalloMaquina> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
+List<dynamic> fallosMaquinasMapToJson(List<FalloMaquina> data) =>
+    List<dynamic>.from(data.map((x) => x.toJson()));
+
 class FalloMaquina {
   FalloMaquina({
     this.codigo,

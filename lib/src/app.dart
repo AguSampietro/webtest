@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:webtest/src/cubit/bobina_cubit.dart';
+import 'package:webtest/src/cubit/producto_cubit.dart';
 import 'package:webtest/src/cubit/fallo_cubit.dart';
 import 'package:webtest/src/cubit/maquina_cubit.dart';
 import 'package:webtest/src/cubit/operario_cubit.dart';
@@ -35,6 +36,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<OperarioCubit>(
           create: (BuildContext context) => OperarioCubit()..PRO_operarios(),
+        ),
+        BlocProvider<ProductoCubit>(
+          create: (BuildContext context) => ProductoCubit()..PRO_productos(''),
         ),
         BlocProvider<BobinaCubit>(
           create: (BuildContext context) => BobinaCubit(),

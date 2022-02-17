@@ -23,8 +23,8 @@ class ControlesRow extends StatelessWidget {
     //final double altoCelda = 45.0;
     return Container(
       padding: const EdgeInsets.only(
-        left: 5,
-        right: 5,
+        left: 1,
+        right: 1,
       ),
       child: Row(
         children: [

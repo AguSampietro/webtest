@@ -5,11 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtest/src/cubit/registro_add_cubit.dart';
 import 'package:webtest/src/models/bobina.dart';
+import 'package:webtest/src/models/producto.dart';
 
 import 'package:webtest/src/models/fallo_maquina_model.dart';
 import 'package:webtest/src/models/fallo.dart';
 import 'package:webtest/src/models/registro_produccion.dart';
-import 'package:webtest/src/utils/maquina_type.dart';
+import 'package:webtest/src/utils/enum_types.dart';
 
 import 'package:webtest/src/views/nuevo_registro/widgets/adhesivo_add.dart';
 import 'package:webtest/src/views/nuevo_registro/widgets/adhesivo_label.dart';
@@ -53,6 +54,14 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
   RegistroProduccion _reg = RegistroProduccion.init();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    context.read<RegistroAddCubit>().ready();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final prefs = AppPreferences();
     final double widthScreen = MediaQuery.of(context).size.width;
@@ -88,10 +97,14 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                     margin: const EdgeInsets.only(left: 10, right: 5),
                     child: Image.asset(
                       'assets/images/logo_hores.png',
-                      width: 110,
+                      width: 90,
                     ),
                   ),
-                  MaquinaCard(),
+                  MaquinaCard(
+                    onRefresh: () {
+                      setState(() {});
+                    },
+                  ),
                 ],
               ),
               Row(
@@ -188,7 +201,7 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                             children: [
                               Container(
                                 margin:
-                                    EdgeInsets.only(top: 5, left: 5, right: 5),
+                                    EdgeInsets.only(top: 1, left: 1, right: 1),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -297,7 +310,7 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                               ),
                               Container(
                                 margin:
-                                    EdgeInsets.only(top: 5, left: 5, right: 5),
+                                    EdgeInsets.only(top: 1, left: 1, right: 1),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -406,7 +419,7 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                               ),
                               Container(
                                 margin:
-                                    EdgeInsets.only(top: 5, left: 5, right: 5),
+                                    EdgeInsets.only(top: 1, left: 1, right: 1),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -470,8 +483,8 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                 ),
                               ),
                               Container(
-                                margin: EdgeInsets.only(
-                                    bottom: 5, left: 5, right: 5),
+                                margin:
+                                    EdgeInsets.only(top: 1, left: 1, right: 1),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -542,7 +555,7 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                             children: [
                               Container(
                                 margin:
-                                    EdgeInsets.only(top: 5, left: 5, right: 5),
+                                    EdgeInsets.only(top: 1, left: 1, right: 1),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -621,7 +634,7 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                               ),
                               Container(
                                 margin:
-                                    EdgeInsets.only(top: 5, left: 5, right: 5),
+                                    EdgeInsets.only(top: 1, left: 1, right: 1),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -700,7 +713,7 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                               ),
                               Container(
                                 margin:
-                                    EdgeInsets.only(top: 5, left: 5, right: 5),
+                                    EdgeInsets.only(top: 1, left: 1, right: 1),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -765,7 +778,7 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                               ),
                               Container(
                                 margin:
-                                    EdgeInsets.only(top: 5, left: 5, right: 5),
+                                    EdgeInsets.only(top: 1, left: 1, right: 1),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -830,7 +843,7 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                               ),
                               Container(
                                 margin:
-                                    EdgeInsets.only(top: 5, left: 5, right: 5),
+                                    EdgeInsets.only(top: 1, left: 1, right: 1),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -1386,7 +1399,7 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
         if (state is RegistroAddInitial) {
           return _buildFinalizarButton(prefs, context);
         } else if (state is RegistroAddLoading) {
-          return Text('Loading');
+          return Text('Loading..');
         } else if (state is RegistroAddError) {
           return _buildFinalizarButton(prefs, context);
         } else if (state is RegistroAddLoaded) {
@@ -1432,7 +1445,7 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
 
   Widget _buildSubTituloCard(BuildContext context, String subtitle) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
         color: Colors.yellow[300],
@@ -1460,7 +1473,7 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
 
   Widget _buildSubTituloFallos(BuildContext context, String subtitle) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
       //padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
       decoration: BoxDecoration(
         border: Utils.borderApp,

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -18,6 +19,7 @@ class RegistroAddCubit extends Cubit<RegistroAddState> {
       emit(const RegistroAddLoading());
       print('API CUBIT - INSERTANDO REGISTRO');
 
+      log(jsonEncode(reg.toJson()));
       final url = Uri.parse('${Utils.api_url}/PRO_insertRegistro');
 
       final http.Response response = await http.post(
@@ -41,6 +43,46 @@ class RegistroAddCubit extends Cubit<RegistroAddState> {
       }
     } catch (e) {
       emit(RegistroAddError(e.toString()));
+    }
+  }
+
+  void ready() {
+    emit(const RegistroAddInitial());
+  }
+
+  Future<Respuesta> PRO_cambiarEstadoRegistro(String id, String estado) async {
+    try {
+      print('API CUBIT - ACTUALZIANDO ESTADO REGISTRO');
+
+      final url = Uri.parse('${Utils.api_url}/PRO_cambiarEstadoRegistro');
+
+      final http.Response response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          "id": id,
+          "filtro": estado,
+        }),
+      );
+
+      log('RESPONSE CODE ${response.statusCode} - ${response.body}');
+      if (response.statusCode == 200) {
+        Respuesta res = respuestaFromJson(response.body);
+        return res;
+      } else {
+        Respuesta res = Respuesta(
+            error: 'S',
+            mensaje: 'Problemas actualizando el estado del registro');
+        return res;
+      }
+    } catch (e) {
+      Respuesta res = Respuesta(
+          error: 'S',
+          mensaje:
+              'Error actualizando el estado del registro. ${e.toString()}');
+      return res;
     }
   }
 }

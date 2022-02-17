@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:webtest/src/cubit/maquina_cubit.dart';
+
 import 'package:webtest/src/cubit/registro_lista_cubit.dart';
-import 'package:webtest/src/models/maquina.dart';
+
 import 'package:webtest/src/models/registro_lista.dart';
-import 'package:webtest/src/utils/registro_type.dart';
-import 'package:webtest/src/utils/theme.dart';
+import 'package:webtest/src/utils/enum_types.dart';
+
 import 'package:webtest/src/views/registro/registro.dart';
 import 'package:webtest/src/widgets/loading.dart';
 
 class RegistrosLista extends StatelessWidget {
+  RegistrosLista({required this.onRefresh});
+  final Function onRefresh;
   @override
   Widget build(BuildContext context) {
     context.read<RegistroListaCubit>().PRO_registros();
@@ -41,7 +43,10 @@ class RegistrosLista extends StatelessWidget {
                   itemCount: state.registros.length,
                   itemBuilder: (context, index) {
                     RegistroLista registro = state.registros[index];
-                    return RegistroItem(registro: registro);
+                    return RegistroItem(
+                      registro: registro,
+                      onRefresh: onRefresh,
+                    );
                   },
                 ),
               ),
@@ -61,9 +66,11 @@ class RegistroItem extends StatelessWidget {
   const RegistroItem({
     Key? key,
     required this.registro,
+    required this.onRefresh,
   }) : super(key: key);
 
   final RegistroLista registro;
+  final Function onRefresh;
 
   @override
   Widget build(BuildContext context) {
@@ -169,7 +176,9 @@ class RegistroItem extends StatelessWidget {
                     context,
                     RegistroView.routeName,
                     arguments: registro.id,
-                  );
+                  ).then((value) {
+                    onRefresh();
+                  });
                 },
                 icon: const Icon(
                   Icons.info_outline,
@@ -224,7 +233,7 @@ class _LoadingRegistro extends StatelessWidget {
         children: [
           LoadingSpinner(
             color: Theme.of(context).primaryColor,
-            text: 'Buscando maquinas',
+            text: 'Buscando registros de produccion...',
             height: 3,
           ),
         ],

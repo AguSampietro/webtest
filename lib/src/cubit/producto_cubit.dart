@@ -3,22 +3,21 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart' as http;
-import 'package:webtest/src/models/bobina.dart';
 import 'package:webtest/src/models/producto.dart';
 
 import 'package:webtest/src/utils/utils.dart';
 
-part 'bobina_state.dart';
+part 'producto_state.dart';
 
-class BobinaCubit extends Cubit<BobinaState> {
-  BobinaCubit() : super(BobinaInitial());
+class ProductoCubit extends Cubit<ProductoState> {
+  ProductoCubit() : super(ProductoInitial());
 
   Future<void> PRO_productos(String filtro) async {
     try {
-      emit(const BobinaLoading());
+      emit(const ProductoLoading());
       print('API CUBIT - BUSCANDO PRODUCTOS');
 
-      final url = Uri.parse('${Utils.api_url}/PRO_bobinas');
+      final url = Uri.parse('${Utils.api_url}/PRO_productos');
 
       final http.Response response = await http.post(
         url,
@@ -31,13 +30,13 @@ class BobinaCubit extends Cubit<BobinaState> {
       );
       print('RESPONSE CODE ${response.statusCode} - ${response.body}');
       if (response.statusCode == 200) {
-        List<Bobina> bobinas = bobinasFromJson(response.body);
-        emit(BobinaLoaded(bobinas: bobinas));
+        List<Producto> productos = productosFromJson(response.body);
+        emit(ProductoLoaded(productos: productos));
       } else {
-        emit(BobinaError('No existen los bobinas'));
+        emit(ProductoError('No existen los bobinas'));
       }
     } catch (e) {
-      emit(BobinaError(e.toString()));
+      emit(ProductoError(e.toString()));
     }
   }
 }

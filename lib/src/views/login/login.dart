@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/src/provider.dart';
+import 'package:webtest/src/cubit/operario_cubit.dart';
+import 'package:webtest/src/models/operario.dart';
 
 import 'package:webtest/src/services/preferences/app_preferences.dart';
+import 'package:webtest/src/utils/enum_types.dart';
+import 'package:webtest/src/utils/utils.dart';
 import 'package:webtest/src/views/verificacion/verificacion.dart';
+import 'package:webtest/src/widgets/accept_button.dart';
+import 'package:webtest/src/widgets/cancel_button.dart';
 
 class LoginView extends StatefulWidget {
   static const routeName = '/login';
@@ -16,6 +24,9 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
+  final _formKeySupervisor = GlobalKey<FormState>();
+  final _formKeyOperario = GlobalKey<FormState>();
+
   String _mail = '';
   String _clave = '';
 
@@ -70,115 +81,12 @@ class _LoginViewState extends State<LoginView> {
                   flex: 3,
                   child: Column(
                     children: [
-                      Container(
-                        width: size.width * 0.7,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                        child: Column(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Colors.grey.shade300))),
-                              child: TextField(
-                                keyboardType: TextInputType.emailAddress,
-                                onChanged: (text) {
-                                  setState(() {
-                                    _mail = text;
-                                  });
-                                },
-                                decoration: InputDecoration(
-                                    prefixIcon: const Icon(Icons.person),
-                                    border: InputBorder.none,
-                                    hintStyle: TextStyle(
-                                        color: Colors.grey.withOpacity(.8)),
-                                    hintText: "Ingresá tu nombre de usuario"),
-                              ),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(),
-                              child: TextField(
-                                onChanged: (text) {
-                                  setState(() {
-                                    _clave = text;
-                                  });
-                                },
-                                obscureText: true,
-                                decoration: InputDecoration(
-                                    prefixIcon: const Icon(Icons.lock),
-                                    border: InputBorder.none,
-                                    hintStyle: TextStyle(
-                                        color: Colors.grey.withOpacity(.8)),
-                                    hintText: "Ingresá tu contraseña"),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 20),
                       Center(
                         child: Column(
                           children: <Widget>[
-                            GestureDetector(
-                              onTap: () {
-                                // LLAMA A LA API
-                                if (_mail.isEmpty || _clave.isEmpty) {
-                                  // ignore: deprecated_member_use
-                                  scaffoldKey.currentState?.showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                          'Debe ingreser sus credenciales de usuario'),
-                                    ),
-                                  );
-                                } else {
-                                  final prefs = AppPreferences();
-                                  prefs.logged = true;
-                                  Navigator.pushReplacementNamed(
-                                      context, VerificacionView.routeName);
-                                  // utils.modalLoading(context, 'VALIDANDO DATOS DEL USUARIO');
-                                }
-                              },
-                              child: Container(
-                                width: 250,
-                                padding: const EdgeInsets.all(18),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  //color: Colors.deepPurple[900],
-                                  border: Border.all(
-                                    color: Colors.white,
-                                    width: 1.5,
-                                    style: BorderStyle.solid,
-                                  ),
-                                ),
-                                child: const Center(
-                                    child: Text(
-                                  "INGRESAR",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 18,
-                                  ),
-                                )),
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            SizedBox(
-                              width: size.width * 0.7,
-                              child: TextButton(
-                                onPressed: () {
-                                  //Navigator.of(context).pushNamed('recupero');
-                                },
-                                child: const Text(
-                                  "OLVIDE MI CLAVE",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                            ),
+                            _loginOperarios(context, size),
+                            const SizedBox(height: 10),
+                            _loginSupervisor(context, size),
                             Container(
                               width: double.infinity,
                               margin: const EdgeInsets.symmetric(
@@ -202,6 +110,342 @@ class _LoginViewState extends State<LoginView> {
                 ),
                 // Expanded(child: Container()),
               ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _loginOperarios(BuildContext context, Size size) {
+    return GestureDetector(
+      onTap: () {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                content: Stack(
+                  children: <Widget>[
+                    Form(
+                      key: _formKeyOperario,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          const Text(
+                            'Ingrese sus credenciales, las cuales son su legajo y contraseña.\nTendra acceso a todos los registros generados por su usuario.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.black87,
+                              fontSize: 20,
+                            ),
+                          ),
+                          const SizedBox(height: 40),
+                          Container(
+                            width: size.width * 0.7,
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Colors.grey.shade300))),
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              onChanged: (text) {
+                                setState(() {
+                                  _mail = text;
+                                });
+                              },
+                              decoration: InputDecoration(
+                                  prefixIcon: const Icon(Icons.person),
+                                  border: InputBorder.none,
+                                  hintStyle: TextStyle(
+                                      color: Colors.grey.withOpacity(.8)),
+                                  hintText: "Ingresá tu legajo de operario"),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(8.0),
+                            width: size.width * 0.7,
+                            decoration: BoxDecoration(),
+                            child: TextField(
+                              onChanged: (text) {
+                                setState(() {
+                                  _clave = text;
+                                });
+                              },
+                              obscureText: true,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                  prefixIcon: const Icon(Icons.lock),
+                                  border: InputBorder.none,
+                                  hintStyle: TextStyle(
+                                      color: Colors.grey.withOpacity(.8)),
+                                  hintText: "Ingresá tu contraseña"),
+                            ),
+                          ),
+                          const SizedBox(height: 40),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  child: CancelButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, 'cancel');
+                                    },
+                                    text: 'CANCELAR',
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  child: AcceptButton(
+                                    onPressed: () async {
+                                      // LLAMA A LA API
+                                      if (_mail.isEmpty || _clave.isEmpty) {
+                                        // ignore: deprecated_member_use
+                                        scaffoldKey.currentState?.showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                                'Debe ingreser sus credenciales de usuario'),
+                                          ),
+                                        );
+                                      } else {
+                                        final prefs = AppPreferences();
+                                        prefs.logged = false;
+                                        Operario operario = await context
+                                            .read<OperarioCubit>()
+                                            .PRO_operario(_mail);
+
+                                        if (operario.legajo! == _mail
+                                            //&& operario.clave! == _clave
+                                            ) {
+                                          prefs.logged = true;
+                                          prefs.usuarioTipo = UserType.OPERARIO;
+                                          prefs.tipoFiltro =
+                                              FiltrosType.OPERARIOS;
+                                          prefs.operarioId = operario.legajo!;
+                                          prefs.operarioNombre =
+                                              operario.nombre!;
+
+                                          Navigator.pushReplacementNamed(
+                                              context,
+                                              VerificacionView.routeName);
+                                        } else {
+                                          Utils.snackBar(context,
+                                              'No se encontro el operario');
+                                        }
+
+                                        // utils.modalLoading(context, 'VALIDANDO DATOS DEL USUARIO');
+                                      }
+                                    },
+                                    text: 'INGRESAR',
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            });
+      },
+      child: Container(
+        width: 420,
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(50),
+          //color: Colors.deepPurple[900],
+          border: Border.all(
+            color: Colors.white,
+            width: 1.5,
+            style: BorderStyle.solid,
+          ),
+        ),
+        child: const Center(
+          // child: Text(
+          //   "INGRESAR COMO OPERARIO",
+          //   textAlign: TextAlign.center,
+          //   style: TextStyle(
+          //     color: Colors.white,
+          //     fontWeight: FontWeight.w700,
+          //     fontSize: 18,
+          //   ),
+          // ),
+          child: ListTile(
+            leading: Icon(
+              FontAwesomeIcons.hardHat,
+              color: Colors.white,
+              size: 40,
+            ),
+            title: Text(
+              "INGRESAR COMO OPERARIO",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+                fontSize: 18,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _loginSupervisor(BuildContext context, Size size) {
+    return GestureDetector(
+      onTap: () {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                content: Stack(
+                  children: <Widget>[
+                    Form(
+                      key: _formKeySupervisor,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          const Text(
+                            'Ingrese sus credenciales gestionadas desde el sistema Atila Online.\nTendra acceso a todos los registros generados por los operarios.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.black87,
+                              fontSize: 20,
+                            ),
+                          ),
+                          const SizedBox(height: 40),
+                          Container(
+                            width: size.width * 0.7,
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: Colors.grey.shade300,
+                                ),
+                              ),
+                            ),
+                            child: TextField(
+                              keyboardType: TextInputType.emailAddress,
+                              onChanged: (text) {
+                                setState(() {
+                                  _mail = text;
+                                });
+                              },
+                              decoration: InputDecoration(
+                                  prefixIcon: const Icon(Icons.person),
+                                  border: InputBorder.none,
+                                  hintStyle: TextStyle(
+                                      color: Colors.grey.withOpacity(.8)),
+                                  hintText: "Ingresá tu nombre de usuario"),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(8.0),
+                            width: size.width * 0.7,
+                            decoration: BoxDecoration(),
+                            child: TextField(
+                              onChanged: (text) {
+                                setState(() {
+                                  _clave = text;
+                                });
+                              },
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                  prefixIcon: const Icon(Icons.lock),
+                                  border: InputBorder.none,
+                                  hintStyle: TextStyle(
+                                      color: Colors.grey.withOpacity(.8)),
+                                  hintText: "Ingresá tu contraseña"),
+                            ),
+                          ),
+                          const SizedBox(height: 40),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  child: CancelButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    text: 'CANCELAR',
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  child: AcceptButton(
+                                    onPressed: () {
+                                      // LLAMA A LA API
+                                      if (_mail.isEmpty || _clave.isEmpty) {
+                                        // ignore: deprecated_member_use
+                                        scaffoldKey.currentState?.showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                                'Debe ingreser sus credenciales de usuario'),
+                                          ),
+                                        );
+                                      } else {
+                                        final prefs = AppPreferences();
+                                        prefs.usuarioTipo = UserType.SUPERVISOR;
+                                        prefs.logged = true;
+                                        Navigator.pushReplacementNamed(context,
+                                            VerificacionView.routeName);
+                                        // utils.modalLoading(context, 'VALIDANDO DATOS DEL USUARIO');
+                                      }
+                                    },
+                                    text: 'INGRESAR',
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            });
+      },
+      child: Container(
+        width: 420,
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(50),
+          //color: Colors.deepPurple[900],
+          border: Border.all(
+            color: Colors.white,
+            width: 1.5,
+            style: BorderStyle.solid,
+          ),
+        ),
+        // child: const Center(
+        //   child: Text(
+        //     "INGRESAR COMO SUPERVISOR",
+        //     textAlign: TextAlign.center,
+        //     style: TextStyle(
+        //       color: Colors.white,
+        //       fontWeight: FontWeight.w700,
+        //       fontSize: 18,
+        //     ),
+        //   ),
+        // ),
+        child: const ListTile(
+          leading: Icon(
+            FontAwesomeIcons.userTie,
+            color: Colors.white,
+            size: 40,
+          ),
+          title: Text(
+            "INGRESAR COMO SUPERVISOR",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+              fontSize: 18,
             ),
           ),
         ),

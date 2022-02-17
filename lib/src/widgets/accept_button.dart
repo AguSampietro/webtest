@@ -21,19 +21,19 @@ class AcceptButton extends StatelessWidget {
         padding: MaterialStateProperty.all(
           const EdgeInsets.symmetric(
             horizontal: 15,
-            vertical: 10,
+            vertical: 20,
           ),
         ),
         textStyle: MaterialStateProperty.all(
           const TextStyle(
-            fontSize: 16,
+            fontSize: 20,
             fontWeight: FontWeight.w600,
             color: Colors.white,
           ),
         ),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5.0),
+            borderRadius: BorderRadius.circular(0.0),
             side: BorderSide(
               color: ThemeApp.acceptButtonColor,
             ),

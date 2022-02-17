@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:webtest/src/models/bobina.dart';
+import 'package:webtest/src/models/producto.dart';
 import 'package:webtest/src/models/fallo_maquina_model.dart';
 
 RegistroProduccion registroProFromJson(String str) =>
@@ -258,21 +259,21 @@ class RegistroProduccion {
         "ADHESIVO_DELANTERO3": adhesivoDelantero3,
         "ADHESIVO_DELANTERO4": adhesivoDelantero4,
         "ADHESIVO_DELANTERO5": adhesivoDelantero5,
-        "BOBINA1": bobinaToJson(bobina1!),
-        "BOBINA2": bobinaToJson(bobina2!),
-        "BOBINA3": bobinaToJson(bobina3!),
-        "BOBINA4": bobinaToJson(bobina4!),
-        "BOBINA5": bobinaToJson(bobina5!),
-        "BOBINA6": bobinaToJson(bobina6!),
-        "BOBINA_FONDO1": bobinaToJson(bobinaFondo1!),
-        "BOBINA_FONDO2": bobinaToJson(bobinaFondo2!),
-        "BOBINA_FONDO3": bobinaToJson(bobinaFondo3!),
-        "BOBINA_LATERAL1": bobinaToJson(bobinaLateral1!),
-        "BOBINA_LATERAL2": bobinaToJson(bobinaLateral2!),
-        "BOBINA_LATERAL3": bobinaToJson(bobinaLateral3!),
-        "BOBINA_CONO1": bobinaToJson(bobinaCono1!),
-        "BOBINA_CONO2": bobinaToJson(bobinaCono2!),
-        "BOBINA_CONO3": bobinaToJson(bobinaCono3!),
+        "BOBINA1": bobinaMapToJson(bobina1!),
+        "BOBINA2": bobinaMapToJson(bobina2!),
+        "BOBINA3": bobinaMapToJson(bobina3!),
+        "BOBINA4": bobinaMapToJson(bobina4!),
+        "BOBINA5": bobinaMapToJson(bobina5!),
+        "BOBINA6": bobinaMapToJson(bobina6!),
+        "BOBINA_FONDO1": bobinaMapToJson(bobinaFondo1!),
+        "BOBINA_FONDO2": bobinaMapToJson(bobinaFondo2!),
+        "BOBINA_FONDO3": bobinaMapToJson(bobinaFondo3!),
+        "BOBINA_LATERAL1": bobinaMapToJson(bobinaLateral1!),
+        "BOBINA_LATERAL2": bobinaMapToJson(bobinaLateral2!),
+        "BOBINA_LATERAL3": bobinaMapToJson(bobinaLateral3!),
+        "BOBINA_CONO1": bobinaMapToJson(bobinaCono1!),
+        "BOBINA_CONO2": bobinaMapToJson(bobinaCono2!),
+        "BOBINA_CONO3": bobinaMapToJson(bobinaCono3!),
         "CRUCE1": cruce_1,
         "CRUCE2": cruce_2,
         "RULO1": rulo_1,
@@ -295,7 +296,7 @@ class RegistroProduccion {
         "PPR4_2": ppr4_2,
         "PPR6_1": ppr6_1,
         "PPR6_2": ppr6_2,
-        "FALLOS_MAQUINA": fallosMaquinasToJson(fallosMaquina!),
+        "FALLOS_MAQUINA": fallosMaquinasMapToJson(fallosMaquina!),
       };
 
   bool isReady() {
@@ -357,27 +358,33 @@ class RegistroProduccion {
         bobina6: json["BOBINA6"] == null
             ? Bobina()
             : Bobina.fromJson(json["BOBINA6"]),
-        bobinaFondo1:
-            json["BOBINA_FONDO1"] == null ? Bobina() : json["BOBINA_FONDO1"],
-        bobinaFondo2:
-            json["BOBINA_FONDO2"] == null ? Bobina() : json["BOBINA_FONDO2"],
-        bobinaFondo3:
-            json["BOBINA_FONDO3"] == null ? Bobina() : json["BOBINA_FONDO3"],
+        bobinaFondo1: json["BOBINA_FONDO1"] == null
+            ? Bobina()
+            : Bobina.fromJson(json["BOBINA_FONDO1"]),
+        bobinaFondo2: json["BOBINA_FONDO2"] == null
+            ? Bobina()
+            : Bobina.fromJson(json["BOBINA_FONDO2"]),
+        bobinaFondo3: json["BOBINA_FONDO3"] == null
+            ? Bobina()
+            : Bobina.fromJson(json["BOBINA_FONDO3"]),
         bobinaLateral1: json["BOBINA_LATERAL1"] == null
             ? Bobina()
-            : json["BOBINA_LATERAL1"],
+            : Bobina.fromJson(json["BOBINA_LATERAL1"]),
         bobinaLateral2: json["BOBINA_LATERAL2"] == null
             ? Bobina()
-            : json["BOBINA_LATERAL2"],
+            : Bobina.fromJson(json["BOBINA_LATERAL2"]),
         bobinaLateral3: json["BOBINA_LATERAL3"] == null
             ? Bobina()
-            : json["BOBINA_LATERAL3"],
-        bobinaCono1:
-            json["BOBINA_CONO1"] == null ? Bobina() : json["BOBINA_CONO1"],
-        bobinaCono2:
-            json["BOBINA_CONO2"] == null ? Bobina() : json["BOBINA_CONO2"],
-        bobinaCono3:
-            json["BOBINA_CONO3"] == null ? Bobina() : json["BOBINA_CONO3"],
+            : Bobina.fromJson(json["BOBINA_LATERAL3"]),
+        bobinaCono1: json["BOBINA_CONO1"] == null
+            ? Bobina()
+            : Bobina.fromJson(json["BOBINA_CONO1"]),
+        bobinaCono2: json["BOBINA_CONO2"] == null
+            ? Bobina()
+            : Bobina.fromJson(json["BOBINA_CONO2"]),
+        bobinaCono3: json["BOBINA_CONO3"] == null
+            ? Bobina()
+            : Bobina.fromJson(json["BOBINA_CONO3"]),
         cruce_1: json["CRUCE1"],
         cruce_2: json["CRUCE2"],
         rulo_1: json["RULO1"],

@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:webtest/src/cubit/bobina_cubit.dart';
+import 'package:webtest/src/cubit/producto_cubit.dart';
 
+import 'package:webtest/src/utils/theme.dart';
 import 'package:webtest/src/widgets/loading.dart';
 
-class BobinaFiltro extends StatelessWidget {
+class ProductoFiltro extends StatelessWidget {
   TextEditingController _filtroController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<BobinaCubit, BobinaState>(
+    return BlocConsumer<ProductoCubit, ProductoState>(
       listener: (context, state) {},
       builder: (context, state) {
         return ListTile(
@@ -23,7 +24,7 @@ class BobinaFiltro extends StatelessWidget {
               keyboardType: TextInputType.emailAddress,
               onChanged: (text) {
                 if (text.length > 2) {
-                  context.read<BobinaCubit>().PRO_productos(text);
+                  context.read<ProductoCubit>().PRO_productos(text);
                 }
               },
               decoration: InputDecoration(
@@ -32,7 +33,7 @@ class BobinaFiltro extends StatelessWidget {
                   onTap: () {
                     _filtroController.text = "";
                     FocusScope.of(context).unfocus();
-                    context.read<BobinaCubit>().PRO_productos('');
+                    context.read<ProductoCubit>().PRO_productos('');
                   },
                   child: const Icon(Icons.cancel, color: Colors.black38),
                 ),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -25,7 +26,7 @@ class OperarioCubit extends Cubit<OperarioState> {
           'Content-Type': 'application/json; charset=UTF-8',
         },
       );
-      print('RESPONSE CODE ${response.statusCode} - ${response.body}');
+      log('RESPONSE CODE ${response.statusCode} - ${response.body}');
       if (response.statusCode == 200) {
         List<Operario> maquinas = operariosFromJson(response.body);
         emit(OperarioLoaded(operarios: maquinas));
@@ -34,6 +35,33 @@ class OperarioCubit extends Cubit<OperarioState> {
       }
     } catch (e) {
       emit(OperarioError(e.toString()));
+    }
+  }
+
+  Future<Operario> PRO_operario(String legajo) async {
+    try {
+      log('API CUBIT - BUSCANDO OPERARIO');
+
+      final url = Uri.parse('${Utils.api_url}/PRO_operario');
+      final http.Response response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          "id": legajo,
+        }),
+      );
+
+      log('RESPONSE CODE ${response.statusCode} - ${response.body}');
+      if (response.statusCode == 200) {
+        List<Operario> operarios = operariosFromJson(response.body);
+        return operarios.first;
+      } else {
+        return Operario(legajo: '', nombre: '', clave: '');
+      }
+    } catch (e) {
+      return Operario(legajo: '', nombre: '', clave: '');
     }
   }
 }
