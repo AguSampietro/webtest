@@ -17,7 +17,7 @@ dependencies:
     sdk: flutter
   data_table_2: ^2.2.0
   http: ^0.13.1
-  shared_preferences:
+  shared_preferences: ^2.0.13
   numeric_keyboard: ^1.1.0
   simple_tags: ^0.0.4
   permission_handler: ^8.0.0+2
