@@ -176,6 +176,9 @@ class _HomeViewState extends State<HomeView> {
             margin: EdgeInsets.only(top: 5, bottom: 30),
             child: ElevatedButton.icon(
               onPressed: () {
+                final prefs = AppPreferences();
+                prefs.idRegistroEdit = '';
+
                 Navigator.pushNamed(context, NuevoRegistroView.routeName)
                     .then((value) {
                   setState(() {});

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtest/src/cubit/bobina_cubit.dart';
+import 'package:webtest/src/services/preferences/app_preferences.dart';
 
 import 'package:webtest/src/widgets/loading.dart';
 
@@ -9,6 +10,9 @@ class BobinaFiltro extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final prefs = AppPreferences();
+    final deposito = prefs.depositoId;
+
     return BlocConsumer<BobinaCubit, BobinaState>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -23,7 +27,9 @@ class BobinaFiltro extends StatelessWidget {
               keyboardType: TextInputType.emailAddress,
               onChanged: (text) {
                 if (text.length > 2) {
-                  context.read<BobinaCubit>().PRO_productos(text);
+                  context
+                      .read<BobinaCubit>()
+                      .PRO_bobinasPorDeposito(text, deposito);
                 }
               },
               decoration: InputDecoration(
@@ -32,7 +38,9 @@ class BobinaFiltro extends StatelessWidget {
                   onTap: () {
                     _filtroController.text = "";
                     FocusScope.of(context).unfocus();
-                    context.read<BobinaCubit>().PRO_productos('');
+                    context
+                        .read<BobinaCubit>()
+                        .PRO_bobinasPorDeposito('', deposito);
                   },
                   child: const Icon(Icons.cancel, color: Colors.black38),
                 ),
@@ -98,7 +106,7 @@ class _LoadingBobina extends StatelessWidget {
         children: [
           LoadingSpinner(
             color: Theme.of(context).primaryColor,
-            text: 'Buscando maquinas',
+            text: 'Buscando bobinas',
             height: 3,
           ),
         ],

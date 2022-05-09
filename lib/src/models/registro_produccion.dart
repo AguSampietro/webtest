@@ -12,6 +12,8 @@ class RegistroProduccion {
     this.id,
     this.producto,
     this.maquina,
+    this.deposito,
+    this.depositoNombre,
     this.operario,
     this.fecha,
     this.hora,
@@ -83,6 +85,8 @@ class RegistroProduccion {
   String? id = '';
   String? producto = '';
   String? maquina = '';
+  String? deposito = '';
+  String? depositoNombre = '';
   String? operario = '';
   String? fecha = '';
   String? hora = '';
@@ -118,24 +122,24 @@ class RegistroProduccion {
   String? adhesivoDelantero4 = '';
   String? adhesivoDelantero5 = '';
 
-  Bobina? bobina1 = Bobina(id: '', nombre: '');
-  Bobina? bobina2 = Bobina(id: '', nombre: '');
-  Bobina? bobina3 = Bobina(id: '', nombre: '');
-  Bobina? bobina4 = Bobina(id: '', nombre: '');
-  Bobina? bobina5 = Bobina(id: '', nombre: '');
-  Bobina? bobina6 = Bobina(id: '', nombre: '');
+  Bobina? bobina1 = Bobina.init();
+  Bobina? bobina2 = Bobina.init();
+  Bobina? bobina3 = Bobina.init();
+  Bobina? bobina4 = Bobina.init();
+  Bobina? bobina5 = Bobina.init();
+  Bobina? bobina6 = Bobina.init();
 
-  Bobina? bobinaFondo1 = Bobina(id: '', nombre: '');
-  Bobina? bobinaFondo2 = Bobina(id: '', nombre: '');
-  Bobina? bobinaFondo3 = Bobina(id: '', nombre: '');
+  Bobina? bobinaFondo1 = Bobina.init();
+  Bobina? bobinaFondo2 = Bobina.init();
+  Bobina? bobinaFondo3 = Bobina.init();
 
-  Bobina? bobinaLateral1 = Bobina(id: '', nombre: '');
-  Bobina? bobinaLateral2 = Bobina(id: '', nombre: '');
-  Bobina? bobinaLateral3 = Bobina(id: '', nombre: '');
+  Bobina? bobinaLateral1 = Bobina.init();
+  Bobina? bobinaLateral2 = Bobina.init();
+  Bobina? bobinaLateral3 = Bobina.init();
 
-  Bobina? bobinaCono1 = Bobina(id: '', nombre: '');
-  Bobina? bobinaCono2 = Bobina(id: '', nombre: '');
-  Bobina? bobinaCono3 = Bobina(id: '', nombre: '');
+  Bobina? bobinaCono1 = Bobina.init();
+  Bobina? bobinaCono2 = Bobina.init();
+  Bobina? bobinaCono3 = Bobina.init();
 
   String? cruce_1 = '';
   String? cruce_2 = '';
@@ -194,21 +198,21 @@ class RegistroProduccion {
         adhesivoDelantero3: '',
         adhesivoDelantero4: '',
         adhesivoDelantero5: '',
-        bobina1: Bobina(id: '', nombre: ''),
-        bobina2: Bobina(id: '', nombre: ''),
-        bobina3: Bobina(id: '', nombre: ''),
-        bobina4: Bobina(id: '', nombre: ''),
-        bobina5: Bobina(id: '', nombre: ''),
-        bobina6: Bobina(id: '', nombre: ''),
-        bobinaFondo1: Bobina(id: '', nombre: ''),
-        bobinaFondo2: Bobina(id: '', nombre: ''),
-        bobinaFondo3: Bobina(id: '', nombre: ''),
-        bobinaLateral1: Bobina(id: '', nombre: ''),
-        bobinaLateral2: Bobina(id: '', nombre: ''),
-        bobinaLateral3: Bobina(id: '', nombre: ''),
-        bobinaCono1: Bobina(id: '', nombre: ''),
-        bobinaCono2: Bobina(id: '', nombre: ''),
-        bobinaCono3: Bobina(id: '', nombre: ''),
+        bobina1: Bobina.init(),
+        bobina2: Bobina.init(),
+        bobina3: Bobina.init(),
+        bobina4: Bobina.init(),
+        bobina5: Bobina.init(),
+        bobina6: Bobina.init(),
+        bobinaFondo1: Bobina.init(),
+        bobinaFondo2: Bobina.init(),
+        bobinaFondo3: Bobina.init(),
+        bobinaLateral1: Bobina.init(),
+        bobinaLateral2: Bobina.init(),
+        bobinaLateral3: Bobina.init(),
+        bobinaCono1: Bobina.init(),
+        bobinaCono2: Bobina.init(),
+        bobinaCono3: Bobina.init(),
         cruce_1: '',
         cruce_2: '',
         rulo_1: '',
@@ -235,8 +239,10 @@ class RegistroProduccion {
       );
 
   Map<String, dynamic> toJson() => {
+        "ID": id,
         "COD_PRODUCTO": codProducto,
         "ID_MAQUINA": idMaquina,
+        "DEPOSITO": deposito,
         "LEGAJO_OPERARIO": legajoOperario,
         "CONTADOR_INICIAL": contadorInicial,
         "LOTE": lote,
@@ -300,12 +306,12 @@ class RegistroProduccion {
       };
 
   bool isReady() {
-    return contadorInicial!.isNotEmpty &&
-        lote!.isNotEmpty &&
+    return lote!.isNotEmpty &&
         codProducto!.isNotEmpty &&
         idMaquina!.isNotEmpty &&
         legajoOperario!.isNotEmpty &&
-        contadorFinal!.isNotEmpty &&
+        // contadorInicial!.isNotEmpty &&
+        // contadorFinal!.isNotEmpty &&
         cantidadMoldes!.isNotEmpty &&
         cantidadCajas!.isNotEmpty;
   }
@@ -317,6 +323,8 @@ class RegistroProduccion {
         producto: json["PRODUCTO"],
         idMaquina: json["ID_MAQUINA"],
         maquina: json["MAQUINA"],
+        deposito: json["DEPOSITO"],
+        depositoNombre: json["DEPOSITO_NOMBRE"],
         legajoOperario: json["LEGAJO_OPERARIO"],
         operario: json["OPERARIO"],
         contadorInicial: json["CONTADOR_INICIAL"],

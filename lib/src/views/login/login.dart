@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/src/provider.dart';
 import 'package:webtest/src/cubit/operario_cubit.dart';
 import 'package:webtest/src/models/operario.dart';
+import 'package:webtest/src/models/supervisor.dart';
 
 import 'package:webtest/src/services/preferences/app_preferences.dart';
 import 'package:webtest/src/utils/enum_types.dart';
@@ -27,8 +28,8 @@ class _LoginViewState extends State<LoginView> {
   final _formKeySupervisor = GlobalKey<FormState>();
   final _formKeyOperario = GlobalKey<FormState>();
 
-  String _mail = '';
-  String _clave = '';
+  String _claveSuper = '';
+  String _legajo = '';
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +133,7 @@ class _LoginViewState extends State<LoginView> {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           const Text(
-                            'Ingrese sus credenciales, las cuales son su legajo y contraseña.\nTendra acceso a todos los registros generados por su usuario.',
+                            'Ingrese sus credenciales, las cuales son su legajo.\nTendra acceso a todos los registros generados por su usuario.',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.black87,
@@ -151,7 +152,7 @@ class _LoginViewState extends State<LoginView> {
                               keyboardType: TextInputType.number,
                               onChanged: (text) {
                                 setState(() {
-                                  _mail = text;
+                                  _legajo = text;
                                 });
                               },
                               decoration: InputDecoration(
@@ -162,26 +163,26 @@ class _LoginViewState extends State<LoginView> {
                                   hintText: "Ingresá tu legajo de operario"),
                             ),
                           ),
-                          Container(
-                            padding: EdgeInsets.all(8.0),
-                            width: size.width * 0.7,
-                            decoration: BoxDecoration(),
-                            child: TextField(
-                              onChanged: (text) {
-                                setState(() {
-                                  _clave = text;
-                                });
-                              },
-                              obscureText: true,
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                  prefixIcon: const Icon(Icons.lock),
-                                  border: InputBorder.none,
-                                  hintStyle: TextStyle(
-                                      color: Colors.grey.withOpacity(.8)),
-                                  hintText: "Ingresá tu contraseña"),
-                            ),
-                          ),
+                          // Container(
+                          //   padding: EdgeInsets.all(8.0),
+                          //   width: size.width * 0.7,
+                          //   decoration: BoxDecoration(),
+                          //   child: TextField(
+                          //     onChanged: (text) {
+                          //       setState(() {
+                          //         _clave = text;
+                          //       });
+                          //     },
+                          //     obscureText: true,
+                          //     keyboardType: TextInputType.number,
+                          //     decoration: InputDecoration(
+                          //         prefixIcon: const Icon(Icons.lock),
+                          //         border: InputBorder.none,
+                          //         hintStyle: TextStyle(
+                          //             color: Colors.grey.withOpacity(.8)),
+                          //         hintText: "Ingresá tu contraseña"),
+                          //   ),
+                          // ),
                           const SizedBox(height: 40),
                           Row(
                             children: [
@@ -200,7 +201,7 @@ class _LoginViewState extends State<LoginView> {
                                   child: AcceptButton(
                                     onPressed: () async {
                                       // LLAMA A LA API
-                                      if (_mail.isEmpty || _clave.isEmpty) {
+                                      if (_legajo.isEmpty) {
                                         // ignore: deprecated_member_use
                                         scaffoldKey.currentState?.showSnackBar(
                                           const SnackBar(
@@ -213,11 +214,9 @@ class _LoginViewState extends State<LoginView> {
                                         prefs.logged = false;
                                         Operario operario = await context
                                             .read<OperarioCubit>()
-                                            .PRO_operario(_mail);
+                                            .PRO_operario(_legajo);
 
-                                        if (operario.legajo! == _mail
-                                            //&& operario.clave! == _clave
-                                            ) {
+                                        if (operario.legajo! == _legajo) {
                                           prefs.logged = true;
                                           prefs.usuarioTipo = UserType.OPERARIO;
                                           prefs.tipoFiltro =
@@ -309,7 +308,7 @@ class _LoginViewState extends State<LoginView> {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           const Text(
-                            'Ingrese sus credenciales gestionadas desde el sistema Atila Online.\nTendra acceso a todos los registros generados por los operarios.',
+                            'Ingrese sus clave de supervisor.\nTendra acceso a todos los registros generados por los operarios.',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.black87,
@@ -331,7 +330,7 @@ class _LoginViewState extends State<LoginView> {
                               keyboardType: TextInputType.emailAddress,
                               onChanged: (text) {
                                 setState(() {
-                                  _mail = text;
+                                  _claveSuper = text;
                                 });
                               },
                               decoration: InputDecoration(
@@ -339,26 +338,7 @@ class _LoginViewState extends State<LoginView> {
                                   border: InputBorder.none,
                                   hintStyle: TextStyle(
                                       color: Colors.grey.withOpacity(.8)),
-                                  hintText: "Ingresá tu nombre de usuario"),
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(8.0),
-                            width: size.width * 0.7,
-                            decoration: BoxDecoration(),
-                            child: TextField(
-                              onChanged: (text) {
-                                setState(() {
-                                  _clave = text;
-                                });
-                              },
-                              obscureText: true,
-                              decoration: InputDecoration(
-                                  prefixIcon: const Icon(Icons.lock),
-                                  border: InputBorder.none,
-                                  hintStyle: TextStyle(
-                                      color: Colors.grey.withOpacity(.8)),
-                                  hintText: "Ingresá tu contraseña"),
+                                  hintText: "Ingresá tu clave de supervsor"),
                             ),
                           ),
                           const SizedBox(height: 40),
@@ -377,9 +357,9 @@ class _LoginViewState extends State<LoginView> {
                               Expanded(
                                 child: Container(
                                   child: AcceptButton(
-                                    onPressed: () {
+                                    onPressed: () async {
                                       // LLAMA A LA API
-                                      if (_mail.isEmpty || _clave.isEmpty) {
+                                      if (_claveSuper.isEmpty) {
                                         // ignore: deprecated_member_use
                                         scaffoldKey.currentState?.showSnackBar(
                                           const SnackBar(
@@ -389,11 +369,24 @@ class _LoginViewState extends State<LoginView> {
                                         );
                                       } else {
                                         final prefs = AppPreferences();
-                                        prefs.usuarioTipo = UserType.SUPERVISOR;
-                                        prefs.logged = true;
-                                        Navigator.pushReplacementNamed(context,
-                                            VerificacionView.routeName);
-                                        // utils.modalLoading(context, 'VALIDANDO DATOS DEL USUARIO');
+                                        prefs.logged = false;
+                                        Supervisor operario = await context
+                                            .read<OperarioCubit>()
+                                            .PRO_supervisor(_claveSuper);
+
+                                        if (operario.claveacceso! ==
+                                            _claveSuper) {
+                                          prefs.logged = true;
+                                          prefs.usuarioTipo =
+                                              UserType.SUPERVISOR;
+
+                                          Navigator.pushReplacementNamed(
+                                              context,
+                                              VerificacionView.routeName);
+                                        } else {
+                                          Utils.snackBar(context,
+                                              'No se encontro el supervisor');
+                                        }
                                       }
                                     },
                                     text: 'INGRESAR',

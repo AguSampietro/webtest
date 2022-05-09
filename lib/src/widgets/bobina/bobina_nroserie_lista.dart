@@ -2,16 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtest/src/cubit/bobina_cubit.dart';
 import 'package:webtest/src/models/bobina.dart';
+import 'package:webtest/src/models/nro_serie.dart';
+import 'package:webtest/src/services/preferences/app_preferences.dart';
 import 'package:webtest/src/utils/theme.dart';
 import 'package:webtest/src/widgets/loading.dart';
 
-class BobinaLista extends StatelessWidget {
-  BobinaLista({required this.trabajando});
+class BobinaNroSerieLista extends StatelessWidget {
+  BobinaNroSerieLista({required this.trabajando, required this.codProducto});
 
   final bool trabajando;
+  final String codProducto;
   @override
   Widget build(BuildContext context) {
-    context.read<BobinaCubit>().PRO_productos('');
+    final prefs = AppPreferences();
+    String deposito = prefs.depositoId;
+
+    context.read<BobinaCubit>().PRO_nroSerieProducto(codProducto, deposito);
 
     return BlocConsumer<BobinaCubit, BobinaState>(
       listener: (context, state) {},
@@ -20,15 +26,15 @@ class BobinaLista extends StatelessWidget {
 
         if (state is BobinaInitial) {
           return const _MessageSearch(
-              mensaje: 'Comenzando busqueda de bobinas');
+              mensaje: 'Comenzando busqueda de numeros de serie');
         } else if (state is BobinaLoading) {
           return const _LoadingBobina();
         } else if (state is BobinaError) {
           return _MessageSearch(mensaje: state.message);
         } else if (state is BobinaLoaded) {
-          List<Bobina> bobinas = [];
+          List<NroSerie> nroSeries = [];
 
-          bobinas = state.bobinas!;
+          nroSeries = state.bobinasNroSerie!;
 
           return Expanded(
             child: ListView.separated(
@@ -38,17 +44,17 @@ class BobinaLista extends StatelessWidget {
               padding: const EdgeInsets.only(
                   bottom: kFloatingActionButtonMargin + 48),
               scrollDirection: Axis.vertical,
-              itemCount: bobinas.length,
+              itemCount: nroSeries.length,
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(
-                    bobinas[index].nombre!,
+                    'Nro Serie: ${nroSeries[index].nroserie!}',
                     style: const TextStyle(
                       fontSize: 20,
                     ),
                   ),
                   subtitle: Text(
-                    'Código: ${bobinas[index].codproducto!}',
+                    'Código: ${nroSeries[index].codproducto!} - ${nroSeries[index].nombre!}',
                     style: const TextStyle(
                       fontSize: 16,
                       color: Colors.black45,
@@ -61,7 +67,7 @@ class BobinaLista extends StatelessWidget {
                     ),
                   ),
                   onTap: () {
-                    Navigator.of(context).pop(bobinas[index]);
+                    Navigator.of(context).pop(nroSeries[index]);
                   },
                 );
               },
@@ -72,7 +78,7 @@ class BobinaLista extends StatelessWidget {
           );
         } else {
           return const _MessageSearch(
-              mensaje: 'Algo salio mal obteniendo las bobinas.');
+              mensaje: 'Algo salio mal obteniendo los numeros de serie.');
         }
       },
     );
@@ -118,7 +124,7 @@ class _LoadingBobina extends StatelessWidget {
         children: [
           LoadingSpinner(
             color: Theme.of(context).primaryColor,
-            text: 'Buscando maquinas',
+            text: 'Buscando numeros de series',
             height: 3,
           ),
         ],

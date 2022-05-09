@@ -22,7 +22,7 @@ class _MaquinaCardState extends State<MaquinaCard> {
     final prefs = AppPreferences();
     print('prefs.maquina: ${prefs.maquinaNombre}');
     String maq = (prefs.maquinaId.isEmpty)
-        ? 'CONFIGURE UNA MAQUINA'
+        ? 'CONFIGURE TIPO MAQUINA'
         : prefs.maquinaNombre;
     return Expanded(
       child: GestureDetector(
@@ -56,7 +56,7 @@ class _MaquinaCardState extends State<MaquinaCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'MAQUINA UTILIZADA:',
+                'TIPO DE MAQUINA UTILIZADA:',
                 style: TextStyle(
                   fontSize: 16,
                 ),

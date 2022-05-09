@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtest/src/cubit/bobina_cubit.dart';
 import 'package:webtest/src/models/bobina.dart';
+import 'package:webtest/src/services/preferences/app_preferences.dart';
 import 'package:webtest/src/utils/theme.dart';
 import 'package:webtest/src/widgets/loading.dart';
 
-class BobinaLista extends StatelessWidget {
-  BobinaLista({required this.trabajando});
+class BobinaDepositoLista extends StatelessWidget {
+  BobinaDepositoLista({required this.trabajando});
 
   final bool trabajando;
   @override
   Widget build(BuildContext context) {
-    context.read<BobinaCubit>().PRO_productos('');
+    final prefs = AppPreferences();
+    final deposito = prefs.depositoId;
+    context.read<BobinaCubit>().PRO_bobinasPorDeposito('', deposito);
 
     return BlocConsumer<BobinaCubit, BobinaState>(
       listener: (context, state) {},
@@ -28,7 +31,7 @@ class BobinaLista extends StatelessWidget {
         } else if (state is BobinaLoaded) {
           List<Bobina> bobinas = [];
 
-          bobinas = state.bobinas!;
+          bobinas = state.bobinasPorDeposito!;
 
           return Expanded(
             child: ListView.separated(

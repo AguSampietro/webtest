@@ -99,7 +99,8 @@ class InfoContainer extends StatelessWidget {
     );
   }
 
-  static Widget bobinaDetalle({required String nro, required String value}) {
+  static Widget bobinaDetalle(
+      {required String nro, required String value, required bool checked}) {
     return Expanded(
       child: Container(
         height: 60,
@@ -118,12 +119,22 @@ class InfoContainer extends StatelessWidget {
               style: const TextStyle(fontSize: 12),
             ),
             const Spacer(),
-            Text(
-              value,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
+            Row(
+              children: [
+                Text(
+                  value,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const Spacer(),
+                (checked)
+                    ? const Icon(Icons.check_circle,
+                        color: Colors.green, size: 20)
+                    : const Icon(Icons.circle_outlined,
+                        color: Colors.grey, size: 20),
+              ],
             ),
             const Spacer(),
           ],

@@ -1,16 +1,21 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webtest/src/cubit/operario_cubit.dart';
 import 'package:webtest/src/cubit/registro_add_cubit.dart';
 
 import 'package:webtest/src/cubit/registro_detalle_cubit.dart';
+import 'package:webtest/src/models/bobina.dart';
 
 import 'package:webtest/src/models/registro_produccion.dart';
 import 'package:webtest/src/models/respuesta.dart';
+import 'package:webtest/src/models/supervisor.dart';
 import 'package:webtest/src/utils/enum_types.dart';
+import 'package:webtest/src/utils/modal.dart';
 import 'package:webtest/src/utils/utils.dart';
 
 import 'package:webtest/src/views/nuevo_registro/widgets/fallos_detail.dart';
+import 'package:webtest/src/widgets/accept_button.dart';
 import 'package:webtest/src/widgets/cancel_button.dart';
 
 import 'package:webtest/src/widgets/loading.dart';
@@ -43,7 +48,7 @@ class RegistrosDetalleView extends StatelessWidget {
         } else if (state is RegistroDetalleLoaded) {
           return _Detalle(registro: state.registro);
         } else {
-          return _MessageSearch(
+          return const _MessageSearch(
               mensaje: 'Algo salio mal obteniendo el registro de produccion.');
         }
       },
@@ -61,8 +66,32 @@ class _Detalle extends StatefulWidget {
 }
 
 class _DetalleState extends State<_Detalle> {
+  String _claveSuper = '';
+
+  final _formKeySupervisor = GlobalKey<FormState>();
+  var scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
+    // widget.registro.bobina1 ??= Bobina.init();
+    // widget.registro.bobina2 ??= Bobina.init();
+    // widget.registro.bobina3 ??= Bobina.init();
+    // widget.registro.bobina4 ??= Bobina.init();
+    // widget.registro.bobina5 ??= Bobina.init();
+    // widget.registro.bobina6 ??= Bobina.init();
+
+    // widget.registro.bobinaCono1 ??= Bobina.init();
+    // widget.registro.bobinaCono2 ??= Bobina.init();
+    // widget.registro.bobinaCono3 ??= Bobina.init();
+
+    // widget.registro.bobinaFondo1 ??= Bobina.init();
+    // widget.registro.bobinaFondo2 ??= Bobina.init();
+    // widget.registro.bobinaFondo3 ??= Bobina.init();
+
+    // widget.registro.bobinaLateral1 ??= Bobina.init();
+    // widget.registro.bobinaLateral2 ??= Bobina.init();
+    // widget.registro.bobinaLateral3 ??= Bobina.init();
+
     var _color = Colors.black54;
     bool canEdit = false;
     if (widget.registro.estado == RegistroType.CREADO) {
@@ -119,26 +148,61 @@ class _DetalleState extends State<_Detalle> {
             actions: [
               if (canEdit)
                 TextButton.icon(
-                  onPressed: () {
-                    Utils.confirmAlert(context, 'Procesar registro',
-                        '¿Está seguro que desea PROCESAR el registro?',
-                        () async {
-                      Navigator.of(context).pop();
-                      Respuesta res = await context
-                          .read<RegistroAddCubit>()
-                          .PRO_cambiarEstadoRegistro(
-                              widget.registro.id!, RegistroType.PROCESADO);
-
-                      if (res.error == 'S') {
-                        Utils.snackBarWarinig(
-                            context, 'Cambio de estado', res.mensaje!);
+                  onPressed: () async {
+                    String result = await Modal.password(
+                        context: context,
+                        title: 'PROCESAR: INGRESE CLAVE SUPERVISOR ');
+                    if (result.isNotEmpty) {
+                      if (result == 'delete') {
+                        _claveSuper = '';
                       } else {
-                        context
-                            .read<RegistroDetalleCubit>()
-                            .PRO_registro(widget.registro.id!);
-                        setState(() {});
+                        _claveSuper = result;
+
+                        Supervisor operario = await context
+                            .read<OperarioCubit>()
+                            .PRO_supervisor(_claveSuper);
+
+                        if (operario.claveacceso! == _claveSuper) {
+                          Respuesta res = await context
+                              .read<RegistroAddCubit>()
+                              .PRO_cambiarEstadoRegistro(widget.registro.id!,
+                                  RegistroType.PROCESADO, operario.quien!);
+
+                          if (res.error == 'S') {
+                            Utils.snackBarWarinig(context,
+                                'Cambio de estado: Procesar', res.mensaje!);
+                          } else {
+                            context
+                                .read<RegistroDetalleCubit>()
+                                .PRO_registro(widget.registro.id!);
+                            setState(() {});
+                          }
+                        } else {
+                          Utils.snackBar(
+                              context, 'No se encontro el supervisor');
+                        }
                       }
-                    });
+                    }
+
+                    // Utils.confirmAlert(context, 'Procesar registro',
+                    //     '¿Está seguro que desea PROCESAR el registro?',
+                    //     () async {
+                    //   Navigator.of(context).pop();
+                    //   Respuesta res = await context
+                    //       .read<RegistroAddCubit>()
+                    //       .PRO_cambiarEstadoRegistro(
+                    //           widget.registro.id!, RegistroType.PROCESADO);
+
+                    //   if (res.error == 'S') {
+                    //     Utils.snackBarWarinig(
+                    //         context, 'Cambio de estado', res.mensaje!);
+                    //   } else {
+                    //     context
+                    //         .read<RegistroDetalleCubit>()
+                    //         .PRO_registro(widget.registro.id!);
+                    //     setState(() {});
+                    //   }
+                    // });
                   },
                   label: const Text(
                     'PROCESAR',
@@ -170,26 +234,58 @@ class _DetalleState extends State<_Detalle> {
               const SizedBox(width: 5),
               if (canEdit)
                 TextButton.icon(
-                  onPressed: () {
-                    Utils.confirmAlert(context, 'Anular registro',
-                        '¿Está seguro que desea ANULAR el registro? ',
-                        () async {
-                      Navigator.of(context).pop();
-                      Respuesta res = await context
-                          .read<RegistroAddCubit>()
-                          .PRO_cambiarEstadoRegistro(
-                              widget.registro.id!, RegistroType.ANULADO);
-
-                      if (res.error == 'S') {
-                        Utils.snackBarWarinig(
-                            context, 'Cambio de estado', res.mensaje!);
+                  onPressed: () async {
+                    String result = await Modal.password(
+                        context: context, title: 'INGRESE CLAVE SUPERVISOR ');
+                    if (result.isNotEmpty) {
+                      if (result == 'delete') {
+                        _claveSuper = '';
                       } else {
-                        context
-                            .read<RegistroDetalleCubit>()
-                            .PRO_registro(widget.registro.id!);
-                        setState(() {});
+                        _claveSuper = result;
+
+                        Supervisor operario = await context
+                            .read<OperarioCubit>()
+                            .PRO_supervisor(_claveSuper);
+
+                        if (operario.claveacceso! == _claveSuper) {
+                          Respuesta res = await context
+                              .read<RegistroAddCubit>()
+                              .PRO_cambiarEstadoRegistro(widget.registro.id!,
+                                  RegistroType.ANULADO, operario.quien!);
+
+                          if (res.error == 'S') {
+                            Utils.snackBarWarinig(
+                                context, 'Cambio de estado', res.mensaje!);
+                          } else {
+                            context
+                                .read<RegistroDetalleCubit>()
+                                .PRO_registro(widget.registro.id!);
+                            setState(() {});
+                          }
+                        } else {
+                          Utils.snackBar(
+                              context, 'No se encontro el supervisor');
+                        }
                       }
-                    });
+                    }
+                    // Utils.confirmAlert(context, 'Anular registro',
+                    //     '¿Está seguro que desea ANULAR el registro? ',
+                    //     () async {
+                    //   Navigator.of(context).pop();
+                    //   Respuesta res = await context
+                    //       .read<RegistroAddCubit>()
+                    //       .PRO_cambiarEstadoRegistro(
+                    //           widget.registro.id!, RegistroType.ANULADO);
+                    //   if (res.error == 'S') {
+                    //     Utils.snackBarWarinig(
+                    //         context, 'Cambio de estado', res.mensaje!);
+                    //   } else {
+                    //     context
+                    //         .read<RegistroDetalleCubit>()
+                    //         .PRO_registro(widget.registro.id!);
+                    //     setState(() {});
+                    //   }
+                    // });
                   },
                   label: const Text(
                     'ANULAR',
@@ -280,16 +376,16 @@ class _DetalleState extends State<_Detalle> {
                           value: widget.registro.adhesivoDelantero1!,
                         ),
                         InfoContainer.adhesivoDetalle(
-                          value: widget.registro.adhesivoDelantero1!,
+                          value: widget.registro.adhesivoDelantero2!,
                         ),
                         InfoContainer.adhesivoDetalle(
-                          value: widget.registro.adhesivoDelantero1!,
+                          value: widget.registro.adhesivoDelantero3!,
                         ),
                         InfoContainer.adhesivoDetalle(
-                          value: widget.registro.adhesivoDelantero1!,
+                          value: widget.registro.adhesivoDelantero4!,
                         ),
                         InfoContainer.adhesivoDetalle(
-                          value: widget.registro.adhesivoDelantero1!,
+                          value: widget.registro.adhesivoDelantero5!,
                         ),
                       ],
                     ),
@@ -299,21 +395,30 @@ class _DetalleState extends State<_Detalle> {
                         InfoContainer.bobinaTitulo(label: 'Adhesivo\npapel:'),
                         InfoContainer.bobinaDetalle(
                           nro: '1',
-                          value: (widget.registro.bobina1!.codproducto == null)
+                          value: (widget.registro.bobina1 == null ||
+                                  widget.registro.bobina1!.nroSerie == null)
                               ? ' '
-                              : widget.registro.bobina1!.nombre!,
+                              : widget.registro.bobina1!.nroSerie!,
+                          checked: widget.registro.bobina1!.checked!,
                         ),
                         InfoContainer.bobinaDetalle(
                           nro: '2',
-                          value: (widget.registro.bobina2!.codproducto == null)
+                          value: (widget.registro.bobina2 == null ||
+                                  widget.registro.bobina2!.nroSerie == null)
                               ? ' '
-                              : widget.registro.bobina2!.nombre!,
+                              : widget.registro.bobina2!.nroSerie!,
+                          checked: widget.registro.bobina2!.checked!,
                         ),
                         InfoContainer.bobinaDetalle(
                           nro: '3',
-                          value: (widget.registro.bobina3!.codproducto == null)
+                          value: (widget.registro.bobina3 == null ||
+                                  widget.registro.bobina3!.nroSerie == null)
                               ? ' '
-                              : widget.registro.bobina3!.nombre!,
+                              : widget.registro.bobina3!.nroSerie!,
+                          checked: (widget.registro.bobina3 == null ||
+                                  widget.registro.bobina3!.checked == null)
+                              ? false
+                              : widget.registro.bobina3!.checked!,
                         ),
                       ],
                     ),
@@ -322,21 +427,36 @@ class _DetalleState extends State<_Detalle> {
                         InfoContainer.bobinaTitulo(label: ''),
                         InfoContainer.bobinaDetalle(
                           nro: '4',
-                          value: (widget.registro.bobina4!.codproducto == null)
+                          value: (widget.registro.bobina4 == null ||
+                                  widget.registro.bobina4!.nroSerie == null)
                               ? ' '
-                              : widget.registro.bobina4!.nombre!,
+                              : widget.registro.bobina4!.nroSerie!,
+                          checked: (widget.registro.bobina4 == null ||
+                                  widget.registro.bobina4!.checked == null)
+                              ? false
+                              : widget.registro.bobina4!.checked!,
                         ),
                         InfoContainer.bobinaDetalle(
                           nro: '5',
-                          value: (widget.registro.bobina5!.codproducto == null)
+                          value: (widget.registro.bobina5 == null ||
+                                  widget.registro.bobina5!.nroSerie == null)
                               ? ' '
-                              : widget.registro.bobina5!.nombre!,
+                              : widget.registro.bobina5!.nroSerie!,
+                          checked: (widget.registro.bobina5 == null ||
+                                  widget.registro.bobina5!.checked == null)
+                              ? false
+                              : widget.registro.bobina5!.checked!,
                         ),
                         InfoContainer.bobinaDetalle(
                           nro: '6',
-                          value: (widget.registro.bobina6!.codproducto == null)
+                          value: (widget.registro.bobina6 == null ||
+                                  widget.registro.bobina6!.nroSerie == null)
                               ? ' '
-                              : widget.registro.bobina6!.nombre!,
+                              : widget.registro.bobina6!.nroSerie!,
+                          checked: (widget.registro.bobina6 == null ||
+                                  widget.registro.bobina6!.checked == null)
+                              ? false
+                              : widget.registro.bobina6!.checked!,
                         ),
                       ],
                     ),
@@ -386,24 +506,39 @@ class _DetalleState extends State<_Detalle> {
                         InfoContainer.bobinaTitulo(label: 'Adhesivo\nfondo:'),
                         InfoContainer.bobinaDetalle(
                           nro: '1',
-                          value: (widget.registro.bobinaFondo1!.codproducto ==
-                                  null)
+                          value: (widget.registro.bobinaFondo1 == null ||
+                                  widget.registro.bobinaFondo1!.nroSerie ==
+                                      null)
                               ? ' '
-                              : widget.registro.bobinaFondo1!.nombre!,
+                              : widget.registro.bobinaFondo1!.nroSerie!,
+                          checked: (widget.registro.bobinaFondo1 == null ||
+                                  widget.registro.bobinaFondo1!.checked == null)
+                              ? false
+                              : widget.registro.bobinaFondo1!.checked!,
                         ),
                         InfoContainer.bobinaDetalle(
                           nro: '2',
-                          value: (widget.registro.bobinaFondo2!.codproducto ==
-                                  null)
+                          value: (widget.registro.bobinaFondo2 == null ||
+                                  widget.registro.bobinaFondo2!.nroSerie ==
+                                      null)
                               ? ' '
-                              : widget.registro.bobinaFondo2!.nombre!,
+                              : widget.registro.bobinaFondo2!.nroSerie!,
+                          checked: (widget.registro.bobinaFondo2 == null ||
+                                  widget.registro.bobinaFondo2!.checked == null)
+                              ? false
+                              : widget.registro.bobinaFondo2!.checked!,
                         ),
                         InfoContainer.bobinaDetalle(
                           nro: '3',
-                          value: (widget.registro.bobinaFondo3!.codproducto ==
-                                  null)
+                          value: (widget.registro.bobinaFondo3 == null ||
+                                  widget.registro.bobinaFondo3!.nroSerie ==
+                                      null)
                               ? ' '
-                              : widget.registro.bobinaFondo3!.nombre!,
+                              : widget.registro.bobinaFondo3!.nroSerie!,
+                          checked: (widget.registro.bobinaFondo3 == null ||
+                                  widget.registro.bobinaFondo3!.checked == null)
+                              ? false
+                              : widget.registro.bobinaFondo3!.checked!,
                         ),
                       ],
                     ),
@@ -415,24 +550,42 @@ class _DetalleState extends State<_Detalle> {
                         InfoContainer.bobinaTitulo(label: 'Adhesivo\nlateral:'),
                         InfoContainer.bobinaDetalle(
                           nro: '1',
-                          value: (widget.registro.bobinaLateral1!.codproducto ==
-                                  null)
+                          value: (widget.registro.bobinaLateral1 == null ||
+                                  widget.registro.bobinaLateral1!.nroSerie ==
+                                      null)
                               ? ' '
-                              : widget.registro.bobinaLateral1!.nombre!,
+                              : widget.registro.bobinaLateral1!.nroSerie!,
+                          checked: (widget.registro.bobinaLateral1 == null ||
+                                  widget.registro.bobinaLateral1!.checked ==
+                                      null)
+                              ? false
+                              : widget.registro.bobinaLateral1!.checked!,
                         ),
                         InfoContainer.bobinaDetalle(
                           nro: '2',
-                          value: (widget.registro.bobinaLateral2!.codproducto ==
-                                  null)
+                          value: (widget.registro.bobinaLateral2 == null ||
+                                  widget.registro.bobinaLateral2!.nroSerie ==
+                                      null)
                               ? ' '
-                              : widget.registro.bobinaLateral2!.nombre!,
+                              : widget.registro.bobinaLateral2!.nroSerie!,
+                          checked: (widget.registro.bobinaLateral2 == null ||
+                                  widget.registro.bobinaLateral2!.checked ==
+                                      null)
+                              ? false
+                              : widget.registro.bobinaLateral2!.checked!,
                         ),
                         InfoContainer.bobinaDetalle(
                           nro: '3',
-                          value: (widget.registro.bobinaLateral3!.codproducto ==
-                                  null)
+                          value: (widget.registro.bobinaLateral3 == null ||
+                                  widget.registro.bobinaLateral3!.nroSerie ==
+                                      null)
                               ? ' '
-                              : widget.registro.bobinaLateral3!.nombre!,
+                              : widget.registro.bobinaLateral3!.nroSerie!,
+                          checked: (widget.registro.bobinaLateral3 == null ||
+                                  widget.registro.bobinaLateral3!.checked ==
+                                      null)
+                              ? false
+                              : widget.registro.bobinaLateral3!.checked!,
                         ),
                       ],
                     ),
@@ -444,24 +597,36 @@ class _DetalleState extends State<_Detalle> {
                         InfoContainer.bobinaTitulo(label: 'Adhesivo\ncono:'),
                         InfoContainer.bobinaDetalle(
                           nro: '1',
-                          value:
-                              (widget.registro.bobinaCono1!.codproducto == null)
-                                  ? ' '
-                                  : widget.registro.bobinaCono1!.nombre!,
+                          value: (widget.registro.bobinaCono1 == null ||
+                                  widget.registro.bobinaCono1!.nroSerie == null)
+                              ? ' '
+                              : widget.registro.bobinaCono1!.nroSerie!,
+                          checked: (widget.registro.bobinaCono1 == null ||
+                                  widget.registro.bobinaCono1!.checked == null)
+                              ? false
+                              : widget.registro.bobinaCono1!.checked!,
                         ),
                         InfoContainer.bobinaDetalle(
                           nro: '2',
-                          value:
-                              (widget.registro.bobinaCono2!.codproducto == null)
-                                  ? ' '
-                                  : widget.registro.bobinaCono2!.nombre!,
+                          value: (widget.registro.bobinaCono2 == null ||
+                                  widget.registro.bobinaCono2!.nroSerie == null)
+                              ? ' '
+                              : widget.registro.bobinaCono2!.nroSerie!,
+                          checked: (widget.registro.bobinaCono2 == null ||
+                                  widget.registro.bobinaCono2!.checked == null)
+                              ? false
+                              : widget.registro.bobinaCono2!.checked!,
                         ),
                         InfoContainer.bobinaDetalle(
                           nro: '3',
-                          value:
-                              (widget.registro.bobinaCono3!.codproducto == null)
-                                  ? ' '
-                                  : widget.registro.bobinaCono3!.nombre!,
+                          value: (widget.registro.bobinaCono3 == null ||
+                                  widget.registro.bobinaCono3!.nroSerie == null)
+                              ? ' '
+                              : widget.registro.bobinaCono3!.nroSerie!,
+                          checked: (widget.registro.bobinaCono3 == null ||
+                                  widget.registro.bobinaCono3!.checked == null)
+                              ? false
+                              : widget.registro.bobinaCono3!.checked!,
                         ),
                       ],
                     ),
@@ -654,10 +819,10 @@ class _MessageSearch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-        child: Column(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        const SizedBox(height: 20),
         Container(
           width: double.infinity,
           child: Text(
@@ -666,7 +831,7 @@ class _MessageSearch extends StatelessWidget {
           ),
         ),
       ],
-    ));
+    );
   }
 }
 

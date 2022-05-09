@@ -19,6 +19,8 @@ class Bobina {
     this.rubro,
     this.grupo,
     this.cantXBulto,
+    this.nroSerie,
+    this.checked,
   });
 
   String? id;
@@ -28,15 +30,31 @@ class Bobina {
   String? rubro;
   String? grupo;
   dynamic cantXBulto;
+  String? nroSerie;
+  bool? checked = false;
+
+  factory Bobina.init() => Bobina(
+        id: '',
+        nombre: '',
+        nroSerie: '',
+        checked: false,
+        codproducto: '',
+      );
 
   factory Bobina.fromJson(Map<String, dynamic> json) => Bobina(
-        id: json["ID"],
-        codproducto: json["CODPRODUCTO"],
+        id: json["ID"] ?? '0',
+        codproducto: json["CODPRODUCTO"] ?? '',
         nombre: json["NOMBRE"],
         clase: json["CLASE"],
         rubro: json["RUBRO"],
         grupo: json["GRUPO"],
         cantXBulto: json["CantXBulto"],
+        nroSerie: json["NROSERIE"] ?? '',
+        checked: (json["CHECKED"] == null)
+            ? false
+            : (json["CHECKED"].toString().toLowerCase() == "true")
+                ? true
+                : false,
       );
 
   Map<String, dynamic> toJson() => {
@@ -47,5 +65,7 @@ class Bobina {
         "RUBRO": rubro,
         "GRUPO": grupo,
         "CantXBulto": cantXBulto,
+        "NROSERIE": nroSerie,
+        "CHECKED": checked,
       };
 }

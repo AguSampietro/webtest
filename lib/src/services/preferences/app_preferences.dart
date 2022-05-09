@@ -79,4 +79,18 @@ class AppPreferences {
   String get tipoFiltro => this._prefs.getString('ati_prod_tipoFiltro') ?? '';
   set tipoFiltro(String value) =>
       this._prefs.setString('ati_prod_tipoFiltro', value);
+
+  String get depositoId => this._prefs.getString('ati_prod_depositoId') ?? '';
+  set depositoId(String value) =>
+      this._prefs.setString('ati_prod_depositoId', value);
+
+  String get depositoNombre =>
+      this._prefs.getString('ati_prod_depositoNombre') ?? '';
+  set depositoNombre(String value) =>
+      this._prefs.setString('ati_prod_depositoNombre', value);
+
+  String get idRegistroEdit =>
+      this._prefs.getString('ati_prod_id_registro_edit') ?? '';
+  set idRegistroEdit(String value) =>
+      this._prefs.setString('ati_prod_id_registro_edit', value);
 }

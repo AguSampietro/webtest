@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtest/src/cubit/registro_lista_cubit.dart';
 
 import 'package:webtest/src/models/registro_lista.dart';
+import 'package:webtest/src/services/preferences/app_preferences.dart';
 import 'package:webtest/src/utils/enum_types.dart';
+import 'package:webtest/src/views/nuevo_registro/nuevo_registro_view.dart';
 
 import 'package:webtest/src/views/registro/registro.dart';
 import 'package:webtest/src/widgets/loading.dart';
@@ -53,7 +55,7 @@ class RegistrosLista extends StatelessWidget {
             ),
           );
         } else {
-          return _MessageSearch(
+          return const _MessageSearch(
               mensaje:
                   'Algo salio mal obteniendo los registros de produccion.');
         }
@@ -102,7 +104,7 @@ class RegistroItem extends StatelessWidget {
             ),
             trailing: Container(
               margin: const EdgeInsets.only(top: 5, bottom: 3),
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
                 border: Border.all(color: _color),
                 borderRadius: BorderRadius.circular(20),
@@ -170,6 +172,23 @@ class RegistroItem extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
+              if (registro.estado == RegistroType.CREADO)
+                TextButton.icon(
+                  onPressed: () {
+                    final prefs = AppPreferences();
+                    prefs.idRegistroEdit = registro.id!;
+
+                    Navigator.pushNamed(context, NuevoRegistroView.routeName)
+                        .then((value) {
+                      onRefresh();
+                    });
+                  },
+                  icon: const Icon(
+                    Icons.edit,
+                    size: 20,
+                  ),
+                  label: const Text('EDITAR REGISTRO'),
+                ),
               TextButton.icon(
                 onPressed: () {
                   Navigator.pushNamed(

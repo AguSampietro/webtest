@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:webtest/src/cubit/bobina_cubit.dart';
+import 'package:webtest/src/cubit/deposito_cubit.dart';
 import 'package:webtest/src/cubit/producto_cubit.dart';
 import 'package:webtest/src/cubit/fallo_cubit.dart';
 import 'package:webtest/src/cubit/maquina_cubit.dart';
@@ -31,6 +32,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        BlocProvider<DepositoCubit>(
+          create: (BuildContext context) => DepositoCubit()..PRO_depositos(),
+        ),
         BlocProvider<MaquinaCubit>(
           create: (BuildContext context) => MaquinaCubit()..PRO_maquinas(),
         ),

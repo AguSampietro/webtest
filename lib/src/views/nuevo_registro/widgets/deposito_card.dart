@@ -1,40 +1,46 @@
 import 'package:flutter/material.dart';
-import 'package:webtest/src/models/producto.dart';
+import 'package:webtest/src/models/deposito.dart';
 import 'package:webtest/src/models/maquina.dart';
 import 'package:webtest/src/services/preferences/app_preferences.dart';
 import 'package:webtest/src/utils/enum_types.dart';
 import 'package:webtest/src/utils/modal.dart';
 import 'package:webtest/src/utils/utils.dart';
 
-class ProductoCard extends StatefulWidget {
-  ProductoCard({Key? key}) : super(key: key);
+class DepositoCard extends StatefulWidget {
+  DepositoCard({Key? key, required this.onRefresh}) : super(key: key);
+
+  Function onRefresh;
 
   @override
-  _ProductoCardState createState() => _ProductoCardState();
+  _DepositoCardState createState() => _DepositoCardState();
 }
 
-class _ProductoCardState extends State<ProductoCard> {
+class _DepositoCardState extends State<DepositoCard> {
   final double radious = 5;
 
   @override
   Widget build(BuildContext context) {
     final prefs = AppPreferences();
-    print('prefs.producto: ${prefs.productoNombre}');
-    print('prefs.productoId: ${prefs.productoId}');
-    String maq =
-        (prefs.productoId.isEmpty) ? 'CONFIGURE UN PRODUCTO' : prefs.productoId;
+    print('prefs.maquina: ${prefs.depositoNombre}');
+    String maq = (prefs.depositoId.isEmpty)
+        ? 'CONFIGURE UNA MAQUINA'
+        : prefs.depositoNombre;
     return Expanded(
       child: GestureDetector(
         onTap: prefs.usuarioTipo == UserType.OPERARIO
-            ? _noPermisos
+            ? () => Utils.snackBar(context,
+                'No tiene permisos para modificar la maquina, contacte a un supervisor.')
             : () async {
                 final prefs = AppPreferences();
-                Producto? prod = await Modal.seleccionarProducto(context, true);
-                if (prod != null) {
+                Deposito? deposito =
+                    await Modal.seleccionarDeposito(context) as Deposito?;
+                if (deposito != null) {
                   setState(() {
-                    prefs.productoId = prod.codproducto!;
-                    prefs.productoNombre = prod.nombre!;
+                    prefs.depositoId = deposito.deposito!;
+                    prefs.depositoNombre = deposito.nombre!;
                   });
+
+                  widget.onRefresh();
                 }
               },
         child: Container(
@@ -50,7 +56,7 @@ class _ProductoCardState extends State<ProductoCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'PRODUCTO PRODUCIDO:',
+                'MAQUINA UTILIZADA:',
                 style: TextStyle(
                   fontSize: 16,
                 ),
@@ -68,10 +74,5 @@ class _ProductoCardState extends State<ProductoCard> {
         ),
       ),
     );
-  }
-
-  void _noPermisos() {
-    Utils.snackBar(
-        context, 'No tiene permisos para modificar la configuracion');
   }
 }

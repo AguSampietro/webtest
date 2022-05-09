@@ -33,11 +33,6 @@ class FallosMaquinaLista extends StatelessWidget {
             fallo: fallos[index],
             onDelete: () {
               fallos.removeAt(index);
-              // Scaffold.of(context).showSnackBar(
-              //   SnackBar(
-              //     content: Text('Fallo eliminado'),
-              //   ),
-              // );
               onRefresh();
             },
           );
@@ -74,7 +69,9 @@ class FallosMaquinaRow extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  fallo.codigo! + ' - ' + fallo.nombre!,
+                  (fallo.nombre == null)
+                      ? fallo.codigo! + ' - ' + fallo.fallo!
+                      : fallo.codigo! + ' - ' + fallo.nombre!,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 14,

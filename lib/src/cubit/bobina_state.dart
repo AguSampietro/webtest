@@ -16,9 +16,15 @@ class BobinaLoading extends BobinaState {
 }
 
 class BobinaLoaded extends BobinaState {
-  final List<Bobina> bobinas;
+  final List<Bobina>? bobinas;
+  final List<Bobina>? bobinasPorDeposito;
+  final List<NroSerie>? bobinasNroSerie;
 
-  const BobinaLoaded({required this.bobinas});
+  const BobinaLoaded({
+    this.bobinas,
+    this.bobinasPorDeposito,
+    this.bobinasNroSerie,
+  });
 
   // Generated class
   @override

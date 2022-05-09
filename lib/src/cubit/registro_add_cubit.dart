@@ -46,11 +46,44 @@ class RegistroAddCubit extends Cubit<RegistroAddState> {
     }
   }
 
+  Future<void> PRO_editRegistro(RegistroProduccion reg) async {
+    try {
+      emit(const RegistroAddLoading());
+      print('API CUBIT - EDITANDO REGISTRO');
+
+      log(jsonEncode(reg.toJson()));
+      final url = Uri.parse('${Utils.api_url}/PRO_editRegistro');
+
+      final http.Response response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(reg.toJson()),
+      );
+
+      print('RESPONSE CODE ${response.statusCode} - ${response.body}');
+      if (response.statusCode == 200) {
+        Respuesta res = respuestaFromJson(response.body);
+        if (res.error == 'S') {
+          emit(RegistroAddLoaded(mensaje: res.mensaje!, error: true));
+        } else {
+          emit(RegistroAddLoaded(mensaje: res.mensaje!, error: false));
+        }
+      } else {
+        emit(RegistroAddError('Problemas editando el registro'));
+      }
+    } catch (e) {
+      emit(RegistroAddError(e.toString()));
+    }
+  }
+
   void ready() {
     emit(const RegistroAddInitial());
   }
 
-  Future<Respuesta> PRO_cambiarEstadoRegistro(String id, String estado) async {
+  Future<Respuesta> PRO_cambiarEstadoRegistro(
+      String id, String estado, String quien) async {
     try {
       print('API CUBIT - ACTUALZIANDO ESTADO REGISTRO');
 
@@ -64,6 +97,7 @@ class RegistroAddCubit extends Cubit<RegistroAddState> {
         body: jsonEncode(<String, String>{
           "id": id,
           "filtro": estado,
+          "quien": quien,
         }),
       );
 
