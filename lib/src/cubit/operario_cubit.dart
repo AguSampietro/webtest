@@ -35,6 +35,7 @@ class OperarioCubit extends Cubit<OperarioState> {
         emit(OperarioError('No existen los operarios'));
       }
     } catch (e) {
+      log("ERROR: ${e.toString()}");
       emit(OperarioError(e.toString()));
     }
   }
@@ -62,6 +63,7 @@ class OperarioCubit extends Cubit<OperarioState> {
         return Operario(legajo: '', nombre: '', clave: '');
       }
     } catch (e) {
+      log("ERROR: ${e.toString()}");
       return Operario(legajo: '', nombre: '', clave: '');
     }
   }
@@ -94,6 +96,7 @@ class OperarioCubit extends Cubit<OperarioState> {
             quien: '');
       }
     } catch (e) {
+      log("ERROR: ${e.toString()}");
       return Supervisor(
           id: '', nombre: '', claveacceso: '', claveSupervisor: '', quien: '');
     }

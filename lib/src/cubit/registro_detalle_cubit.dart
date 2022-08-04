@@ -39,6 +39,7 @@ class RegistroDetalleCubit extends Cubit<RegistroDetalleState> {
         emit(RegistroDetalleError('No se encontro el registro de produccion'));
       }
     } catch (e) {
+      log('ERROR API CUBIT - BUSCANDO REGISTRO DETALLE: ${e.toString()}');
       emit(RegistroDetalleError(e.toString()));
     }
   }

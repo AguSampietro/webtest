@@ -38,6 +38,10 @@ class RegistroListaCubit extends Cubit<RegistroListaState> {
         return;
       }
 
+      print(jsonEncode(<String, String>{
+        "id": id,
+      }));
+
       final http.Response response = await http.post(
         url,
         headers: <String, String>{
