@@ -29,7 +29,7 @@ class ControlesRow extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            flex: 2,
+            flex: 5,
             child: Container(
               height: Utils.cellHeight,
               padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -41,15 +41,13 @@ class ControlesRow extends StatelessWidget {
                 child: Text(
                   label,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.w600),
                 ),
               ),
             ),
           ),
           Expanded(
-            flex: 1,
+            flex: 2,
             child: InkWell(
               onTap: onPressed1,
               child: Container(
@@ -63,7 +61,7 @@ class ControlesRow extends StatelessWidget {
             ),
           ),
           Expanded(
-            flex: 1,
+            flex: 2,
             child: InkWell(
               onTap: onPressed2,
               child: Container(

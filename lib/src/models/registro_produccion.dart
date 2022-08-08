@@ -79,6 +79,14 @@ class RegistroProduccion {
     this.ppr4_2,
     this.ppr6_1,
     this.ppr6_2,
+    this.altura_1,
+    this.altura_2,
+    this.microperforado_1,
+    this.microperforado_2,
+    this.pegado_1,
+    this.pegado_2,
+    this.terminacion_superior_1,
+    this.terminacion_superior_2,
     this.fallosMaquina,
   });
 
@@ -174,6 +182,18 @@ class RegistroProduccion {
   String? ppr6_1 = '';
   String? ppr6_2 = '';
 
+  String? altura_1 = '';
+  String? altura_2 = '';
+
+  String? microperforado_1 = '';
+  String? microperforado_2 = '';
+
+  String? pegado_1 = '';
+  String? pegado_2 = '';
+
+  String? terminacion_superior_1 = '';
+  String? terminacion_superior_2 = '';
+
   List<FalloMaquina>? fallosMaquina = [];
 
   factory RegistroProduccion.init() => RegistroProduccion(
@@ -235,6 +255,14 @@ class RegistroProduccion {
         ppr4_2: '',
         ppr6_1: '',
         ppr6_2: '',
+        altura_1: '',
+        altura_2: '',
+        microperforado_1: '',
+        microperforado_2: '',
+        pegado_1: '',
+        pegado_2: '',
+        terminacion_superior_1: '',
+        terminacion_superior_2: '',
         fallosMaquina: [],
       );
 
@@ -302,6 +330,14 @@ class RegistroProduccion {
         "PPR4_2": ppr4_2,
         "PPR6_1": ppr6_1,
         "PPR6_2": ppr6_2,
+        "ALTURA1": altura_1,
+        "ALTURA2": altura_2,
+        "MICROPERFORADO1": microperforado_1,
+        "MICROPERFORADO2": microperforado_2,
+        "PEGADO1": pegado_1,
+        "PEGADO2": pegado_2,
+        "TERMINACION_SUPERIOR1": terminacion_superior_1,
+        "TERMINACION_SUPERIOR2": terminacion_superior_2,
         "FALLOS_MAQUINA": fallosMaquinasMapToJson(fallosMaquina!),
       };
 
@@ -415,6 +451,14 @@ class RegistroProduccion {
         ppr4_2: json["PPR4_2"],
         ppr6_1: json["PPR6_1"],
         ppr6_2: json["PPR6_2"],
+        altura_1: json["ALTURA1"],
+        altura_2: json["ALTURA2"],
+        microperforado_1: json["MICROPERFORADO1"],
+        microperforado_2: json["MICROPERFORADO2"],
+        pegado_1: json["PEGADO1"],
+        pegado_2: json["PEGADO2"],
+        terminacion_superior_1: json["TERMINACION_SUPERIOR1"],
+        terminacion_superior_2: json["TERMINACION_SUPERIOR2"],
         fecha: json["FECHA"],
         hora: json["HORA"],
         estado: json["ESTADO"],

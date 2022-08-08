@@ -123,15 +123,13 @@ class _DetalleState extends State<_Detalle> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
+                    color: _color,
                     border: Border.all(color: _color),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
                     widget.registro.estado!,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: _color,
-                    ),
+                    style: const TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -165,8 +163,8 @@ class _DetalleState extends State<_Detalle> {
                         if (operario.claveacceso! == _claveSuper) {
                           Respuesta res = await context
                               .read<RegistroAddCubit>()
-                              .PRO_cambiarEstadoRegistro(widget.registro.id!,
-                                  RegistroType.PROCESADO, operario.quien!);
+                              .PRO_procesarRegistro(
+                                  widget.registro.id!, operario.quien!);
 
                           if (res.error == 'S') {
                             Utils.snackBarWarinig(context,
@@ -650,115 +648,9 @@ class _DetalleState extends State<_Detalle> {
                         left: 1,
                         right: 1,
                       ),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              InfoGrid.head(label: 'CRUCE', flex: 1),
-                              InfoGrid.cell(
-                                  label: widget.registro.cruce_1!, flex: 1),
-                              InfoGrid.cell(
-                                  label: widget.registro.cruce_2!, flex: 1)
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              InfoGrid.head(label: 'RULO/PESTAÑA', flex: 1),
-                              InfoGrid.cell(
-                                  label: widget.registro.rulo_1!, flex: 1),
-                              InfoGrid.cell(
-                                  label: widget.registro.rulo_2!, flex: 1)
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              InfoGrid.head(label: 'PEGADO TRASERO', flex: 1),
-                              InfoGrid.cell(
-                                  label: widget.registro.pegado_trasero_1!,
-                                  flex: 1),
-                              InfoGrid.cell(
-                                  label: widget.registro.pegado_trasero_2!,
-                                  flex: 1)
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              InfoGrid.head(label: 'PEGADO DELANTERO', flex: 1),
-                              InfoGrid.cell(
-                                  label: widget.registro.pegado_delantero_1!,
-                                  flex: 1),
-                              InfoGrid.cell(
-                                  label: widget.registro.pegado_delantero_2!,
-                                  flex: 1)
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              InfoGrid.head(label: 'CANTIDAD DE CONO', flex: 1),
-                              InfoGrid.cell(
-                                  label: widget.registro.cant_cono_1!, flex: 1),
-                              InfoGrid.cell(
-                                  label: widget.registro.cant_cono_2!, flex: 1)
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              InfoGrid.head(label: 'GRAFICA', flex: 1),
-                              InfoGrid.cell(
-                                  label: widget.registro.grafica_1!, flex: 1),
-                              InfoGrid.cell(
-                                  label: widget.registro.grafica_2!, flex: 1)
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              InfoGrid.head(label: 'TROQUELADO', flex: 1),
-                              InfoGrid.cell(
-                                  label: widget.registro.troquelado_1!,
-                                  flex: 1),
-                              InfoGrid.cell(
-                                  label: widget.registro.troquelado_2!, flex: 1)
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              InfoGrid.head(
-                                  label: 'MATERIAS EXTRAÑAS', flex: 1),
-                              InfoGrid.cell(
-                                  label: widget.registro.materias_1!, flex: 1),
-                              InfoGrid.cell(
-                                  label: widget.registro.materias_2!, flex: 1)
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              InfoGrid.head(label: 'PPR3', flex: 1),
-                              InfoGrid.cell(
-                                  label: widget.registro.ppr3_1!, flex: 1),
-                              InfoGrid.cell(
-                                  label: widget.registro.ppr3_2!, flex: 1)
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              InfoGrid.head(label: 'PPR4', flex: 1),
-                              InfoGrid.cell(
-                                  label: widget.registro.ppr4_1!, flex: 1),
-                              InfoGrid.cell(
-                                  label: widget.registro.ppr4_2!, flex: 1)
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              InfoGrid.head(label: 'PPR6', flex: 1),
-                              InfoGrid.cell(
-                                  label: widget.registro.ppr6_1!, flex: 1),
-                              InfoGrid.cell(
-                                  label: widget.registro.ppr6_2!, flex: 1)
-                            ],
-                          ),
-                        ],
-                      ),
+                      child: (widget.registro.maquina!.contains('BUDIN'))
+                          ? _controlesBUDIN()
+                          : _controlesNOBUDIN(),
                     )
                   ],
                 ),
@@ -805,6 +697,176 @@ class _DetalleState extends State<_Detalle> {
           ),
         ],
       ),
+    );
+  }
+
+  Column _controlesBUDIN() {
+    return Column(
+      children: [
+        Row(
+          children: [
+            InfoGrid.head(label: 'CRUCE', flex: 5),
+            InfoGrid.cell(label: widget.registro.cruce_1!, flex: 2),
+            InfoGrid.cell(label: widget.registro.cruce_2!, flex: 2)
+          ],
+        ),
+        Row(
+          children: [
+            InfoGrid.head(label: 'RULO/PESTAÑA', flex: 5),
+            InfoGrid.cell(label: widget.registro.rulo_1!, flex: 2),
+            InfoGrid.cell(label: widget.registro.rulo_2!, flex: 2)
+          ],
+        ),
+        Row(
+          children: [
+            InfoGrid.head(label: 'PEGADO TRASERO', flex: 5),
+            InfoGrid.cell(label: widget.registro.pegado_trasero_1!, flex: 2),
+            InfoGrid.cell(label: widget.registro.pegado_trasero_2!, flex: 2)
+          ],
+        ),
+        Row(
+          children: [
+            InfoGrid.head(label: 'PEGADO DELANTERO', flex: 5),
+            InfoGrid.cell(label: widget.registro.pegado_delantero_1!, flex: 2),
+            InfoGrid.cell(label: widget.registro.pegado_delantero_2!, flex: 2)
+          ],
+        ),
+        Row(
+          children: [
+            InfoGrid.head(label: 'CANTIDAD DE CONO', flex: 5),
+            InfoGrid.cell(label: widget.registro.cant_cono_1!, flex: 2),
+            InfoGrid.cell(label: widget.registro.cant_cono_2!, flex: 2)
+          ],
+        ),
+        Row(
+          children: [
+            InfoGrid.head(label: 'GRAFICA', flex: 5),
+            InfoGrid.cell(label: widget.registro.grafica_1!, flex: 2),
+            InfoGrid.cell(label: widget.registro.grafica_2!, flex: 2)
+          ],
+        ),
+        Row(
+          children: [
+            InfoGrid.head(label: 'TROQUELADO', flex: 5),
+            InfoGrid.cell(label: widget.registro.troquelado_1!, flex: 2),
+            InfoGrid.cell(label: widget.registro.troquelado_2!, flex: 2)
+          ],
+        ),
+        Row(
+          children: [
+            InfoGrid.head(label: 'MATERIAS EXTRAÑAS', flex: 5),
+            InfoGrid.cell(label: widget.registro.materias_1!, flex: 2),
+            InfoGrid.cell(label: widget.registro.materias_2!, flex: 2)
+          ],
+        ),
+        Row(
+          children: [
+            InfoGrid.head(label: 'PPR3', flex: 5),
+            InfoGrid.cell(label: widget.registro.ppr3_1!, flex: 2),
+            InfoGrid.cell(label: widget.registro.ppr3_2!, flex: 2)
+          ],
+        ),
+        Row(
+          children: [
+            InfoGrid.head(label: 'PPR4', flex: 5),
+            InfoGrid.cell(label: widget.registro.ppr4_1!, flex: 2),
+            InfoGrid.cell(label: widget.registro.ppr4_2!, flex: 2)
+          ],
+        ),
+        Row(
+          children: [
+            InfoGrid.head(label: 'PPR6', flex: 5),
+            InfoGrid.cell(label: widget.registro.ppr6_1!, flex: 2),
+            InfoGrid.cell(label: widget.registro.ppr6_2!, flex: 2)
+          ],
+        ),
+      ],
+    );
+  }
+
+  Column _controlesNOBUDIN() {
+    return Column(
+      children: [
+        Row(
+          children: [
+            InfoGrid.head(label: 'ALTURA', flex: 5),
+            InfoGrid.cell(label: widget.registro.altura_1!, flex: 2),
+            InfoGrid.cell(label: widget.registro.altura_2!, flex: 2)
+          ],
+        ),
+        Row(
+          children: [
+            InfoGrid.head(label: 'TERMINACIÓN SUPERIOR', flex: 5),
+            InfoGrid.cell(
+                label: widget.registro.terminacion_superior_1!, flex: 2),
+            InfoGrid.cell(
+                label: widget.registro.terminacion_superior_2!, flex: 2)
+          ],
+        ),
+        Row(
+          children: [
+            InfoGrid.head(label: 'CRUCE', flex: 5),
+            InfoGrid.cell(label: widget.registro.cruce_1!, flex: 2),
+            InfoGrid.cell(label: widget.registro.cruce_2!, flex: 2)
+          ],
+        ),
+        Row(
+          children: [
+            InfoGrid.head(label: 'PEGADO', flex: 5),
+            InfoGrid.cell(label: widget.registro.pegado_1!, flex: 2),
+            InfoGrid.cell(label: widget.registro.pegado_2!, flex: 2)
+          ],
+        ),
+        Row(
+          children: [
+            InfoGrid.head(label: 'CANTIDAD DE CONO', flex: 5),
+            InfoGrid.cell(label: widget.registro.cant_cono_1!, flex: 2),
+            InfoGrid.cell(label: widget.registro.cant_cono_2!, flex: 2)
+          ],
+        ),
+        Row(
+          children: [
+            InfoGrid.head(label: 'GRAFICA', flex: 5),
+            InfoGrid.cell(label: widget.registro.grafica_1!, flex: 2),
+            InfoGrid.cell(label: widget.registro.grafica_2!, flex: 2)
+          ],
+        ),
+        Row(
+          children: [
+            InfoGrid.head(label: 'MICROPERFORADO', flex: 5),
+            InfoGrid.cell(label: widget.registro.microperforado_1!, flex: 2),
+            InfoGrid.cell(label: widget.registro.microperforado_2!, flex: 2)
+          ],
+        ),
+        Row(
+          children: [
+            InfoGrid.head(label: 'MATERIAS EXTRAÑAS', flex: 5),
+            InfoGrid.cell(label: widget.registro.materias_1!, flex: 2),
+            InfoGrid.cell(label: widget.registro.materias_2!, flex: 2)
+          ],
+        ),
+        Row(
+          children: [
+            InfoGrid.head(label: 'PPR3', flex: 5),
+            InfoGrid.cell(label: widget.registro.ppr3_1!, flex: 2),
+            InfoGrid.cell(label: widget.registro.ppr3_2!, flex: 2)
+          ],
+        ),
+        Row(
+          children: [
+            InfoGrid.head(label: 'PPR4', flex: 5),
+            InfoGrid.cell(label: widget.registro.ppr4_1!, flex: 2),
+            InfoGrid.cell(label: widget.registro.ppr4_2!, flex: 2)
+          ],
+        ),
+        Row(
+          children: [
+            InfoGrid.head(label: 'PPR6', flex: 5),
+            InfoGrid.cell(label: widget.registro.ppr6_1!, flex: 2),
+            InfoGrid.cell(label: widget.registro.ppr6_2!, flex: 2)
+          ],
+        ),
+      ],
     );
   }
 }

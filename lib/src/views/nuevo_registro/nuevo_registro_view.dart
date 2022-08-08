@@ -1458,352 +1458,10 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                             Expanded(
                               flex: 3,
                               // child: DataTableControles(),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  ControlesRow(
-                                    label: 'CRUCE',
-                                    nro1: _reg.cruce_1!,
-                                    nro2: _reg.cruce_2!,
-                                    onPressed1: () async {
-                                      String result = await Modal.addModal(
-                                          context: context,
-                                          title: 'CRUCE - NRO 1');
-                                      if (result.isNotEmpty) {
-                                        if (result == 'delete') {
-                                          _reg.cruce_1 = '';
-                                        } else {
-                                          _reg.cruce_1 = result;
-                                        }
-                                        setState(() {});
-                                      }
-                                    },
-                                    onPressed2: () async {
-                                      String result = await Modal.addModal(
-                                          context: context,
-                                          title: 'CRUCE - NRO 2');
-                                      if (result.isNotEmpty) {
-                                        if (result == 'delete') {
-                                          _reg.cruce_2 = '';
-                                        } else {
-                                          _reg.cruce_2 = result;
-                                        }
-                                        setState(() {});
-                                      }
-                                    },
-                                  ),
-                                  ControlesRow(
-                                    label: 'RULO/PESTAÑA',
-                                    nro1: _reg.rulo_1!,
-                                    nro2: _reg.rulo_2!,
-                                    onPressed1: () async {
-                                      String result = await Modal.addModal(
-                                          context: context,
-                                          title: 'RULO/PESTAÑA - NRO 1');
-                                      if (result.isNotEmpty) {
-                                        if (result == 'delete') {
-                                          _reg.rulo_1 = '';
-                                        } else {
-                                          _reg.rulo_1 = result;
-                                        }
-                                        setState(() {});
-                                      }
-                                    },
-                                    onPressed2: () async {
-                                      String result = await Modal.addModal(
-                                          context: context,
-                                          title: 'RULO/PESTAÑA - NRO 2');
-                                      if (result.isNotEmpty) {
-                                        if (result == 'delete') {
-                                          _reg.rulo_2 = '';
-                                        } else {
-                                          _reg.rulo_2 = result;
-                                        }
-                                        setState(() {});
-                                      }
-                                    },
-                                  ),
-                                  ControlesRow(
-                                    label: 'PEGADO TRASERO',
-                                    nro1: _reg.pegado_trasero_1!,
-                                    nro2: _reg.pegado_trasero_2!,
-                                    onPressed1: () async {
-                                      String result = await Modal.addModal(
-                                          context: context,
-                                          title: 'PEGADO TRASERO - NRO 1');
-                                      if (result.isNotEmpty) {
-                                        if (result == 'delete') {
-                                          _reg.pegado_trasero_1 = '';
-                                        } else {
-                                          _reg.pegado_trasero_1 = result;
-                                        }
-                                        setState(() {});
-                                      }
-                                    },
-                                    onPressed2: () async {
-                                      String result = await Modal.addModal(
-                                          context: context,
-                                          title: 'PEGADO TRASERO - NRO 2');
-                                      if (result.isNotEmpty) {
-                                        if (result == 'delete') {
-                                          _reg.pegado_trasero_2 = '';
-                                        } else {
-                                          _reg.pegado_trasero_2 = result;
-                                        }
-                                        setState(() {});
-                                      }
-                                    },
-                                  ),
-                                  ControlesRow(
-                                    label: 'PEGADO DELANTERO',
-                                    nro1: _reg.pegado_delantero_1!,
-                                    nro2: _reg.pegado_delantero_2!,
-                                    onPressed1: () async {
-                                      String result = await Modal.addModal(
-                                          context: context,
-                                          title: 'PEGADO DELANTERO - NRO 1');
-                                      if (result.isNotEmpty) {
-                                        if (result == 'delete') {
-                                          _reg.pegado_delantero_1 = '';
-                                        } else {
-                                          _reg.pegado_delantero_1 = result;
-                                        }
-                                        setState(() {});
-                                      }
-                                    },
-                                    onPressed2: () async {
-                                      String result = await Modal.addModal(
-                                          context: context,
-                                          title: 'PEGADO DELANTERO - NRO 2');
-                                      if (result.isNotEmpty) {
-                                        if (result == 'delete') {
-                                          _reg.pegado_delantero_2 = '';
-                                        } else {
-                                          _reg.pegado_delantero_2 = result;
-                                        }
-                                        setState(() {});
-                                      }
-                                    },
-                                  ),
-                                  ControlesRow(
-                                    label: 'CANTIDAD EN CONO',
-                                    nro1: _reg.cant_cono_1!,
-                                    nro2: _reg.cant_cono_2!,
-                                    onPressed1: () async {
-                                      String result = await Modal.addModal(
-                                          context: context,
-                                          title: 'CANTIDAD EN CONO - NRO 1');
-                                      if (result.isNotEmpty) {
-                                        if (result == 'delete') {
-                                          _reg.cant_cono_1 = '';
-                                        } else {
-                                          _reg.cant_cono_1 = result;
-                                        }
-                                        setState(() {});
-                                      }
-                                    },
-                                    onPressed2: () async {
-                                      String result = await Modal.addModal(
-                                          context: context,
-                                          title: 'CANTIDAD EN CONO - NRO 2');
-                                      if (result.isNotEmpty) {
-                                        if (result == 'delete') {
-                                          _reg.cant_cono_2 = '';
-                                        } else {
-                                          _reg.cant_cono_2 = result;
-                                        }
-                                        setState(() {});
-                                      }
-                                    },
-                                  ),
-                                  ControlesRow(
-                                    label: 'GRAFICA',
-                                    nro1: _reg.grafica_1!,
-                                    nro2: _reg.grafica_2!,
-                                    onPressed1: () async {
-                                      String result = await Modal.addModal(
-                                          context: context,
-                                          title: 'GRAFICA - NRO 1');
-                                      if (result.isNotEmpty) {
-                                        if (result == 'delete') {
-                                          _reg.grafica_1 = '';
-                                        } else {
-                                          _reg.grafica_1 = result;
-                                        }
-                                        setState(() {});
-                                      }
-                                    },
-                                    onPressed2: () async {
-                                      String result = await Modal.addModal(
-                                          context: context,
-                                          title: 'GRAFICA - NRO 2');
-                                      if (result.isNotEmpty) {
-                                        if (result == 'delete') {
-                                          _reg.grafica_2 = '';
-                                        } else {
-                                          _reg.grafica_2 = result;
-                                        }
-                                        setState(() {});
-                                      }
-                                    },
-                                  ),
-                                  ControlesRow(
-                                    label: 'TROQUELADO',
-                                    nro1: _reg.troquelado_1!,
-                                    nro2: _reg.troquelado_2!,
-                                    onPressed1: () async {
-                                      String result = await Modal.addModal(
-                                          context: context,
-                                          title: 'TROQUELADO - NRO 1');
-                                      if (result.isNotEmpty) {
-                                        if (result == 'delete') {
-                                          _reg.troquelado_1 = '';
-                                        } else {
-                                          _reg.troquelado_1 = result;
-                                        }
-                                        setState(() {});
-                                      }
-                                    },
-                                    onPressed2: () async {
-                                      String result = await Modal.addModal(
-                                          context: context,
-                                          title: 'TROQUELADO - NRO 2');
-                                      if (result.isNotEmpty) {
-                                        if (result == 'delete') {
-                                          _reg.troquelado_2 = '';
-                                        } else {
-                                          _reg.troquelado_2 = result;
-                                        }
-                                        setState(() {});
-                                      }
-                                    },
-                                  ),
-                                  ControlesRow(
-                                    label: 'MATERIAS EXTRAÑAS',
-                                    nro1: _reg.materias_1!,
-                                    nro2: _reg.materias_2!,
-                                    onPressed1: () async {
-                                      String result = await Modal.addModal(
-                                          context: context,
-                                          title: 'MATERIAS EXTRAÑAS - NRO 1');
-                                      if (result.isNotEmpty) {
-                                        if (result == 'delete') {
-                                          _reg.materias_1 = '';
-                                        } else {
-                                          _reg.materias_1 = result;
-                                        }
-                                        setState(() {});
-                                      }
-                                    },
-                                    onPressed2: () async {
-                                      String result = await Modal.addModal(
-                                          context: context,
-                                          title: 'MATERIAS EXTRAÑAS - NRO 2');
-                                      if (result.isNotEmpty) {
-                                        if (result == 'delete') {
-                                          _reg.materias_2 = '';
-                                        } else {
-                                          _reg.materias_2 = result;
-                                        }
-                                        setState(() {});
-                                      }
-                                    },
-                                  ),
-                                  ControlesRow(
-                                    label: 'PPR3',
-                                    nro1: _reg.ppr3_1!,
-                                    nro2: _reg.ppr3_2!,
-                                    onPressed1: () async {
-                                      String result = await Modal.addModal(
-                                          context: context,
-                                          title: 'PPR3 - NRO 1');
-                                      if (result.isNotEmpty) {
-                                        if (result == 'delete') {
-                                          _reg.ppr3_1 = '';
-                                        } else {
-                                          _reg.ppr3_1 = result;
-                                        }
-                                        setState(() {});
-                                      }
-                                    },
-                                    onPressed2: () async {
-                                      String result = await Modal.addModal(
-                                          context: context,
-                                          title: 'PPR3 - NRO 2');
-                                      if (result.isNotEmpty) {
-                                        if (result == 'delete') {
-                                          _reg.ppr3_2 = '';
-                                        } else {
-                                          _reg.ppr3_2 = result;
-                                        }
-                                        setState(() {});
-                                      }
-                                    },
-                                  ),
-                                  ControlesRow(
-                                    label: 'PPR4',
-                                    nro1: _reg.ppr4_1!,
-                                    nro2: _reg.ppr4_2!,
-                                    onPressed1: () async {
-                                      String result = await Modal.addModal(
-                                          context: context,
-                                          title: 'PPR4 - NRO 1');
-                                      if (result.isNotEmpty) {
-                                        if (result == 'delete') {
-                                          _reg.ppr4_1 = '';
-                                        } else {
-                                          _reg.ppr4_1 = result;
-                                        }
-                                        setState(() {});
-                                      }
-                                    },
-                                    onPressed2: () async {
-                                      String result = await Modal.addModal(
-                                          context: context,
-                                          title: 'PPR4 - NRO 2');
-                                      if (result.isNotEmpty) {
-                                        if (result == 'delete') {
-                                          _reg.ppr4_2 = '';
-                                        } else {
-                                          _reg.ppr4_2 = result;
-                                        }
-                                        setState(() {});
-                                      }
-                                    },
-                                  ),
-                                  ControlesRow(
-                                    label: 'PPR6',
-                                    nro1: _reg.ppr6_1!,
-                                    nro2: _reg.ppr6_2!,
-                                    onPressed1: () async {
-                                      String result = await Modal.addModal(
-                                          context: context,
-                                          title: 'PPR6 - NRO 1');
-                                      if (result.isNotEmpty) {
-                                        if (result == 'delete') {
-                                          _reg.ppr6_1 = '';
-                                        } else {
-                                          _reg.ppr6_1 = result;
-                                        }
-                                        setState(() {});
-                                      }
-                                    },
-                                    onPressed2: () async {
-                                      String result = await Modal.addModal(
-                                          context: context,
-                                          title: 'PPR6 - NRO 2');
-                                      if (result.isNotEmpty) {
-                                        if (result == 'delete') {
-                                          _reg.ppr6_2 = '';
-                                        } else {
-                                          _reg.ppr6_2 = result;
-                                        }
-                                        setState(() {});
-                                      }
-                                    },
-                                  ),
-                                ],
-                              ),
+                              child:
+                                  (prefs.maquinaTipo == MaquinaType.UNA_BOBINA)
+                                      ? _controlesBUDIN(context)
+                                      : _controlesNOBUDIN(context),
                             ),
                             // FALLOS DETALLE
                             Expanded(
@@ -1913,6 +1571,660 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
           ),
         ),
       ),
+    );
+  }
+
+  Column _controlesBUDIN(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        ControlesRow(
+          label: 'CRUCE',
+          nro1: _reg.cruce_1!,
+          nro2: _reg.cruce_2!,
+          onPressed1: () async {
+            String result =
+                await Modal.addModal(context: context, title: 'CRUCE - NRO 1');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.cruce_1 = '';
+              } else {
+                _reg.cruce_1 = result;
+              }
+              setState(() {});
+            }
+          },
+          onPressed2: () async {
+            String result =
+                await Modal.addModal(context: context, title: 'CRUCE - NRO 2');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.cruce_2 = '';
+              } else {
+                _reg.cruce_2 = result;
+              }
+              setState(() {});
+            }
+          },
+        ),
+        ControlesRow(
+          label: 'RULO/PESTAÑA',
+          nro1: _reg.rulo_1!,
+          nro2: _reg.rulo_2!,
+          onPressed1: () async {
+            String result = await Modal.addModal(
+                context: context, title: 'RULO/PESTAÑA - NRO 1');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.rulo_1 = '';
+              } else {
+                _reg.rulo_1 = result;
+              }
+              setState(() {});
+            }
+          },
+          onPressed2: () async {
+            String result = await Modal.addModal(
+                context: context, title: 'RULO/PESTAÑA - NRO 2');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.rulo_2 = '';
+              } else {
+                _reg.rulo_2 = result;
+              }
+              setState(() {});
+            }
+          },
+        ),
+        ControlesRow(
+          label: 'PEGADO TRASERO',
+          nro1: _reg.pegado_trasero_1!,
+          nro2: _reg.pegado_trasero_2!,
+          onPressed1: () async {
+            String result = await Modal.addModal(
+                context: context, title: 'PEGADO TRASERO - NRO 1');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.pegado_trasero_1 = '';
+              } else {
+                _reg.pegado_trasero_1 = result;
+              }
+              setState(() {});
+            }
+          },
+          onPressed2: () async {
+            String result = await Modal.addModal(
+                context: context, title: 'PEGADO TRASERO - NRO 2');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.pegado_trasero_2 = '';
+              } else {
+                _reg.pegado_trasero_2 = result;
+              }
+              setState(() {});
+            }
+          },
+        ),
+        ControlesRow(
+          label: 'PEGADO DELANTERO',
+          nro1: _reg.pegado_delantero_1!,
+          nro2: _reg.pegado_delantero_2!,
+          onPressed1: () async {
+            String result = await Modal.addModal(
+                context: context, title: 'PEGADO DELANTERO - NRO 1');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.pegado_delantero_1 = '';
+              } else {
+                _reg.pegado_delantero_1 = result;
+              }
+              setState(() {});
+            }
+          },
+          onPressed2: () async {
+            String result = await Modal.addModal(
+                context: context, title: 'PEGADO DELANTERO - NRO 2');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.pegado_delantero_2 = '';
+              } else {
+                _reg.pegado_delantero_2 = result;
+              }
+              setState(() {});
+            }
+          },
+        ),
+        ControlesRow(
+          label: 'CANTIDAD EN CONO',
+          nro1: _reg.cant_cono_1!,
+          nro2: _reg.cant_cono_2!,
+          onPressed1: () async {
+            String result = await Modal.addModal(
+                context: context, title: 'CANTIDAD EN CONO - NRO 1');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.cant_cono_1 = '';
+              } else {
+                _reg.cant_cono_1 = result;
+              }
+              setState(() {});
+            }
+          },
+          onPressed2: () async {
+            String result = await Modal.addModal(
+                context: context, title: 'CANTIDAD EN CONO - NRO 2');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.cant_cono_2 = '';
+              } else {
+                _reg.cant_cono_2 = result;
+              }
+              setState(() {});
+            }
+          },
+        ),
+        ControlesRow(
+          label: 'GRAFICA',
+          nro1: _reg.grafica_1!,
+          nro2: _reg.grafica_2!,
+          onPressed1: () async {
+            String result = await Modal.addModal(
+                context: context, title: 'GRAFICA - NRO 1');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.grafica_1 = '';
+              } else {
+                _reg.grafica_1 = result;
+              }
+              setState(() {});
+            }
+          },
+          onPressed2: () async {
+            String result = await Modal.addModal(
+                context: context, title: 'GRAFICA - NRO 2');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.grafica_2 = '';
+              } else {
+                _reg.grafica_2 = result;
+              }
+              setState(() {});
+            }
+          },
+        ),
+        ControlesRow(
+          label: 'TROQUELADO',
+          nro1: _reg.troquelado_1!,
+          nro2: _reg.troquelado_2!,
+          onPressed1: () async {
+            String result = await Modal.addModal(
+                context: context, title: 'TROQUELADO - NRO 1');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.troquelado_1 = '';
+              } else {
+                _reg.troquelado_1 = result;
+              }
+              setState(() {});
+            }
+          },
+          onPressed2: () async {
+            String result = await Modal.addModal(
+                context: context, title: 'TROQUELADO - NRO 2');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.troquelado_2 = '';
+              } else {
+                _reg.troquelado_2 = result;
+              }
+              setState(() {});
+            }
+          },
+        ),
+        ControlesRow(
+          label: 'MATERIAS EXTRAÑAS',
+          nro1: _reg.materias_1!,
+          nro2: _reg.materias_2!,
+          onPressed1: () async {
+            String result = await Modal.addModal(
+                context: context, title: 'MATERIAS EXTRAÑAS - NRO 1');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.materias_1 = '';
+              } else {
+                _reg.materias_1 = result;
+              }
+              setState(() {});
+            }
+          },
+          onPressed2: () async {
+            String result = await Modal.addModal(
+                context: context, title: 'MATERIAS EXTRAÑAS - NRO 2');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.materias_2 = '';
+              } else {
+                _reg.materias_2 = result;
+              }
+              setState(() {});
+            }
+          },
+        ),
+        ControlesRow(
+          label: 'PPR3',
+          nro1: _reg.ppr3_1!,
+          nro2: _reg.ppr3_2!,
+          onPressed1: () async {
+            String result =
+                await Modal.addModal(context: context, title: 'PPR3 - NRO 1');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.ppr3_1 = '';
+              } else {
+                _reg.ppr3_1 = result;
+              }
+              setState(() {});
+            }
+          },
+          onPressed2: () async {
+            String result =
+                await Modal.addModal(context: context, title: 'PPR3 - NRO 2');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.ppr3_2 = '';
+              } else {
+                _reg.ppr3_2 = result;
+              }
+              setState(() {});
+            }
+          },
+        ),
+        ControlesRow(
+          label: 'PPR4',
+          nro1: _reg.ppr4_1!,
+          nro2: _reg.ppr4_2!,
+          onPressed1: () async {
+            String result =
+                await Modal.addModal(context: context, title: 'PPR4 - NRO 1');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.ppr4_1 = '';
+              } else {
+                _reg.ppr4_1 = result;
+              }
+              setState(() {});
+            }
+          },
+          onPressed2: () async {
+            String result =
+                await Modal.addModal(context: context, title: 'PPR4 - NRO 2');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.ppr4_2 = '';
+              } else {
+                _reg.ppr4_2 = result;
+              }
+              setState(() {});
+            }
+          },
+        ),
+        ControlesRow(
+          label: 'PPR6',
+          nro1: _reg.ppr6_1!,
+          nro2: _reg.ppr6_2!,
+          onPressed1: () async {
+            String result =
+                await Modal.addModal(context: context, title: 'PPR6 - NRO 1');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.ppr6_1 = '';
+              } else {
+                _reg.ppr6_1 = result;
+              }
+              setState(() {});
+            }
+          },
+          onPressed2: () async {
+            String result =
+                await Modal.addModal(context: context, title: 'PPR6 - NRO 2');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.ppr6_2 = '';
+              } else {
+                _reg.ppr6_2 = result;
+              }
+              setState(() {});
+            }
+          },
+        ),
+      ],
+    );
+  }
+
+  Column _controlesNOBUDIN(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        ControlesRow(
+          label: 'ALTURA',
+          nro1: _reg.altura_1!,
+          nro2: _reg.altura_2!,
+          onPressed1: () async {
+            String result =
+                await Modal.addModal(context: context, title: 'ALTURA - NRO 1');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.altura_1 = '';
+              } else {
+                _reg.altura_1 = result;
+              }
+              setState(() {});
+            }
+          },
+          onPressed2: () async {
+            String result =
+                await Modal.addModal(context: context, title: 'ALTURA - NRO 2');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.altura_2 = '';
+              } else {
+                _reg.altura_2 = result;
+              }
+              setState(() {});
+            }
+          },
+        ),
+        ControlesRow(
+          label: 'TERMINACIÓN SUPERIOR',
+          nro1: _reg.terminacion_superior_1!,
+          nro2: _reg.terminacion_superior_2!,
+          onPressed1: () async {
+            String result = await Modal.addModal(
+                context: context, title: 'TERMINACIÓN SUPERIOR - NRO 1');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.terminacion_superior_1 = '';
+              } else {
+                _reg.terminacion_superior_1 = result;
+              }
+              setState(() {});
+            }
+          },
+          onPressed2: () async {
+            String result = await Modal.addModal(
+                context: context, title: 'TERMINACIÓN SUPERIOR - NRO 2');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.terminacion_superior_2 = '';
+              } else {
+                _reg.terminacion_superior_2 = result;
+              }
+              setState(() {});
+            }
+          },
+        ),
+        ControlesRow(
+          label: 'CRUCE',
+          nro1: _reg.cruce_1!,
+          nro2: _reg.cruce_2!,
+          onPressed1: () async {
+            String result =
+                await Modal.addModal(context: context, title: 'CRUCE - NRO 1');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.cruce_1 = '';
+              } else {
+                _reg.cruce_1 = result;
+              }
+              setState(() {});
+            }
+          },
+          onPressed2: () async {
+            String result =
+                await Modal.addModal(context: context, title: 'CRUCE - NRO 2');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.cruce_2 = '';
+              } else {
+                _reg.cruce_2 = result;
+              }
+              setState(() {});
+            }
+          },
+        ),
+        ControlesRow(
+          label: 'PEGADO',
+          nro1: _reg.pegado_1!,
+          nro2: _reg.pegado_2!,
+          onPressed1: () async {
+            String result =
+                await Modal.addModal(context: context, title: 'PEGADO - NRO 1');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.pegado_1 = '';
+              } else {
+                _reg.pegado_1 = result;
+              }
+              setState(() {});
+            }
+          },
+          onPressed2: () async {
+            String result =
+                await Modal.addModal(context: context, title: 'PEGADO - NRO 2');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.pegado_2 = '';
+              } else {
+                _reg.pegado_2 = result;
+              }
+              setState(() {});
+            }
+          },
+        ),
+        ControlesRow(
+          label: 'CANTIDAD EN CONO',
+          nro1: _reg.cant_cono_1!,
+          nro2: _reg.cant_cono_2!,
+          onPressed1: () async {
+            String result = await Modal.addModal(
+                context: context, title: 'CANTIDAD EN CONO - NRO 1');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.cant_cono_1 = '';
+              } else {
+                _reg.cant_cono_1 = result;
+              }
+              setState(() {});
+            }
+          },
+          onPressed2: () async {
+            String result = await Modal.addModal(
+                context: context, title: 'CANTIDAD EN CONO - NRO 2');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.cant_cono_2 = '';
+              } else {
+                _reg.cant_cono_2 = result;
+              }
+              setState(() {});
+            }
+          },
+        ),
+        ControlesRow(
+          label: 'GRAFICA',
+          nro1: _reg.grafica_1!,
+          nro2: _reg.grafica_2!,
+          onPressed1: () async {
+            String result = await Modal.addModal(
+                context: context, title: 'GRAFICA - NRO 1');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.grafica_1 = '';
+              } else {
+                _reg.grafica_1 = result;
+              }
+              setState(() {});
+            }
+          },
+          onPressed2: () async {
+            String result = await Modal.addModal(
+                context: context, title: 'GRAFICA - NRO 2');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.grafica_2 = '';
+              } else {
+                _reg.grafica_2 = result;
+              }
+              setState(() {});
+            }
+          },
+        ),
+        ControlesRow(
+          label: 'MICROPERFORADO',
+          nro1: _reg.microperforado_1!,
+          nro2: _reg.microperforado_2!,
+          onPressed1: () async {
+            String result = await Modal.addModal(
+                context: context, title: 'MICROPERFORADO - NRO 1');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.microperforado_1 = '';
+              } else {
+                _reg.microperforado_1 = result;
+              }
+              setState(() {});
+            }
+          },
+          onPressed2: () async {
+            String result = await Modal.addModal(
+                context: context, title: 'MICROPERFORADO - NRO 2');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.microperforado_2 = '';
+              } else {
+                _reg.microperforado_2 = result;
+              }
+              setState(() {});
+            }
+          },
+        ),
+        ControlesRow(
+          label: 'MATERIAS EXTRAÑAS',
+          nro1: _reg.materias_1!,
+          nro2: _reg.materias_2!,
+          onPressed1: () async {
+            String result = await Modal.addModal(
+                context: context, title: 'MATERIAS EXTRAÑAS - NRO 1');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.materias_1 = '';
+              } else {
+                _reg.materias_1 = result;
+              }
+              setState(() {});
+            }
+          },
+          onPressed2: () async {
+            String result = await Modal.addModal(
+                context: context, title: 'MATERIAS EXTRAÑAS - NRO 2');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.materias_2 = '';
+              } else {
+                _reg.materias_2 = result;
+              }
+              setState(() {});
+            }
+          },
+        ),
+        ControlesRow(
+          label: 'PPR3',
+          nro1: _reg.ppr3_1!,
+          nro2: _reg.ppr3_2!,
+          onPressed1: () async {
+            String result =
+                await Modal.addModal(context: context, title: 'PPR3 - NRO 1');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.ppr3_1 = '';
+              } else {
+                _reg.ppr3_1 = result;
+              }
+              setState(() {});
+            }
+          },
+          onPressed2: () async {
+            String result =
+                await Modal.addModal(context: context, title: 'PPR3 - NRO 2');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.ppr3_2 = '';
+              } else {
+                _reg.ppr3_2 = result;
+              }
+              setState(() {});
+            }
+          },
+        ),
+        ControlesRow(
+          label: 'PPR4',
+          nro1: _reg.ppr4_1!,
+          nro2: _reg.ppr4_2!,
+          onPressed1: () async {
+            String result =
+                await Modal.addModal(context: context, title: 'PPR4 - NRO 1');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.ppr4_1 = '';
+              } else {
+                _reg.ppr4_1 = result;
+              }
+              setState(() {});
+            }
+          },
+          onPressed2: () async {
+            String result =
+                await Modal.addModal(context: context, title: 'PPR4 - NRO 2');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.ppr4_2 = '';
+              } else {
+                _reg.ppr4_2 = result;
+              }
+              setState(() {});
+            }
+          },
+        ),
+        ControlesRow(
+          label: 'PPR6',
+          nro1: _reg.ppr6_1!,
+          nro2: _reg.ppr6_2!,
+          onPressed1: () async {
+            String result =
+                await Modal.addModal(context: context, title: 'PPR6 - NRO 1');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.ppr6_1 = '';
+              } else {
+                _reg.ppr6_1 = result;
+              }
+              setState(() {});
+            }
+          },
+          onPressed2: () async {
+            String result =
+                await Modal.addModal(context: context, title: 'PPR6 - NRO 2');
+            if (result.isNotEmpty) {
+              if (result == 'delete') {
+                _reg.ppr6_2 = '';
+              } else {
+                _reg.ppr6_2 = result;
+              }
+              setState(() {});
+            }
+          },
+        ),
+      ],
     );
   }
 

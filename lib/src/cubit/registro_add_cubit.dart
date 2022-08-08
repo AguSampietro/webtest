@@ -119,4 +119,40 @@ class RegistroAddCubit extends Cubit<RegistroAddState> {
       return res;
     }
   }
+
+  Future<Respuesta> PRO_procesarRegistro(String id, String quien) async {
+    try {
+      print('API CUBIT - ACTUALZIANDO ESTADO REGISTRO');
+
+      final url = Uri.parse('${Utils.api_url}/PRO_procesarRegistro');
+
+      final http.Response response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          "id": id,
+          "quien": quien,
+        }),
+      );
+
+      log('RESPONSE CODE ${response.statusCode} - ${response.body}');
+      if (response.statusCode == 200) {
+        Respuesta res = respuestaFromJson(response.body);
+        return res;
+      } else {
+        Respuesta res = Respuesta(
+            error: 'S',
+            mensaje: 'Problemas actualizando el estado del registro');
+        return res;
+      }
+    } catch (e) {
+      Respuesta res = Respuesta(
+          error: 'S',
+          mensaje:
+              'Error actualizando el estado del registro. ${e.toString()}');
+      return res;
+    }
+  }
 }

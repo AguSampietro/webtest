@@ -89,6 +89,7 @@ class RegistroItem extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       padding: const EdgeInsets.only(top: 15, bottom: 5, left: 5, right: 10),
       decoration: BoxDecoration(
+        color: Colors.white,
         border: Border.all(color: Colors.grey),
         borderRadius: BorderRadius.circular(20),
       ),
@@ -107,14 +108,12 @@ class RegistroItem extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
                 border: Border.all(color: _color),
+                color: _color,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
                 registro.estado!,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: _color,
-                ),
+                style: const TextStyle(fontSize: 14, color: Colors.white),
               ),
             ),
           ),
