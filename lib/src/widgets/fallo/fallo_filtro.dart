@@ -23,7 +23,7 @@ class FalloFiltro extends StatelessWidget {
               controller: _filtroController,
               keyboardType: TextInputType.emailAddress,
               onChanged: (text) {
-                if (text.length > 1) {
+                if (text.length > 0) {
                   context.read<FalloCubit>().PRO_fallos(text);
                 } else if (text.length == 0) {
                   context.read<FalloCubit>().PRO_fallos('');

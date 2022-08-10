@@ -352,6 +352,14 @@ class RegistroProduccion {
         cantidadCajas!.isNotEmpty;
   }
 
+  bool hasSomething() {
+    return lote!.isNotEmpty ||
+        contadorInicial!.isNotEmpty ||
+        contadorFinal!.isNotEmpty ||
+        cantidadMoldes!.isNotEmpty ||
+        cantidadCajas!.isNotEmpty;
+  }
+
   factory RegistroProduccion.fromJson(Map<String, dynamic> json) =>
       RegistroProduccion(
         id: json["ID"],

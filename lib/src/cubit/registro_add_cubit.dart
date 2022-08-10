@@ -73,6 +73,8 @@ class RegistroAddCubit extends Cubit<RegistroAddState> {
       } else {
         emit(RegistroAddError('Problemas editando el registro'));
       }
+
+      print('sasa');
     } catch (e) {
       emit(RegistroAddError(e.toString()));
     }

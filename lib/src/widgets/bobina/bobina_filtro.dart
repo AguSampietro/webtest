@@ -26,11 +26,9 @@ class BobinaFiltro extends StatelessWidget {
               controller: _filtroController,
               keyboardType: TextInputType.emailAddress,
               onChanged: (text) {
-                if (text.length > 2) {
-                  context
-                      .read<BobinaCubit>()
-                      .PRO_bobinasPorDeposito(text, deposito);
-                }
+                context
+                    .read<BobinaCubit>()
+                    .PRO_bobinasPorDeposito(text, deposito);
               },
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.search),
@@ -50,17 +48,17 @@ class BobinaFiltro extends StatelessWidget {
               ),
             ),
           ),
-          trailing: ElevatedButton.icon(
-            label: Text('QR Escaner'),
-            icon: const Icon(
-              Icons.qr_code_scanner,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              FocusScope.of(context).unfocus();
-              //context.read<BobinaCubit>().PRO_productos('');
-            },
-          ),
+          // trailing: ElevatedButton.icon(
+          //   label: Text('QR Escaner'),
+          //   icon: const Icon(
+          //     Icons.qr_code_scanner,
+          //     color: Colors.white,
+          //   ),
+          //   onPressed: () {
+          //     FocusScope.of(context).unfocus();
+          //     //context.read<BobinaCubit>().PRO_productos('');
+          //   },
+          // ),
         );
       },
     );
