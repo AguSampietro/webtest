@@ -160,7 +160,8 @@ class _DetalleState extends State<_Detalle> {
                             .read<OperarioCubit>()
                             .PRO_supervisor(_claveSuper);
 
-                        if (operario.claveacceso! == _claveSuper) {
+                        if (operario.claveacceso! == _claveSuper &&
+                            operario.nombre!.contains('-PR')) {
                           Respuesta res = await context
                               .read<RegistroAddCubit>()
                               .PRO_procesarRegistro(

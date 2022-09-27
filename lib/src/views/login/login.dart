@@ -203,12 +203,8 @@ class _LoginViewState extends State<LoginView> {
                                       // LLAMA A LA API
                                       if (_legajo.isEmpty) {
                                         // ignore: deprecated_member_use
-                                        scaffoldKey.currentState?.showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                                'Debe ingreser sus credenciales de usuario'),
-                                          ),
-                                        );
+                                        Utils.snackBar(context,
+                                            'Debe ingreser sus credenciales de usuario');
                                       } else {
                                         final prefs = AppPreferences();
                                         prefs.logged = false;
@@ -360,13 +356,8 @@ class _LoginViewState extends State<LoginView> {
                                     onPressed: () async {
                                       // LLAMA A LA API
                                       if (_claveSuper.isEmpty) {
-                                        // ignore: deprecated_member_use
-                                        scaffoldKey.currentState?.showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                                'Debe ingreser sus credenciales de usuario'),
-                                          ),
-                                        );
+                                        Utils.snackBar(context,
+                                            'Debe ingreser sus credenciales de usuario');
                                       } else {
                                         final prefs = AppPreferences();
                                         prefs.logged = false;
