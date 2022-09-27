@@ -390,7 +390,7 @@ class _DetalleState extends State<_Detalle> {
                     // BOBINA PAPEL - BUDIN
                     Row(
                       children: [
-                        InfoContainer.bobinaTitulo(label: 'Adhesivo\npapel:'),
+                        InfoContainer.bobinaTitulo(label: 'Bobina\npapel:'),
                         InfoContainer.bobinaDetalle(
                           nro: '1',
                           value: (widget.registro.bobina1 == null ||
@@ -501,7 +501,7 @@ class _DetalleState extends State<_Detalle> {
                     // BOBINA FONDO - DULCE BISCOCHO
                     Row(
                       children: [
-                        InfoContainer.bobinaTitulo(label: 'Adhesivo\nfondo:'),
+                        InfoContainer.bobinaTitulo(label: 'Bobina\nfondo:'),
                         InfoContainer.bobinaDetalle(
                           nro: '1',
                           value: (widget.registro.bobinaFondo1 == null ||
@@ -545,7 +545,7 @@ class _DetalleState extends State<_Detalle> {
                     // BOBINA LATERAL - DULCE BISCOCHO
                     Row(
                       children: [
-                        InfoContainer.bobinaTitulo(label: 'Adhesivo\nlateral:'),
+                        InfoContainer.bobinaTitulo(label: 'Bobina\nlateral:'),
                         InfoContainer.bobinaDetalle(
                           nro: '1',
                           value: (widget.registro.bobinaLateral1 == null ||
@@ -592,7 +592,7 @@ class _DetalleState extends State<_Detalle> {
                     // BOBINA CONO - DULCE BISCOCHO
                     Row(
                       children: [
-                        InfoContainer.bobinaTitulo(label: 'Adhesivo\ncono:'),
+                        InfoContainer.bobinaTitulo(label: 'Bobina\ncono:'),
                         InfoContainer.bobinaDetalle(
                           nro: '1',
                           value: (widget.registro.bobinaCono1 == null ||

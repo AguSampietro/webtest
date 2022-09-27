@@ -1,11 +1,11 @@
 {
-    "name": "webtest",
-    "short_name": "webtest",
+    "name": "Producción",
+    "short_name": "Producción",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Registro de producción",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
