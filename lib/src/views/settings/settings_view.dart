@@ -64,135 +64,144 @@ class _SettingsViewState extends State<SettingsView> {
       ),
       body: Column(
         children: [
-          Container(
-            margin: const EdgeInsets.all(10),
-            padding: const EdgeInsets.only(left: 10),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Column(
+          if (prefs.puedeConfigurar)
+            Column(
               children: [
-                // MAQUINAS
-                ListTile(
-                  onTap: prefs.usuarioTipo == UserType.OPERARIO
-                      ? _noPermisos
-                      : () async {
-                          final prefs = AppPreferences();
-                          Maquina? maquina =
-                              await Modal.seleccionarMaquina(context);
-                          if (maquina != null) {
-                            setState(() {
-                              _maquina = maquina;
-                              prefs.maquinaId = maquina.id!;
-                              prefs.maquinaNombre = maquina.maquina!;
-                              prefs.maquinaTipo = maquina.tipo!;
-                            });
-                          }
-                        },
-                  leading: const Icon(
-                    Icons.build_circle_outlined,
-                    size: 40,
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.only(left: 10),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(20),
                   ),
-                  title: _maquina == null
-                      ? const Text('SELECCIONE UNA MAQUINA')
-                      : Text(_maquina!.maquina!),
-                  subtitle: const Text('Maquina configurada'),
-                  trailing: const Icon(Icons.arrow_drop_down_circle_outlined),
-                ),
+                  child: Column(
+                    children: [
+                      // MAQUINAS
+                      ListTile(
+                        onTap: prefs.usuarioTipo == UserType.OPERARIO
+                            ? _noPermisos
+                            : () async {
+                                final prefs = AppPreferences();
+                                Maquina? maquina =
+                                    await Modal.seleccionarMaquina(context);
+                                if (maquina != null) {
+                                  setState(() {
+                                    _maquina = maquina;
+                                    prefs.maquinaId = maquina.id!;
+                                    prefs.maquinaNombre = maquina.maquina!;
+                                    prefs.maquinaTipo = maquina.tipo!;
+                                  });
+                                }
+                              },
+                        leading: const Icon(
+                          Icons.build_circle_outlined,
+                          size: 40,
+                        ),
+                        title: _maquina == null
+                            ? const Text('SELECCIONE UNA MAQUINA')
+                            : Text(_maquina!.maquina!),
+                        subtitle: const Text('Maquina configurada'),
+                        trailing:
+                            const Icon(Icons.arrow_drop_down_circle_outlined),
+                      ),
 
-                const Divider(thickness: 1),
+                      const Divider(thickness: 1),
 
-                // DEPOSITOS
-                ListTile(
-                  onTap: prefs.usuarioTipo == UserType.OPERARIO
-                      ? _noPermisos
-                      : () async {
-                          final prefs = AppPreferences();
-                          Deposito? deposito =
-                              await Modal.seleccionarDeposito(context);
-                          if (deposito != null) {
-                            setState(() {
-                              _deposito = deposito;
-                              prefs.depositoId = deposito.deposito!;
-                              prefs.depositoNombre = deposito.nombre!;
-                            });
-                          }
-                        },
-                  leading: const Icon(
-                    Icons.factory_outlined,
-                    size: 40,
+                      // DEPOSITOS
+                      ListTile(
+                        onTap: prefs.usuarioTipo == UserType.OPERARIO
+                            ? _noPermisos
+                            : () async {
+                                final prefs = AppPreferences();
+                                Deposito? deposito =
+                                    await Modal.seleccionarDeposito(context);
+                                if (deposito != null) {
+                                  setState(() {
+                                    _deposito = deposito;
+                                    prefs.depositoId = deposito.deposito!;
+                                    prefs.depositoNombre = deposito.nombre!;
+                                  });
+                                }
+                              },
+                        leading: const Icon(
+                          Icons.factory_outlined,
+                          size: 40,
+                        ),
+                        title: _deposito == null
+                            ? const Text('SELECCIONE UN DEPOSITO')
+                            : Text(_deposito!.nombre!),
+                        subtitle: const Text('Deposito configurado'),
+                        trailing:
+                            const Icon(Icons.arrow_drop_down_circle_outlined),
+                      ),
+
+                      Divider(thickness: 1),
+
+                      // PRODUCTO A PRODUCIR
+                      ListTile(
+                        onTap: prefs.usuarioTipo == UserType.OPERARIO
+                            ? _noPermisos
+                            : () async {
+                                final prefs = AppPreferences();
+                                Producto? producto =
+                                    await Modal.seleccionarProducto(
+                                        context, false) as Producto?;
+
+                                if (producto != null) {
+                                  setState(() {
+                                    _producto = producto;
+                                    prefs.productoId = producto.codproducto!;
+                                    prefs.productoNombre = producto.nombre!;
+                                  });
+                                }
+                              },
+                        leading: const Icon(
+                          Icons.add_box_outlined,
+                          size: 40,
+                        ),
+                        title: _producto == null
+                            ? const Text('SELECIONE UN PRODUCTO A PRODUCIR')
+                            : Text(_producto!.nombre!),
+                        subtitle: const Text('Producto configurado'),
+                        trailing:
+                            const Icon(Icons.arrow_drop_down_circle_outlined),
+                      ),
+
+                      const Divider(thickness: 1),
+
+                      // OPERARIOS
+                      ListTile(
+                        onTap: prefs.usuarioTipo == UserType.OPERARIO
+                            ? _noPermisos
+                            : () async {
+                                final prefs = AppPreferences();
+                                Operario? operario =
+                                    await Modal.seleccionarOperario(context)
+                                        as Operario?;
+                                if (operario != null) {
+                                  setState(() {
+                                    _operario = operario;
+                                    prefs.operarioId = operario.legajo!;
+                                    prefs.operarioNombre = operario.nombre!;
+                                  });
+                                }
+                              },
+                        leading: const Icon(
+                          Icons.person_outline,
+                          size: 40,
+                        ),
+                        title: _operario == null
+                            ? const Text('SELECIONE UN OPERARIO')
+                            : Text(_operario!.nombre!),
+                        subtitle: const Text('Operario configurado'),
+                        trailing:
+                            const Icon(Icons.arrow_drop_down_circle_outlined),
+                      ),
+                    ],
                   ),
-                  title: _deposito == null
-                      ? const Text('SELECCIONE UN DEPOSITO')
-                      : Text(_deposito!.nombre!),
-                  subtitle: const Text('Deposito configurado'),
-                  trailing: const Icon(Icons.arrow_drop_down_circle_outlined),
-                ),
-
-                Divider(thickness: 1),
-
-                // PRODUCTO A PRODUCIR
-                ListTile(
-                  onTap: prefs.usuarioTipo == UserType.OPERARIO
-                      ? _noPermisos
-                      : () async {
-                          final prefs = AppPreferences();
-                          Producto? producto =
-                              await Modal.seleccionarProducto(context, false)
-                                  as Producto?;
-
-                          if (producto != null) {
-                            setState(() {
-                              _producto = producto;
-                              prefs.productoId = producto.codproducto!;
-                              prefs.productoNombre = producto.nombre!;
-                            });
-                          }
-                        },
-                  leading: const Icon(
-                    Icons.add_box_outlined,
-                    size: 40,
-                  ),
-                  title: _producto == null
-                      ? const Text('SELECIONE UN PRODUCTO A PRODUCIR')
-                      : Text(_producto!.nombre!),
-                  subtitle: const Text('Producto configurado'),
-                  trailing: const Icon(Icons.arrow_drop_down_circle_outlined),
-                ),
-
-                const Divider(thickness: 1),
-
-                // OPERARIOS
-                ListTile(
-                  onTap: prefs.usuarioTipo == UserType.OPERARIO
-                      ? _noPermisos
-                      : () async {
-                          final prefs = AppPreferences();
-                          Operario? operario =
-                              await Modal.seleccionarOperario(context)
-                                  as Operario?;
-                          if (operario != null) {
-                            setState(() {
-                              _operario = operario;
-                              prefs.operarioId = operario.legajo!;
-                              prefs.operarioNombre = operario.nombre!;
-                            });
-                          }
-                        },
-                  leading: const Icon(
-                    Icons.person_outline,
-                    size: 40,
-                  ),
-                  title: _operario == null
-                      ? const Text('SELECIONE UN OPERARIO')
-                      : Text(_operario!.nombre!),
-                  subtitle: const Text('Operario configurado'),
-                  trailing: const Icon(Icons.arrow_drop_down_circle_outlined),
                 ),
               ],
             ),
-          ),
           Container(
             margin: const EdgeInsets.all(10),
             padding: const EdgeInsets.only(left: 10),

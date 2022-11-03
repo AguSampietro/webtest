@@ -129,7 +129,7 @@ class FallosDetail extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-            flex: 4,
+            flex: 5,
             child: Container(
               height: Utils.cellHeight,
               padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -141,7 +141,7 @@ class FallosDetail extends StatelessWidget {
                   fallo.codigo! + ' - ' + fallo.fallo!,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 12,
                     fontWeight: FontWeight.w500,
                     color: Colors.black,
                   ),
@@ -162,7 +162,7 @@ class FallosDetail extends StatelessWidget {
                   fallo.tiempo!.toString() + '\'',
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 14,
                     fontWeight: FontWeight.w500,
                     color: Colors.black,
                   ),
@@ -171,7 +171,7 @@ class FallosDetail extends StatelessWidget {
             ),
           ),
           Expanded(
-            flex: 5,
+            flex: 4,
             child: Container(
               //height: altoCelda,
               constraints: BoxConstraints(
@@ -186,7 +186,7 @@ class FallosDetail extends StatelessWidget {
                   fallo.observaciones!,
                   textAlign: TextAlign.start,
                   style: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: Colors.black,
                   ),

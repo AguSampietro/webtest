@@ -32,6 +32,15 @@ class _LoginViewState extends State<LoginView> {
   String _legajo = '';
 
   @override
+  void setState(VoidCallback fn) {
+    // TODO: implement setState
+    super.setState(fn);
+    final prefs = AppPreferences();
+    prefs.puedeProcesar = false;
+    prefs.puedeConfigurar = false;
+  }
+
+  @override
   Widget build(BuildContext context) {
     final prefs = AppPreferences();
     final double widthScreen = MediaQuery.of(context).size.width;
@@ -88,6 +97,8 @@ class _LoginViewState extends State<LoginView> {
                             _loginOperarios(context, size),
                             const SizedBox(height: 10),
                             _loginSupervisor(context, size),
+                            const SizedBox(height: 10),
+                            _loginEncargado(context, size),
                             Container(
                               width: double.infinity,
                               margin: const EdgeInsets.symmetric(
@@ -221,6 +232,9 @@ class _LoginViewState extends State<LoginView> {
                                           prefs.operarioNombre =
                                               operario.nombre!;
 
+                                          prefs.puedeProcesar = false;
+                                          prefs.puedeConfigurar = false;
+
                                           Navigator.pushReplacementNamed(
                                               context,
                                               VerificacionView.routeName);
@@ -247,7 +261,7 @@ class _LoginViewState extends State<LoginView> {
             });
       },
       child: Container(
-        width: 420,
+        width: 520,
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
@@ -361,6 +375,154 @@ class _LoginViewState extends State<LoginView> {
                                       } else {
                                         final prefs = AppPreferences();
                                         prefs.logged = false;
+
+                                        Supervisor operario = await context
+                                            .read<OperarioCubit>()
+                                            .PRO_supervisor(_claveSuper);
+
+                                        if (operario.claveacceso! ==
+                                                _claveSuper &&
+                                            operario.nombre!.contains('-PR')) {
+                                          prefs.puedeProcesar = true;
+                                          prefs.puedeConfigurar = false;
+                                          Navigator.pushReplacementNamed(
+                                              context,
+                                              VerificacionView.routeName);
+                                        } else {
+                                          Utils.snackBar(context,
+                                              'No se encontro el supervisor');
+                                        }
+                                      }
+                                    },
+                                    text: 'INGRESAR',
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            });
+      },
+      child: Container(
+        width: 520,
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(50),
+          //color: Colors.deepPurple[900],
+          border: Border.all(
+            color: Colors.white,
+            width: 1.5,
+            style: BorderStyle.solid,
+          ),
+        ),
+        // child: const Center(
+        //   child: Text(
+        //     "INGRESAR COMO SUPERVISOR",
+        //     textAlign: TextAlign.center,
+        //     style: TextStyle(
+        //       color: Colors.white,
+        //       fontWeight: FontWeight.w700,
+        //       fontSize: 18,
+        //     ),
+        //   ),
+        // ),
+        child: const ListTile(
+          leading: Icon(
+            FontAwesomeIcons.userCheck,
+            color: Colors.white,
+            size: 40,
+          ),
+          title: Text(
+            "INGRESAR COMO SUPERVISOR",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+              fontSize: 18,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _loginEncargado(BuildContext context, Size size) {
+    return GestureDetector(
+      onTap: () {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                content: Stack(
+                  children: <Widget>[
+                    Form(
+                      key: _formKeySupervisor,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          const Text(
+                            'Ingrese sus clave de encargado.\nTendra acceso a todos los registros generados por los operarios y la configuracion del sistema.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.black87,
+                              fontSize: 20,
+                            ),
+                          ),
+                          const SizedBox(height: 40),
+                          Container(
+                            width: size.width * 0.7,
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: Colors.grey.shade300,
+                                ),
+                              ),
+                            ),
+                            child: TextField(
+                              keyboardType: TextInputType.emailAddress,
+                              onChanged: (text) {
+                                setState(() {
+                                  _claveSuper = text;
+                                });
+                              },
+                              decoration: InputDecoration(
+                                  prefixIcon: const Icon(Icons.person),
+                                  border: InputBorder.none,
+                                  hintStyle: TextStyle(
+                                      color: Colors.grey.withOpacity(.8)),
+                                  hintText: "Ingresá tu clave de supervsor"),
+                            ),
+                          ),
+                          const SizedBox(height: 40),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  child: CancelButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    text: 'CANCELAR',
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  child: AcceptButton(
+                                    onPressed: () async {
+                                      // LLAMA A LA API
+                                      if (_claveSuper.isEmpty) {
+                                        Utils.snackBar(context,
+                                            'Debe ingreser sus credenciales de usuario');
+                                      } else {
+                                        final prefs = AppPreferences();
+                                        prefs.logged = false;
                                         Supervisor operario = await context
                                             .read<OperarioCubit>()
                                             .PRO_supervisor(_claveSuper);
@@ -369,7 +531,10 @@ class _LoginViewState extends State<LoginView> {
                                             _claveSuper) {
                                           prefs.logged = true;
                                           prefs.usuarioTipo =
-                                              UserType.SUPERVISOR;
+                                              UserType.ENCARGADO;
+
+                                          prefs.puedeProcesar = true;
+                                          prefs.puedeConfigurar = true;
 
                                           Navigator.pushReplacementNamed(
                                               context,
@@ -395,7 +560,7 @@ class _LoginViewState extends State<LoginView> {
             });
       },
       child: Container(
-        width: 420,
+        width: 520,
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
@@ -424,7 +589,7 @@ class _LoginViewState extends State<LoginView> {
             size: 40,
           ),
           title: Text(
-            "INGRESAR COMO SUPERVISOR",
+            "INGRESAR COMO ENCARGADO",
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.white,

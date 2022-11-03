@@ -14,6 +14,7 @@ import 'package:webtest/src/views/home/home.dart';
 import 'package:webtest/src/views/login/login.dart';
 
 import 'package:webtest/src/views/nuevo_registro/nuevo_registro_view.dart';
+import 'package:webtest/src/views/registro/print_registro.dart';
 import 'package:webtest/src/views/registro/registro.dart';
 import 'package:webtest/src/views/verificacion/verificacion.dart';
 
@@ -86,6 +87,8 @@ class MyApp extends StatelessWidget {
                       return const VerificacionView();
                     case RegistroView.routeName:
                       return const RegistroView();
+                    case PrintRegistro.routeName:
+                      return const PrintRegistro();
                     default:
                       return const VerificacionView();
                   }

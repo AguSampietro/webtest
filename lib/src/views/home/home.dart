@@ -10,6 +10,7 @@ import 'package:webtest/src/utils/utils.dart';
 import 'package:webtest/src/views/nuevo_registro/nuevo_registro_view.dart';
 
 import 'package:webtest/src/services/preferences/app_preferences.dart';
+import 'package:webtest/src/views/registro/print_registro.dart';
 import 'package:webtest/src/widgets/registros/registro_lista.dart';
 
 import '../settings/settings_view.dart';

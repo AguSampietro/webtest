@@ -16,6 +16,6 @@ class RegistroType {
 }
 
 class UserType {
-  static final String SUPERVISOR = "SUPERVISOR";
+  static final String ENCARGADO = "SUPERVISOR";
   static final String OPERARIO = "OPERARIO";
 }

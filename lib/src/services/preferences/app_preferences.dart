@@ -93,4 +93,14 @@ class AppPreferences {
       this._prefs.getString('ati_prod_id_registro_edit') ?? '';
   set idRegistroEdit(String value) =>
       this._prefs.setString('ati_prod_id_registro_edit', value);
+
+  bool get puedeProcesar =>
+      this._prefs.getBool('ati_prod_puede_procesar') ?? false;
+  set puedeProcesar(bool value) =>
+      this._prefs.setBool('ati_prod_puede_procesar', value);
+
+  bool get puedeConfigurar =>
+      this._prefs.getBool('ati_prod_puede_configurar') ?? false;
+  set puedeConfigurar(bool value) =>
+      this._prefs.setBool('ati_prod_puede_configurar', value);
 }

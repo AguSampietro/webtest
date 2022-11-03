@@ -15,6 +15,7 @@ import 'package:webtest/src/utils/modal.dart';
 import 'package:webtest/src/utils/utils.dart';
 
 import 'package:webtest/src/views/nuevo_registro/widgets/fallos_detail.dart';
+import 'package:webtest/src/views/registro/print_registro.dart';
 import 'package:webtest/src/widgets/accept_button.dart';
 import 'package:webtest/src/widgets/cancel_button.dart';
 
@@ -217,7 +218,8 @@ class _DetalleState extends State<_Detalle> {
               const SizedBox(width: 5),
               TextButton.icon(
                 onPressed: () {
-                  Utils.snackBar(context, 'En desarrollo');
+                  Navigator.pushNamed(context, PrintRegistro.routeName,
+                      arguments: widget.registro.id);
                 },
                 label: const Text(
                   'IMPRIMIR',
