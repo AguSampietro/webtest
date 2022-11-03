@@ -383,6 +383,7 @@ class _LoginViewState extends State<LoginView> {
                                         if (operario.claveacceso! ==
                                                 _claveSuper &&
                                             operario.nombre!.contains('-PR')) {
+                                          prefs.logged = true;
                                           prefs.puedeProcesar = true;
                                           prefs.puedeConfigurar = false;
                                           Navigator.pushReplacementNamed(
