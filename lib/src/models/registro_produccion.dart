@@ -88,6 +88,9 @@ class RegistroProduccion {
     this.terminacion_superior_1,
     this.terminacion_superior_2,
     this.fallosMaquina,
+    this.turno,
+    this.embaladoPor,
+    this.codigoCajas,
   });
 
   String? id = '';
@@ -195,6 +198,10 @@ class RegistroProduccion {
   String? terminacion_superior_2 = '';
 
   List<FalloMaquina>? fallosMaquina = [];
+
+  String? turno = '';
+  String? embaladoPor = '';
+  String? codigoCajas = '';
 
   factory RegistroProduccion.init() => RegistroProduccion(
         contadorInicial: '',
@@ -339,6 +346,11 @@ class RegistroProduccion {
         "TERMINACION_SUPERIOR1": terminacion_superior_1,
         "TERMINACION_SUPERIOR2": terminacion_superior_2,
         "FALLOS_MAQUINA": fallosMaquinasMapToJson(fallosMaquina!),
+        "TURNO": turno,
+        "EMBALADO_POR": embaladoPor,
+        "CODIGO_CAJAS": codigoCajas,
+        "FECHA": fecha,
+        "HORA": hora,
       };
 
   bool isReady() {
@@ -474,5 +486,8 @@ class RegistroProduccion {
             ? []
             : List<FalloMaquina>.from(
                 json["FALLOS_MAQUINA"].map((x) => FalloMaquina.fromJson(x))),
+        turno: json["TURNO"],
+        embaladoPor: json["EMBALADO_POR"],
+        codigoCajas: json["CODIGO_CAJAS"],
       );
 }

@@ -103,4 +103,41 @@ class AppPreferences {
       this._prefs.getBool('ati_prod_puede_configurar') ?? false;
   set puedeConfigurar(bool value) =>
       this._prefs.setBool('ati_prod_puede_configurar', value);
+
+  String get fechaTurno => this._prefs.getString('ati_prod_fecha_turno') ?? '';
+  set fechaTurno(String value) =>
+      this._prefs.setString('ati_prod_fecha_turno', value);
+
+  String get horaTurno => this._prefs.getString('ati_prod_hora_turno') ?? '';
+  set horaTurno(String value) =>
+      this._prefs.setString('ati_prod_hora_turno', value);
+
+  String get fechHoraTurno =>
+      this._prefs.getString('ati_prod_fecha_hora_turno') ?? '';
+  set fechHoraTurno(String value) =>
+      this._prefs.setString('ati_prod_fecha_hora_turno', value);
+
+  String get turnoCodigo =>
+      this._prefs.getString('ati_prod_codigo_turno') ?? '';
+  set turnoCodigo(String value) =>
+      this._prefs.setString('ati_prod_codigo_turno', value);
+
+  String get turnoNombre =>
+      this._prefs.getString('ati_prod_nombre_turno') ?? '';
+  set turnoNombre(String value) =>
+      this._prefs.setString('ati_prod_nombre_turno', value);
+
+  String get embaladoPorCodigo =>
+      this._prefs.getString('ati_prod_codigo_embalado_por') ?? '';
+  set embaladoPorCodigo(String value) =>
+      this._prefs.setString('ati_prod_codigo_embalado_por', value);
+
+  String get embaladoPorNombre =>
+      this._prefs.getString('ati_prod_nombre_embalado_por') ?? '';
+  set embaladoPorNombre(String value) =>
+      this._prefs.setString('ati_prod_nombre_embalado_por', value);
+
+  String get codigoCaja => this._prefs.getString('ati_prod_codigo_caja') ?? '';
+  set codigoCaja(String value) =>
+      this._prefs.setString('ati_prod_codigo_caja', value);
 }

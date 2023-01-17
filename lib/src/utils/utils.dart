@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Utils {
   static double cellHeight = 50.0;
@@ -289,5 +290,11 @@ class Utils {
 
     double alto = newheight * porcAlto;
     return alto;
+  }
+
+  static String convertirDDMMYYYYHS(DateTime date) {
+    final DateFormat formatter = DateFormat('dd/MM/yyyy HH:mm');
+    final String formatted = formatter.format(date);
+    return formatted;
   }
 }

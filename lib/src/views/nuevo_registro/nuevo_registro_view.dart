@@ -2357,6 +2357,11 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
           _reg.legajoOperario = prefs.operarioId;
           _reg.codProducto = prefs.productoId;
           _reg.deposito = prefs.depositoId;
+          _reg.fecha = prefs.fechaTurno;
+          _reg.hora = prefs.horaTurno;
+          _reg.turno = prefs.turnoCodigo;
+          _reg.embaladoPor = prefs.embaladoPorCodigo;
+          _reg.codigoCajas = prefs.codigoCaja;
 
           if (_reg.isReady()) {
             Utils.confirmAlert(context, 'Finalizar registro',
