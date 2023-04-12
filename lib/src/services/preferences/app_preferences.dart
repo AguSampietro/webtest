@@ -117,16 +117,6 @@ class AppPreferences {
   set fechHoraTurno(String value) =>
       this._prefs.setString('ati_prod_fecha_hora_turno', value);
 
-  String get turnoCodigo =>
-      this._prefs.getString('ati_prod_codigo_turno') ?? '';
-  set turnoCodigo(String value) =>
-      this._prefs.setString('ati_prod_codigo_turno', value);
-
-  String get turnoNombre =>
-      this._prefs.getString('ati_prod_nombre_turno') ?? '';
-  set turnoNombre(String value) =>
-      this._prefs.setString('ati_prod_nombre_turno', value);
-
   String get embaladoPorCodigo =>
       this._prefs.getString('ati_prod_codigo_embalado_por') ?? '';
   set embaladoPorCodigo(String value) =>

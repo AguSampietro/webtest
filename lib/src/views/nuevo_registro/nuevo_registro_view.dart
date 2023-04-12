@@ -13,7 +13,9 @@ import 'package:webtest/src/models/producto.dart';
 import 'package:webtest/src/models/fallo_maquina_model.dart';
 import 'package:webtest/src/models/fallo.dart';
 import 'package:webtest/src/models/registro_produccion.dart';
+import 'package:webtest/src/models/turno.dart';
 import 'package:webtest/src/utils/enum_types.dart';
+import 'package:webtest/src/views/home/home.dart';
 
 import 'package:webtest/src/views/nuevo_registro/widgets/adhesivo_add.dart';
 import 'package:webtest/src/views/nuevo_registro/widgets/adhesivo_label.dart';
@@ -56,6 +58,8 @@ class NuevoRegistroView extends StatefulWidget {
 class _NuevoRegistroViewState extends State<NuevoRegistroView> {
   final double radious = 5;
   RegistroProduccion _reg = RegistroProduccion.init();
+
+  Turno _turno = Turno(nombre: '', codigo: '');
 
   @override
   void initState() {
@@ -100,7 +104,26 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
           prefs.productoId = _reg.codProducto!;
           prefs.productoNombre = _reg.producto!;
 
+          String? _t = regState.registro.turno;
+
+          if (_t != null) {
+            _turno = Turno();
+            _turno.codigo = _t;
+
+            if (_t == 'manana') {
+              _turno.nombre = 'Mañana';
+            } else if (_t == 'tarde') {
+              _turno.nombre = 'Tarde';
+            } else if (_t == 'noche') {
+              _turno.nombre = 'Noche';
+            }
+          } else {
+            _turno.codigo = '';
+            _turno.nombre = '';
+          }
+
           context.read<RegistroAddCubit>().ready();
+
           setState(() {});
 
           // Utils.confirmAlert(
@@ -232,6 +255,64 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                           children: [
                             Row(
                               children: [
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      final prefs = AppPreferences();
+                                      String? _t = await selectTurno();
+
+                                      if (_t != null) {
+                                        _turno = Turno();
+                                        _turno.codigo = _t;
+
+                                        if (_t == 'manana') {
+                                          _turno.nombre = 'Mañana';
+                                        } else if (_t == 'tarde') {
+                                          _turno.nombre = 'Tarde';
+                                        } else if (_t == 'noche') {
+                                          _turno.nombre = 'Noche';
+                                        }
+                                      } else {
+                                        _turno.codigo = '';
+                                        _turno.nombre = '';
+                                      }
+                                      setState(() {});
+                                    },
+                                    child: Container(
+                                      height: 50,
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 1, vertical: 1),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 5, vertical: 0),
+                                      decoration: BoxDecoration(
+                                        border: Utils.borderApp,
+                                        color: Colors.grey[200],
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Text(
+                                            'TURNO ACTUAL:',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                          if (_turno.codigo!.isNotEmpty)
+                                            Text(
+                                              _turno.nombre!,
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
                                 ContadorCard(
                                   label: 'LOTE: ',
                                   value: _reg.lote!,
@@ -1672,6 +1753,62 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
         ));
   }
 
+  Future<String?> selectTurno() async {
+    var _style = TextStyle(fontSize: 24);
+    return await showDialog<String?>(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            title: Container(
+              width: 500,
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+              child: const Text(
+                'Selecciona un turno',
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            children: <Widget>[
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(context, 'manana');
+                },
+                child: Container(
+                  width: 500,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                  child: Text('Mañana', style: _style),
+                ),
+              ),
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(context, 'tarde');
+                },
+                child: Container(
+                  width: 500,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                  child: Text('Tarde', style: _style),
+                ),
+              ),
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(context, 'noche');
+                },
+                child: Container(
+                  width: 500,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                  child: Text('Noche', style: _style),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
   Column _controlesBUDIN(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -2328,7 +2465,13 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
 
   Widget _finalizarButton(BuildContext context, AppPreferences prefs) {
     return BlocConsumer<RegistroAddCubit, RegistroAddState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is RegistroAddLoaded) {
+          if (state.mensaje.contains('con exito')) {
+            Navigator.pushReplacementNamed(context, HomeView.routeName);
+          }
+        }
+      },
       builder: (context, state) {
         if (state == null) return Text('State error');
 
@@ -2359,7 +2502,7 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
           _reg.deposito = prefs.depositoId;
           _reg.fecha = prefs.fechaTurno;
           _reg.hora = prefs.horaTurno;
-          _reg.turno = prefs.turnoCodigo;
+          _reg.turno = _turno.codigo;
           _reg.embaladoPor = prefs.embaladoPorCodigo;
           _reg.codigoCajas = prefs.codigoCaja;
 

@@ -76,12 +76,6 @@ class _SettingsViewState extends State<SettingsView> {
       _fechaHora = FechaHora(fecha: prefs.fechaTurno, hora: prefs.horaTurno);
     }
 
-    if (prefs.turnoCodigo.isEmpty) {
-      _turno = Turno(nombre: 'SELECCIONE TURNO', codigo: '');
-    } else {
-      _turno = Turno(nombre: prefs.turnoNombre, codigo: prefs.turnoCodigo);
-    }
-
     if (prefs.embaladoPorCodigo.isEmpty) {
       _embaladoPor =
           Operario(nombre: 'SELECCIONE ENCARGADO DEL EMBALAJE', legajo: '');
@@ -253,160 +247,118 @@ class _SettingsViewState extends State<SettingsView> {
                             const Icon(Icons.arrow_drop_down_circle_outlined),
                       ),
 
-                      const Divider(thickness: 1),
+                      // const Divider(thickness: 1),
 
                       // TURNO
-                      Row(
-                        children: [
-                          Expanded(
-                            child: ListTile(
-                              onTap: prefs.usuarioTipo == UserType.OPERARIO
-                                  ? _noPermisos
-                                  : () async {
-                                      final prefs = AppPreferences();
-                                      String? _t = await selectTurno();
+                      // Row(
+                      //   children: [
+                      //     Expanded(
+                      //       child:
+                      //           // FECHA Y HORA DEL TURNO
+                      //           ListTile(
+                      //         onTap: prefs.usuarioTipo == UserType.OPERARIO
+                      //             ? _noPermisos
+                      //             : () async {
+                      //                 final prefs = AppPreferences();
 
-                                      if (_t != null) {
-                                        _turno?.codigo = _t;
-                                        prefs.turnoCodigo = _t;
+                      //                 DatePicker.showDateTimePicker(
+                      //                   context,
+                      //                   showTitleActions: true,
+                      //                   theme: DatePickerTheme(
+                      //                     cancelStyle: const TextStyle(
+                      //                         color: Colors.black87,
+                      //                         fontSize: 24),
+                      //                     doneStyle: const TextStyle(
+                      //                         color: Colors.blue,
+                      //                         fontSize: 24,
+                      //                         fontWeight: FontWeight.bold),
+                      //                     itemStyle: const TextStyle(
+                      //                         color: Colors.black,
+                      //                         fontSize: 24),
+                      //                     backgroundColor: Colors.white,
+                      //                     headerColor: Colors.grey.shade200,
+                      //                     containerHeight: 350.0,
+                      //                     titleHeight: 60.0,
+                      //                     itemHeight: 50.0,
+                      //                   ),
+                      //                   locale: LocaleType.es,
+                      //                   onConfirm: (date) {
+                      //                     log('confirm ${date.toString()}');
+                      //                     List<String> sel =
+                      //                         Utils.convertirDDMMYYYYHS(date)
+                      //                             .split(' ');
+                      //                     log(sel[0]);
+                      //                     log(sel[1]);
 
-                                        if (_t == 'manana') {
-                                          _turno?.nombre = 'Mañana';
-                                          prefs.turnoNombre = 'Mañana';
-                                        } else if (_t == 'tarde') {
-                                          _turno?.nombre = 'tarde';
-                                          prefs.turnoNombre = 'Tarde';
-                                        } else if (_t == 'noche') {
-                                          _turno?.nombre = 'Noche';
-                                          prefs.turnoNombre = 'Noche';
-                                        }
-                                      } else {
-                                        _turno?.codigo = '';
-                                        _turno?.nombre = 'SELECIONE TURNO';
-                                        prefs.turnoCodigo = '';
-                                        prefs.turnoNombre = 'SELECIONE TURNO';
-                                      }
-                                      setState(() {});
-                                    },
-                              leading: const Icon(
-                                Icons.access_time_outlined,
-                                size: 40,
-                              ),
-                              title: _producto == null
-                                  ? const Text('SELECIONE TURNO')
-                                  : Text(_turno!.nombre!),
-                              subtitle: const Text('Turno configurado'),
-                              trailing: const Icon(
-                                  Icons.arrow_drop_down_circle_outlined),
-                            ),
-                          ),
-                          Expanded(
-                            child:
-                                // FECHA Y HORA DEL TURNO
-                                ListTile(
-                              onTap: prefs.usuarioTipo == UserType.OPERARIO
-                                  ? _noPermisos
-                                  : () async {
-                                      final prefs = AppPreferences();
+                      //                     setState(() {
+                      //                       _fechaHora?.fecha = sel[0];
+                      //                       _fechaHora?.hora = sel[1];
+                      //                       _fechaHora?.fechaAlta = date;
 
-                                      DatePicker.showDateTimePicker(
-                                        context,
-                                        showTitleActions: true,
-                                        theme: DatePickerTheme(
-                                          cancelStyle: const TextStyle(
-                                              color: Colors.black87,
-                                              fontSize: 24),
-                                          doneStyle: const TextStyle(
-                                              color: Colors.blue,
-                                              fontSize: 24,
-                                              fontWeight: FontWeight.bold),
-                                          itemStyle: const TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 24),
-                                          backgroundColor: Colors.white,
-                                          headerColor: Colors.grey.shade200,
-                                          containerHeight: 350.0,
-                                          titleHeight: 60.0,
-                                          itemHeight: 50.0,
-                                        ),
-                                        locale: LocaleType.es,
-                                        onConfirm: (date) {
-                                          log('confirm ${date.toString()}');
-                                          List<String> sel =
-                                              Utils.convertirDDMMYYYYHS(date)
-                                                  .split(' ');
-                                          log(sel[0]);
-                                          log(sel[1]);
-
-                                          setState(() {
-                                            _fechaHora?.fecha = sel[0];
-                                            _fechaHora?.hora = sel[1];
-                                            _fechaHora?.fechaAlta = date;
-
-                                            prefs.fechaTurno = sel[0];
-                                            prefs.horaTurno = sel[1];
-                                            prefs.fechHoraTurno =
-                                                date.toString();
-                                          });
-                                        },
-                                        currentTime: DateTime.now(),
-                                      );
-                                    },
-                              leading: const Icon(
-                                Icons.calendar_month_outlined,
-                                size: 40,
-                              ),
-                              title: _producto == null
-                                  ? const Text(
-                                      'SELECIONE FECHA Y HORA DE COMIENZO DEL TURNO')
-                                  : Text(_fechaHora.toString()),
-                              subtitle: const Text(
-                                  'Fecha y hora configurada del turno'),
-                              trailing: const Icon(
-                                  Icons.arrow_drop_down_circle_outlined),
-                            ),
-                          ),
-                        ],
-                      ),
+                      //                       prefs.fechaTurno = sel[0];
+                      //                       prefs.horaTurno = sel[1];
+                      //                       prefs.fechHoraTurno =
+                      //                           date.toString();
+                      //                     });
+                      //                   },
+                      //                   currentTime: DateTime.now(),
+                      //                 );
+                      //               },
+                      //         leading: const Icon(
+                      //           Icons.calendar_month_outlined,
+                      //           size: 40,
+                      //         ),
+                      //         title: _producto == null
+                      //             ? const Text(
+                      //                 'SELECIONE FECHA Y HORA DE COMIENZO DEL TURNO')
+                      //             : Text(_fechaHora.toString()),
+                      //         subtitle: const Text(
+                      //             'Fecha y hora configurada del turno'),
+                      //         trailing: const Icon(
+                      //             Icons.arrow_drop_down_circle_outlined),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
 
                       const Divider(thickness: 1),
 
                       // EMBALADO POR
                       Row(
                         children: [
-                          Expanded(
-                            child: ListTile(
-                              onTap: prefs.usuarioTipo == UserType.OPERARIO
-                                  ? _noPermisos
-                                  : () async {
-                                      final prefs = AppPreferences();
-                                      Operario? operario =
-                                          await Modal.seleccionarOperario(
-                                              context) as Operario?;
-                                      if (operario != null) {
-                                        setState(() {
-                                          _embaladoPor = operario;
-                                          prefs.embaladoPorCodigo =
-                                              operario.legajo!;
-                                          prefs.embaladoPorNombre =
-                                              operario.nombre!;
-                                        });
-                                      }
-                                    },
-                              leading: const Icon(
-                                Icons.co_present_outlined,
-                                size: 40,
-                              ),
-                              title: _embaladoPor == null
-                                  ? const Text(
-                                      'SELECCIONE ENCARGADO DEL EMBALAJE')
-                                  : Text(_embaladoPor!.nombre!),
-                              subtitle: const Text(
-                                  'Encargado del embalaje configurado'),
-                              trailing: const Icon(
-                                  Icons.arrow_drop_down_circle_outlined),
-                            ),
-                          ),
+                          // Expanded(
+                          //   child: ListTile(
+                          //     onTap: prefs.usuarioTipo == UserType.OPERARIO
+                          //         ? _noPermisos
+                          //         : () async {
+                          //             final prefs = AppPreferences();
+                          //             Operario? operario =
+                          //                 await Modal.seleccionarOperario(
+                          //                     context) as Operario?;
+                          //             if (operario != null) {
+                          //               setState(() {
+                          //                 _embaladoPor = operario;
+                          //                 prefs.embaladoPorCodigo =
+                          //                     operario.legajo!;
+                          //                 prefs.embaladoPorNombre =
+                          //                     operario.nombre!;
+                          //               });
+                          //             }
+                          //           },
+                          //     leading: const Icon(
+                          //       Icons.co_present_outlined,
+                          //       size: 40,
+                          //     ),
+                          //     title: _embaladoPor == null
+                          //         ? const Text(
+                          //             'SELECCIONE ENCARGADO DEL EMBALAJE')
+                          //         : Text(_embaladoPor!.nombre!),
+                          //     subtitle: const Text(
+                          //         'Encargado del embalaje configurado'),
+                          //     trailing: const Icon(
+                          //         Icons.arrow_drop_down_circle_outlined),
+                          //   ),
+                          // ),
                           Expanded(
                             child: // CODIGO CAJA
                                 ListTile(
@@ -414,14 +366,21 @@ class _SettingsViewState extends State<SettingsView> {
                                   ? _noPermisos
                                   : () async {
                                       final prefs = AppPreferences();
-                                      String result = await Modal.addModal(
-                                          context: context,
-                                          title: 'CODIGO CAJA');
-                                      if (result.isNotEmpty) {
+                                      String? result = await Modal.codigoCaja(
+                                          context, MediaQuery.of(context).size);
+                                      if (result == null) {
+                                        _codigoCaja?.codigo = '';
+                                        _codigoCaja?.nombre = '';
+                                        prefs.codigoCaja = '';
+                                      } else if (result.isNotEmpty) {
                                         if (result == 'delete') {
                                           _codigoCaja?.codigo = '';
                                           _codigoCaja?.nombre = '';
                                           prefs.codigoCaja = '';
+                                        } else if (result == 'cancel') {
+                                          // _codigoCaja?.codigo = '';
+                                          // _codigoCaja?.nombre = '';
+                                          // prefs.codigoCaja = '';
                                         } else {
                                           _codigoCaja?.codigo = result;
                                           _codigoCaja?.nombre = result;

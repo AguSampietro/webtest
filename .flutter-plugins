@@ -1,12 +1,11 @@
 # This is a generated file; do not edit or check into version control.
-path_provider_linux=/Users/agusampietro/development/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_linux-2.1.5/
-path_provider_windows=/Users/agusampietro/development/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-2.0.5/
-permission_handler=/Users/agusampietro/development/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-8.3.0/
-printing=/Users/agusampietro/development/flutter/.pub-cache/hosted/pub.dartlang.org/printing-5.9.3/
-shared_preferences=/Users/agusampietro/development/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-2.0.13/
-shared_preferences_android=/Users/agusampietro/development/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_android-2.0.11/
-shared_preferences_ios=/Users/agusampietro/development/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_ios-2.1.0/
-shared_preferences_linux=/Users/agusampietro/development/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_linux-2.1.0/
-shared_preferences_macos=/Users/agusampietro/development/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_macos-2.0.3/
-shared_preferences_web=/Users/agusampietro/development/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_web-2.0.3/
-shared_preferences_windows=/Users/agusampietro/development/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_windows-2.1.0/
+path_provider_linux=/Users/agusampietro/.pub-cache/hosted/pub.dev/path_provider_linux-2.1.10/
+path_provider_windows=/Users/agusampietro/.pub-cache/hosted/pub.dev/path_provider_windows-2.1.5/
+permission_handler=/Users/agusampietro/.pub-cache/hosted/pub.dev/permission_handler-8.3.0/
+printing=/Users/agusampietro/.pub-cache/hosted/pub.dev/printing-5.10.1/
+shared_preferences=/Users/agusampietro/.pub-cache/hosted/pub.dev/shared_preferences-2.0.18/
+shared_preferences_android=/Users/agusampietro/.pub-cache/hosted/pub.dev/shared_preferences_android-2.0.17/
+shared_preferences_foundation=/Users/agusampietro/.pub-cache/hosted/pub.dev/shared_preferences_foundation-2.1.5/
+shared_preferences_linux=/Users/agusampietro/.pub-cache/hosted/pub.dev/shared_preferences_linux-2.1.5/
+shared_preferences_web=/Users/agusampietro/.pub-cache/hosted/pub.dev/shared_preferences_web-2.0.6/
+shared_preferences_windows=/Users/agusampietro/.pub-cache/hosted/pub.dev/shared_preferences_windows-2.1.5/

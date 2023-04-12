@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -179,6 +180,15 @@ class _HomeViewState extends State<HomeView> {
               onPressed: () {
                 final prefs = AppPreferences();
                 prefs.idRegistroEdit = '';
+                DateTime date = DateTime.now();
+
+                List<String> sel = Utils.convertirDDMMYYYYHS(date).split(' ');
+                log(sel[0]);
+                log(sel[1]);
+
+                prefs.fechaTurno = sel[0];
+                prefs.horaTurno = sel[1];
+                prefs.fechHoraTurno = date.toString();
 
                 Navigator.pushNamed(context, NuevoRegistroView.routeName)
                     .then((value) {

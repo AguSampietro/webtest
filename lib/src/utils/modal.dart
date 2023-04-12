@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:numeric_keyboard/numeric_keyboard.dart';
 import 'package:webtest/src/models/bobina.dart';
+import 'package:webtest/src/models/codigo_caja.dart';
 import 'package:webtest/src/models/deposito.dart';
 import 'package:webtest/src/models/nro_serie.dart';
 
@@ -970,6 +971,105 @@ class Modal {
             ),
           );
         });
+    if (result == null) return null;
+
+    return result;
+  }
+
+  static Future<String?> codigoCaja(BuildContext context, Size size) async {
+    TextEditingController _controller = TextEditingController();
+
+    String? result = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Stack(
+            children: <Widget>[
+              Form(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Container(
+                      child: AppBar(
+                        centerTitle: true,
+                        backgroundColor:
+                            ThemeApp.modalHeadColor, //Colors.pink[400],
+                        elevation: 0,
+                        automaticallyImplyLeading: false,
+                        title: const Text(
+                          'CODIGO DE CAJA',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+                    Container(
+                      width: size.width * 0.7,
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(color: Colors.grey.shade300),
+                        ),
+                      ),
+                      child: TextField(
+                        controller: _controller,
+                        decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.numbers),
+                            border: InputBorder.none,
+                            hintStyle:
+                                TextStyle(color: Colors.grey.withOpacity(.8)),
+                            hintText: "Ingresá codigo de caja"),
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            child: DeleteButton(
+                              onPressed: () {
+                                Navigator.pop(context, 'delete');
+                              },
+                              text: 'BORRAR',
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            child: CancelButton(
+                              onPressed: () {
+                                Navigator.pop(context, 'cancel');
+                              },
+                              text: 'CANCELAR',
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            child: AcceptButton(
+                              onPressed: () async {
+                                Navigator.pop(context, _controller.text);
+                              },
+                              text: 'ACEPTAR',
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
     if (result == null) return null;
 
     return result;

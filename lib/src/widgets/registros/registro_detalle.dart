@@ -93,6 +93,21 @@ class _DetalleState extends State<_Detalle> {
     // widget.registro.bobinaLateral2 ??= Bobina.init();
     // widget.registro.bobinaLateral3 ??= Bobina.init();
 
+    String? _t = widget.registro.turno;
+    String? _turno = '';
+
+    if (_t != null) {
+      if (_t == 'manana') {
+        _turno = 'Mañana';
+      } else if (_t == 'tarde') {
+        _turno = 'Tarde';
+      } else if (_t == 'noche') {
+        _turno = 'Noche';
+      }
+    } else {
+      _turno = '';
+    }
+
     var _color = Colors.black54;
     bool canEdit = false;
     if (widget.registro.estado == RegistroType.CREADO) {
@@ -308,6 +323,10 @@ class _DetalleState extends State<_Detalle> {
                 label: 'OPERARIO:',
                 value:
                     '${widget.registro.legajoOperario!} - ${widget.registro.operario!}',
+              ),
+              InfoContainer(
+                label: 'TURNO:',
+                value: '$_turno',
               ),
             ],
           ),
