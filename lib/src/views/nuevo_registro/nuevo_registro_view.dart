@@ -109,14 +109,7 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
           if (_t != null) {
             _turno = Turno();
             _turno.codigo = _t;
-
-            if (_t == 'manana') {
-              _turno.nombre = 'Mañana';
-            } else if (_t == 'tarde') {
-              _turno.nombre = 'Tarde';
-            } else if (_t == 'noche') {
-              _turno.nombre = 'Noche';
-            }
+            _turno.nombre = _t;
           } else {
             _turno.codigo = '';
             _turno.nombre = '';
@@ -255,7 +248,8 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                           children: [
                             Row(
                               children: [
-                                Expanded(
+                                Container(
+                                  width: 200,
                                   child: GestureDetector(
                                     onTap: () async {
                                       final prefs = AppPreferences();
@@ -264,14 +258,7 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                       if (_t != null) {
                                         _turno = Turno();
                                         _turno.codigo = _t;
-
-                                        if (_t == 'manana') {
-                                          _turno.nombre = 'Mañana';
-                                        } else if (_t == 'tarde') {
-                                          _turno.nombre = 'Tarde';
-                                        } else if (_t == 'noche') {
-                                          _turno.nombre = 'Noche';
-                                        }
+                                        _turno.nombre = _t;
                                       } else {
                                         _turno.codigo = '';
                                         _turno.nombre = '';
@@ -1770,38 +1757,39 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                 ),
               ),
             ),
+            alignment: AlignmentDirectional.center,
             children: <Widget>[
               SimpleDialogOption(
                 onPressed: () {
-                  Navigator.pop(context, 'manana');
+                  Navigator.pop(context, '1');
                 },
                 child: Container(
                   width: 500,
                   padding:
                       const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-                  child: Text('Mañana', style: _style),
+                  child: Text('1', style: _style),
                 ),
               ),
               SimpleDialogOption(
                 onPressed: () {
-                  Navigator.pop(context, 'tarde');
+                  Navigator.pop(context, '2');
                 },
                 child: Container(
                   width: 500,
                   padding:
                       const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-                  child: Text('Tarde', style: _style),
+                  child: Text('2', style: _style),
                 ),
               ),
               SimpleDialogOption(
                 onPressed: () {
-                  Navigator.pop(context, 'noche');
+                  Navigator.pop(context, '3');
                 },
                 child: Container(
                   width: 500,
                   padding:
                       const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-                  child: Text('Noche', style: _style),
+                  child: Text('3', style: _style),
                 ),
               ),
             ],
