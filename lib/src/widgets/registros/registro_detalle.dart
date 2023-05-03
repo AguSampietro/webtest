@@ -97,13 +97,7 @@ class _DetalleState extends State<_Detalle> {
     String? _turno = '';
 
     if (_t != null) {
-      if (_t == 'manana') {
-        _turno = 'Mañana';
-      } else if (_t == 'tarde') {
-        _turno = 'Tarde';
-      } else if (_t == 'noche') {
-        _turno = 'Noche';
-      }
+      _turno = _t;
     } else {
       _turno = '';
     }
