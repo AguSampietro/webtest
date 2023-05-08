@@ -97,6 +97,7 @@ class PrintRegistro extends StatelessWidget {
               ),
               pw.Row(
                 children: [
+                  _infoContent('TURNO:', registro.turno!),
                   _infoContent('CONTADOR INICIAL:', registro.contadorInicial!),
                   _infoContent('LOTE:', registro.lote!),
                   _infoContent('CONTADOR FINAL:', registro.contadorFinal!),
