@@ -18,6 +18,8 @@ class BobinaAdd extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool selected = bobina.checked ?? false;
+
     return InkWell(
       onTap: onPressed,
       child: Container(
@@ -62,10 +64,11 @@ class BobinaAdd extends StatelessWidget {
               width: 30,
               height: 30,
               child: Checkbox(
-                value: bobina.checked ?? false,
+                value: selected,
                 checkColor: Colors.white,
-                fillColor:
-                    MaterialStateProperty.all(Theme.of(context).primaryColor),
+                fillColor: MaterialStateProperty.all(
+                  selected ? Colors.green.shade500 : Colors.grey,
+                ),
                 shape: CircleBorder(),
                 onChanged: onChecked,
               ),

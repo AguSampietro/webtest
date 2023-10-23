@@ -1,6 +1,6 @@
 PODS:
   - Flutter (1.0.0)
-  - "permission_handler (5.1.0+2)":
+  - permission_handler_apple (9.1.1):
     - Flutter
   - printing (1.0.0):
     - Flutter
@@ -10,25 +10,25 @@ PODS:
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
-  - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
+  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - printing (from `.symlinks/plugins/printing/ios`)
-  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/ios`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
-  permission_handler:
-    :path: ".symlinks/plugins/permission_handler/ios"
+  permission_handler_apple:
+    :path: ".symlinks/plugins/permission_handler_apple/ios"
   printing:
     :path: ".symlinks/plugins/printing/ios"
   shared_preferences_foundation:
-    :path: ".symlinks/plugins/shared_preferences_foundation/ios"
+    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
-  printing: eafa00acb682c0ca029d4d98d0798f55a1e27102
-  shared_preferences_foundation: 986fc17f3d3251412d18b0265f9c64113a8c2472
+  permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
+  printing: 233e1b73bd1f4a05615548e9b5a324c98588640b
+  shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
 
 PODFILE CHECKSUM: ef19549a9bc3046e7bb7d2fab4d021637c0c58a3
 
