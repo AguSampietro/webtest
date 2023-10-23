@@ -51,5 +51,35 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
+
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>This app requires apple music access to function properly.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>This app requires calendar access to function properly.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This app needs access to your camera if you want to attach a picture</string>
+	<key>NSContactsUsageDescription</key>
+	<string>This app requires contacts access to function properly.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app needs access to location when open and in the background to find help and service around you.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>This app needs access to location when in the background to find help and service around you.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app needs access to location to find help and service around you.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>The app uses motion description to function properly.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app needs access to your gallery if you want to upload a picture</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>The app uses speech recognition to function properly.</string>
+	
+
+
 </dict>
 </plist>

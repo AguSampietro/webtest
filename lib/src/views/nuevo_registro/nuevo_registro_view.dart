@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webtest/src/cubit/bobina_cubit.dart';
 import 'package:webtest/src/cubit/fallo_cubit.dart';
 import 'package:webtest/src/cubit/registro_add_cubit.dart';
 import 'package:webtest/src/cubit/registro_detalle_cubit.dart';
@@ -14,6 +15,7 @@ import 'package:webtest/src/models/fallo_maquina_model.dart';
 import 'package:webtest/src/models/fallo.dart';
 import 'package:webtest/src/models/registro_produccion.dart';
 import 'package:webtest/src/models/turno.dart';
+import 'package:webtest/src/services/api_service.dart';
 import 'package:webtest/src/utils/enum_types.dart';
 import 'package:webtest/src/views/home/home.dart';
 
@@ -37,6 +39,8 @@ import 'package:webtest/src/utils/modal.dart';
 import 'package:webtest/src/utils/sizes.dart';
 import 'package:webtest/src/utils/utils.dart';
 import 'package:webtest/src/views/nuevo_registro/widgets/producto_card.dart';
+
+import 'package:webtest/src/views/scanner/qr_scanner.dart' as QRScanner;
 
 import 'package:webtest/src/widgets/finish_button.dart';
 
@@ -130,6 +134,48 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
     } else {
       context.read<RegistroAddCubit>().ready();
     }
+  }
+
+  bool _tieneBobina(Bobina? bob) {
+    return (bob != null && bob.nroSerie != null && bob.nroSerie!.isNotEmpty);
+  }
+
+  _borrarBobina(Function acceptButton) {
+    Utils.confirmAlert(
+        context, 'Borrar', 'Esta seguro que desea borrar la bobina?', () {
+      Navigator.pop(context);
+      acceptButton();
+    });
+  }
+
+  Future<Bobina?> _scanBobina(String result) async {
+    Bobina? res;
+    final prefs = AppPreferences();
+    ApiService api = ApiService();
+    String deposito = prefs.depositoId;
+    Utils.modalLoading(context, 'Buscando bobina...');
+    List<NroSerie>? nSeries =
+        await api.PRO_bobinaPorNroSerieDeposito(result, deposito);
+    Navigator.pop(context);
+
+    if (nSeries != null) {
+      if (nSeries.isEmpty) {
+        Utils.snackBar(context, 'No se encontro la bobina');
+        res = Bobina(
+          codproducto: '',
+          nombre: '',
+          nroSerie: '',
+        );
+      } else {
+        res = Bobina(
+          codproducto: nSeries.first.codproducto ?? '',
+          nombre: nSeries.first.nombre ?? '',
+          nroSerie: result,
+        );
+      }
+    }
+
+    return res;
   }
 
   @override
@@ -616,32 +662,60 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                             bobina: _reg.bobina1!,
                                             nro: '1',
                                             onPressed: () async {
-                                              Bobina? bobina = await Modal
-                                                  .seleccionarBobinaPorDeposito(
-                                                      context);
-                                              if (bobina != null) {
-                                                if (bobina
-                                                    .codproducto!.isNotEmpty) {
-                                                  // OPEN NRO SERIE
-                                                  NroSerie? nroSerie = await Modal
-                                                      .seleccionarNumeroSerie(
-                                                          context,
-                                                          bobina.codproducto!);
-                                                  if (nroSerie != null) {
-                                                    bobina.nroSerie =
-                                                        nroSerie.nroserie;
-
-                                                    setState(() {
-                                                      _reg.bobina1 = bobina;
-                                                    });
-                                                  }
-                                                } else {
-                                                  bobina = Bobina.init();
+                                              if (_tieneBobina(_reg.bobina1)) {
+                                                _borrarBobina(() {
                                                   setState(() {
-                                                    _reg.bobina1 = bobina;
+                                                    _reg.bobina1 = Bobina(
+                                                      id: '',
+                                                      codproducto: '',
+                                                      nombre: '',
+                                                      nroSerie: '',
+                                                    );
                                                   });
+                                                });
+                                              } else {
+                                                try {
+                                                  String? result =
+                                                      await QRScanner
+                                                          .openScanner(context);
+                                                  if (result!.isNotEmpty) {
+                                                    _reg.bobina1 =
+                                                        await _scanBobina(
+                                                            result);
+                                                    setState(() {});
+                                                  }
+                                                } catch (err) {
+                                                  print(
+                                                      '=== QR SCANNER ERROR === $err');
                                                 }
                                               }
+
+                                              // Bobina? bobina = await Modal
+                                              //     .seleccionarBobinaPorDeposito(
+                                              //         context);
+                                              // if (bobina != null) {
+                                              //   if (bobina
+                                              //       .codproducto!.isNotEmpty) {
+                                              //     // OPEN NRO SERIE
+                                              //     NroSerie? nroSerie = await Modal
+                                              //         .seleccionarNumeroSerie(
+                                              //             context,
+                                              //             bobina.codproducto!);
+                                              //     if (nroSerie != null) {
+                                              //       bobina.nroSerie =
+                                              //           nroSerie.nroserie;
+
+                                              //       setState(() {
+                                              //         _reg.bobina1 = bobina;
+                                              //       });
+                                              //     }
+                                              //   } else {
+                                              //     bobina = Bobina.init();
+                                              //     setState(() {
+                                              //       _reg.bobina1 = bobina;
+                                              //     });
+                                              //   }
+                                              // }
                                             },
                                             onChecked: (newValue) {
                                               setState(() {
@@ -657,32 +731,60 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                             bobina: _reg.bobina2!,
                                             nro: '2',
                                             onPressed: () async {
-                                              Bobina? bobina = await Modal
-                                                  .seleccionarBobinaPorDeposito(
-                                                      context);
-                                              if (bobina != null) {
-                                                if (bobina
-                                                    .codproducto!.isNotEmpty) {
-                                                  // OPEN NRO SERIE
-                                                  NroSerie? nroSerie = await Modal
-                                                      .seleccionarNumeroSerie(
-                                                          context,
-                                                          bobina.codproducto!);
-                                                  if (nroSerie != null) {
-                                                    bobina.nroSerie =
-                                                        nroSerie.nroserie;
-
-                                                    setState(() {
-                                                      _reg.bobina2 = bobina;
-                                                    });
-                                                  }
-                                                } else {
-                                                  bobina = Bobina.init();
+                                              if (_tieneBobina(_reg.bobina2)) {
+                                                _borrarBobina(() {
                                                   setState(() {
-                                                    _reg.bobina2 = bobina;
+                                                    _reg.bobina2 = Bobina(
+                                                      id: '',
+                                                      codproducto: '',
+                                                      nombre: '',
+                                                      nroSerie: '',
+                                                    );
                                                   });
+                                                });
+                                              } else {
+                                                try {
+                                                  String? result =
+                                                      await QRScanner
+                                                          .openScanner(context);
+                                                  if (result!.isNotEmpty) {
+                                                    _reg.bobina2 =
+                                                        await _scanBobina(
+                                                            result);
+                                                    setState(() {});
+                                                  }
+                                                } catch (err) {
+                                                  print(
+                                                      '=== QR SCANNER ERROR === $err');
                                                 }
                                               }
+
+                                              // Bobina? bobina = await Modal
+                                              //     .seleccionarBobinaPorDeposito(
+                                              //         context);
+                                              // if (bobina != null) {
+                                              //   if (bobina
+                                              //       .codproducto!.isNotEmpty) {
+                                              //     // OPEN NRO SERIE
+                                              //     NroSerie? nroSerie = await Modal
+                                              //         .seleccionarNumeroSerie(
+                                              //             context,
+                                              //             bobina.codproducto!);
+                                              //     if (nroSerie != null) {
+                                              //       bobina.nroSerie =
+                                              //           nroSerie.nroserie;
+
+                                              //       setState(() {
+                                              //         _reg.bobina2 = bobina;
+                                              //       });
+                                              //     }
+                                              //   } else {
+                                              //     bobina = Bobina.init();
+                                              //     setState(() {
+                                              //       _reg.bobina2 = bobina;
+                                              //     });
+                                              //   }
+                                              // }
 
                                               // Bobina? bobina =
                                               //     await Modal.seleccionarBobina(
@@ -707,32 +809,60 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                             bobina: _reg.bobina3!,
                                             nro: '3',
                                             onPressed: () async {
-                                              Bobina? bobina = await Modal
-                                                  .seleccionarBobinaPorDeposito(
-                                                      context);
-                                              if (bobina != null) {
-                                                if (bobina
-                                                    .codproducto!.isNotEmpty) {
-                                                  // OPEN NRO SERIE
-                                                  NroSerie? nroSerie = await Modal
-                                                      .seleccionarNumeroSerie(
-                                                          context,
-                                                          bobina.codproducto!);
-                                                  if (nroSerie != null) {
-                                                    bobina.nroSerie =
-                                                        nroSerie.nroserie;
-
-                                                    setState(() {
-                                                      _reg.bobina3 = bobina;
-                                                    });
-                                                  }
-                                                } else {
-                                                  bobina = Bobina.init();
+                                              if (_tieneBobina(_reg.bobina3)) {
+                                                _borrarBobina(() {
                                                   setState(() {
-                                                    _reg.bobina3 = bobina;
+                                                    _reg.bobina3 = Bobina(
+                                                      id: '',
+                                                      codproducto: '',
+                                                      nombre: '',
+                                                      nroSerie: '',
+                                                    );
                                                   });
+                                                });
+                                              } else {
+                                                try {
+                                                  String? result =
+                                                      await QRScanner
+                                                          .openScanner(context);
+                                                  if (result!.isNotEmpty) {
+                                                    _reg.bobina3 =
+                                                        await _scanBobina(
+                                                            result);
+                                                    setState(() {});
+                                                  }
+                                                } catch (err) {
+                                                  print(
+                                                      '=== QR SCANNER ERROR === $err');
                                                 }
                                               }
+
+                                              // Bobina? bobina = await Modal
+                                              //     .seleccionarBobinaPorDeposito(
+                                              //         context);
+                                              // if (bobina != null) {
+                                              //   if (bobina
+                                              //       .codproducto!.isNotEmpty) {
+                                              //     // OPEN NRO SERIE
+                                              //     NroSerie? nroSerie = await Modal
+                                              //         .seleccionarNumeroSerie(
+                                              //             context,
+                                              //             bobina.codproducto!);
+                                              //     if (nroSerie != null) {
+                                              //       bobina.nroSerie =
+                                              //           nroSerie.nroserie;
+
+                                              //       setState(() {
+                                              //         _reg.bobina3 = bobina;
+                                              //       });
+                                              //     }
+                                              //   } else {
+                                              //     bobina = Bobina.init();
+                                              //     setState(() {
+                                              //       _reg.bobina3 = bobina;
+                                              //     });
+                                              //   }
+                                              // }
                                               // Bobina? bobina =
                                               //     await Modal.seleccionarBobina(
                                               //         context);
@@ -771,39 +901,59 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                             bobina: _reg.bobina4!,
                                             nro: '4',
                                             onPressed: () async {
-                                              Bobina? bobina = await Modal
-                                                  .seleccionarBobinaPorDeposito(
-                                                      context);
-                                              if (bobina != null) {
-                                                if (bobina
-                                                    .codproducto!.isNotEmpty) {
-                                                  // OPEN NRO SERIE
-                                                  NroSerie? nroSerie = await Modal
-                                                      .seleccionarNumeroSerie(
-                                                          context,
-                                                          bobina.codproducto!);
-                                                  if (nroSerie != null) {
-                                                    bobina.nroSerie =
-                                                        nroSerie.nroserie;
-
-                                                    setState(() {
-                                                      _reg.bobina4 = bobina;
-                                                    });
-                                                  }
-                                                } else {
-                                                  bobina = Bobina.init();
+                                              if (_tieneBobina(_reg.bobina4)) {
+                                                _borrarBobina(() {
                                                   setState(() {
-                                                    _reg.bobina4 = bobina;
+                                                    _reg.bobina4 = Bobina(
+                                                      id: '',
+                                                      codproducto: '',
+                                                      nombre: '',
+                                                      nroSerie: '',
+                                                    );
                                                   });
+                                                });
+                                              } else {
+                                                try {
+                                                  String? result =
+                                                      await QRScanner
+                                                          .openScanner(context);
+                                                  if (result!.isNotEmpty) {
+                                                    _reg.bobina4 =
+                                                        await _scanBobina(
+                                                            result);
+                                                    setState(() {});
+                                                  }
+                                                } catch (err) {
+                                                  print(
+                                                      '=== QR SCANNER ERROR === $err');
                                                 }
                                               }
-                                              // Bobina? bobina =
-                                              //     await Modal.seleccionarBobina(
+
+                                              // Bobina? bobina = await Modal
+                                              //     .seleccionarBobinaPorDeposito(
                                               //         context);
                                               // if (bobina != null) {
-                                              //   setState(() {
-                                              //     _reg.bobina4 = bobina;
-                                              //   });
+                                              //   if (bobina
+                                              //       .codproducto!.isNotEmpty) {
+                                              //     // OPEN NRO SERIE
+                                              //     NroSerie? nroSerie = await Modal
+                                              //         .seleccionarNumeroSerie(
+                                              //             context,
+                                              //             bobina.codproducto!);
+                                              //     if (nroSerie != null) {
+                                              //       bobina.nroSerie =
+                                              //           nroSerie.nroserie;
+
+                                              //       setState(() {
+                                              //         _reg.bobina4 = bobina;
+                                              //       });
+                                              //     }
+                                              //   } else {
+                                              //     bobina = Bobina.init();
+                                              //     setState(() {
+                                              //       _reg.bobina4 = bobina;
+                                              //     });
+                                              //   }
                                               // }
                                             },
                                             onChecked: (newValue) {
@@ -820,32 +970,60 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                             bobina: _reg.bobina5!,
                                             nro: '5',
                                             onPressed: () async {
-                                              Bobina? bobina = await Modal
-                                                  .seleccionarBobinaPorDeposito(
-                                                      context);
-                                              if (bobina != null) {
-                                                if (bobina
-                                                    .codproducto!.isNotEmpty) {
-                                                  // OPEN NRO SERIE
-                                                  NroSerie? nroSerie = await Modal
-                                                      .seleccionarNumeroSerie(
-                                                          context,
-                                                          bobina.codproducto!);
-                                                  if (nroSerie != null) {
-                                                    bobina.nroSerie =
-                                                        nroSerie.nroserie;
-
-                                                    setState(() {
-                                                      _reg.bobina5 = bobina;
-                                                    });
-                                                  }
-                                                } else {
-                                                  bobina = Bobina.init();
+                                              if (_tieneBobina(_reg.bobina5)) {
+                                                _borrarBobina(() {
                                                   setState(() {
-                                                    _reg.bobina5 = bobina;
+                                                    _reg.bobina5 = Bobina(
+                                                      id: '',
+                                                      codproducto: '',
+                                                      nombre: '',
+                                                      nroSerie: '',
+                                                    );
                                                   });
+                                                });
+                                              } else {
+                                                try {
+                                                  String? result =
+                                                      await QRScanner
+                                                          .openScanner(context);
+                                                  if (result!.isNotEmpty) {
+                                                    _reg.bobina5 =
+                                                        await _scanBobina(
+                                                            result);
+                                                    setState(() {});
+                                                  }
+                                                } catch (err) {
+                                                  print(
+                                                      '=== QR SCANNER ERROR === $err');
                                                 }
                                               }
+
+                                              // Bobina? bobina = await Modal
+                                              //     .seleccionarBobinaPorDeposito(
+                                              //         context);
+                                              // if (bobina != null) {
+                                              //   if (bobina
+                                              //       .codproducto!.isNotEmpty) {
+                                              //     // OPEN NRO SERIE
+                                              //     NroSerie? nroSerie = await Modal
+                                              //         .seleccionarNumeroSerie(
+                                              //             context,
+                                              //             bobina.codproducto!);
+                                              //     if (nroSerie != null) {
+                                              //       bobina.nroSerie =
+                                              //           nroSerie.nroserie;
+
+                                              //       setState(() {
+                                              //         _reg.bobina5 = bobina;
+                                              //       });
+                                              //     }
+                                              //   } else {
+                                              //     bobina = Bobina.init();
+                                              //     setState(() {
+                                              //       _reg.bobina5 = bobina;
+                                              //     });
+                                              //   }
+                                              // }
 
                                               // Bobina? bobina =
                                               //     await Modal.seleccionarBobina(
@@ -870,32 +1048,60 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                             bobina: _reg.bobina6!,
                                             nro: '6',
                                             onPressed: () async {
-                                              Bobina? bobina = await Modal
-                                                  .seleccionarBobinaPorDeposito(
-                                                      context);
-                                              if (bobina != null) {
-                                                if (bobina
-                                                    .codproducto!.isNotEmpty) {
-                                                  // OPEN NRO SERIE
-                                                  NroSerie? nroSerie = await Modal
-                                                      .seleccionarNumeroSerie(
-                                                          context,
-                                                          bobina.codproducto!);
-                                                  if (nroSerie != null) {
-                                                    bobina.nroSerie =
-                                                        nroSerie.nroserie;
-
-                                                    setState(() {
-                                                      _reg.bobina6 = bobina;
-                                                    });
-                                                  }
-                                                } else {
-                                                  bobina = Bobina.init();
+                                              if (_tieneBobina(_reg.bobina6)) {
+                                                _borrarBobina(() {
                                                   setState(() {
-                                                    _reg.bobina6 = bobina;
+                                                    _reg.bobina6 = Bobina(
+                                                      id: '',
+                                                      codproducto: '',
+                                                      nombre: '',
+                                                      nroSerie: '',
+                                                    );
                                                   });
+                                                });
+                                              } else {
+                                                try {
+                                                  String? result =
+                                                      await QRScanner
+                                                          .openScanner(context);
+                                                  if (result!.isNotEmpty) {
+                                                    _reg.bobina6 =
+                                                        await _scanBobina(
+                                                            result);
+                                                    setState(() {});
+                                                  }
+                                                } catch (err) {
+                                                  print(
+                                                      '=== QR SCANNER ERROR === $err');
                                                 }
                                               }
+
+                                              // Bobina? bobina = await Modal
+                                              //     .seleccionarBobinaPorDeposito(
+                                              //         context);
+                                              // if (bobina != null) {
+                                              //   if (bobina
+                                              //       .codproducto!.isNotEmpty) {
+                                              //     // OPEN NRO SERIE
+                                              //     NroSerie? nroSerie = await Modal
+                                              //         .seleccionarNumeroSerie(
+                                              //             context,
+                                              //             bobina.codproducto!);
+                                              //     if (nroSerie != null) {
+                                              //       bobina.nroSerie =
+                                              //           nroSerie.nroserie;
+
+                                              //       setState(() {
+                                              //         _reg.bobina6 = bobina;
+                                              //       });
+                                              //     }
+                                              //   } else {
+                                              //     bobina = Bobina.init();
+                                              //     setState(() {
+                                              //       _reg.bobina6 = bobina;
+                                              //     });
+                                              //   }
+                                              // }
                                               // Bobina? bobina =
                                               //     await Modal.seleccionarBobina(
                                               //         context);
@@ -1112,33 +1318,62 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                             bobina: _reg.bobinaFondo1!,
                                             nro: '1',
                                             onPressed: () async {
-                                              Bobina? bobina = await Modal
-                                                  .seleccionarBobinaPorDeposito(
-                                                      context);
-                                              if (bobina != null) {
-                                                if (bobina
-                                                    .codproducto!.isNotEmpty) {
-                                                  // OPEN NRO SERIE
-                                                  NroSerie? nroSerie = await Modal
-                                                      .seleccionarNumeroSerie(
-                                                          context,
-                                                          bobina.codproducto!);
-                                                  if (nroSerie != null) {
-                                                    bobina.nroSerie =
-                                                        nroSerie.nroserie;
-
-                                                    setState(() {
-                                                      _reg.bobinaFondo1 =
-                                                          bobina;
-                                                    });
-                                                  }
-                                                } else {
-                                                  bobina = Bobina.init();
+                                              if (_tieneBobina(
+                                                  _reg.bobinaFondo1)) {
+                                                _borrarBobina(() {
                                                   setState(() {
-                                                    _reg.bobinaFondo1 = bobina;
+                                                    _reg.bobinaFondo1 = Bobina(
+                                                      id: '',
+                                                      codproducto: '',
+                                                      nombre: '',
+                                                      nroSerie: '',
+                                                    );
                                                   });
+                                                });
+                                              } else {
+                                                try {
+                                                  String? result =
+                                                      await QRScanner
+                                                          .openScanner(context);
+                                                  if (result!.isNotEmpty) {
+                                                    _reg.bobinaFondo1 =
+                                                        await _scanBobina(
+                                                            result);
+                                                    setState(() {});
+                                                  }
+                                                } catch (err) {
+                                                  print(
+                                                      '=== QR SCANNER ERROR === $err');
                                                 }
                                               }
+
+                                              // Bobina? bobina = await Modal
+                                              //     .seleccionarBobinaPorDeposito(
+                                              //         context);
+                                              // if (bobina != null) {
+                                              //   if (bobina
+                                              //       .codproducto!.isNotEmpty) {
+                                              //     // OPEN NRO SERIE
+                                              //     NroSerie? nroSerie = await Modal
+                                              //         .seleccionarNumeroSerie(
+                                              //             context,
+                                              //             bobina.codproducto!);
+                                              //     if (nroSerie != null) {
+                                              //       bobina.nroSerie =
+                                              //           nroSerie.nroserie;
+
+                                              //       setState(() {
+                                              //         _reg.bobinaFondo1 =
+                                              //             bobina;
+                                              //       });
+                                              //     }
+                                              //   } else {
+                                              //     bobina = Bobina.init();
+                                              //     setState(() {
+                                              //       _reg.bobinaFondo1 = bobina;
+                                              //     });
+                                              //   }
+                                              // }
 
                                               // Bobina? bobina =
                                               //     await Modal.seleccionarBobina(
@@ -1163,33 +1398,62 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                             bobina: _reg.bobinaFondo2!,
                                             nro: '2',
                                             onPressed: () async {
-                                              Bobina? bobina = await Modal
-                                                  .seleccionarBobinaPorDeposito(
-                                                      context);
-                                              if (bobina != null) {
-                                                if (bobina
-                                                    .codproducto!.isNotEmpty) {
-                                                  // OPEN NRO SERIE
-                                                  NroSerie? nroSerie = await Modal
-                                                      .seleccionarNumeroSerie(
-                                                          context,
-                                                          bobina.codproducto!);
-                                                  if (nroSerie != null) {
-                                                    bobina.nroSerie =
-                                                        nroSerie.nroserie;
-
-                                                    setState(() {
-                                                      _reg.bobinaFondo2 =
-                                                          bobina;
-                                                    });
-                                                  }
-                                                } else {
-                                                  bobina = Bobina.init();
+                                              if (_tieneBobina(
+                                                  _reg.bobinaFondo2)) {
+                                                _borrarBobina(() {
                                                   setState(() {
-                                                    _reg.bobinaFondo2 = bobina;
+                                                    _reg.bobinaFondo2 = Bobina(
+                                                      id: '',
+                                                      codproducto: '',
+                                                      nombre: '',
+                                                      nroSerie: '',
+                                                    );
                                                   });
+                                                });
+                                              } else {
+                                                try {
+                                                  String? result =
+                                                      await QRScanner
+                                                          .openScanner(context);
+                                                  if (result!.isNotEmpty) {
+                                                    _reg.bobinaFondo2 =
+                                                        await _scanBobina(
+                                                            result);
+                                                    setState(() {});
+                                                  }
+                                                } catch (err) {
+                                                  print(
+                                                      '=== QR SCANNER ERROR === $err');
                                                 }
                                               }
+
+                                              // Bobina? bobina = await Modal
+                                              //     .seleccionarBobinaPorDeposito(
+                                              //         context);
+                                              // if (bobina != null) {
+                                              //   if (bobina
+                                              //       .codproducto!.isNotEmpty) {
+                                              //     // OPEN NRO SERIE
+                                              //     NroSerie? nroSerie = await Modal
+                                              //         .seleccionarNumeroSerie(
+                                              //             context,
+                                              //             bobina.codproducto!);
+                                              //     if (nroSerie != null) {
+                                              //       bobina.nroSerie =
+                                              //           nroSerie.nroserie;
+
+                                              //       setState(() {
+                                              //         _reg.bobinaFondo2 =
+                                              //             bobina;
+                                              //       });
+                                              //     }
+                                              //   } else {
+                                              //     bobina = Bobina.init();
+                                              //     setState(() {
+                                              //       _reg.bobinaFondo2 = bobina;
+                                              //     });
+                                              //   }
+                                              // }
                                               // Bobina? bobina =
                                               //     await Modal.seleccionarBobina(
                                               //         context);
@@ -1213,33 +1477,62 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                             bobina: _reg.bobinaFondo3!,
                                             nro: '3',
                                             onPressed: () async {
-                                              Bobina? bobina = await Modal
-                                                  .seleccionarBobinaPorDeposito(
-                                                      context);
-                                              if (bobina != null) {
-                                                if (bobina
-                                                    .codproducto!.isNotEmpty) {
-                                                  // OPEN NRO SERIE
-                                                  NroSerie? nroSerie = await Modal
-                                                      .seleccionarNumeroSerie(
-                                                          context,
-                                                          bobina.codproducto!);
-                                                  if (nroSerie != null) {
-                                                    bobina.nroSerie =
-                                                        nroSerie.nroserie;
-
-                                                    setState(() {
-                                                      _reg.bobinaFondo3 =
-                                                          bobina;
-                                                    });
-                                                  }
-                                                } else {
-                                                  bobina = Bobina.init();
+                                              if (_tieneBobina(
+                                                  _reg.bobinaFondo3)) {
+                                                _borrarBobina(() {
                                                   setState(() {
-                                                    _reg.bobinaFondo3 = bobina;
+                                                    _reg.bobinaFondo3 = Bobina(
+                                                      id: '',
+                                                      codproducto: '',
+                                                      nombre: '',
+                                                      nroSerie: '',
+                                                    );
                                                   });
+                                                });
+                                              } else {
+                                                try {
+                                                  String? result =
+                                                      await QRScanner
+                                                          .openScanner(context);
+                                                  if (result!.isNotEmpty) {
+                                                    _reg.bobinaFondo3 =
+                                                        await _scanBobina(
+                                                            result);
+                                                    setState(() {});
+                                                  }
+                                                } catch (err) {
+                                                  print(
+                                                      '=== QR SCANNER ERROR === $err');
                                                 }
                                               }
+
+                                              // Bobina? bobina = await Modal
+                                              //     .seleccionarBobinaPorDeposito(
+                                              //         context);
+                                              // if (bobina != null) {
+                                              //   if (bobina
+                                              //       .codproducto!.isNotEmpty) {
+                                              //     // OPEN NRO SERIE
+                                              //     NroSerie? nroSerie = await Modal
+                                              //         .seleccionarNumeroSerie(
+                                              //             context,
+                                              //             bobina.codproducto!);
+                                              //     if (nroSerie != null) {
+                                              //       bobina.nroSerie =
+                                              //           nroSerie.nroserie;
+
+                                              //       setState(() {
+                                              //         _reg.bobinaFondo3 =
+                                              //             bobina;
+                                              //       });
+                                              //     }
+                                              //   } else {
+                                              //     bobina = Bobina.init();
+                                              //     setState(() {
+                                              //       _reg.bobinaFondo3 = bobina;
+                                              //     });
+                                              //   }
+                                              // }
                                               // Bobina? bobina =
                                               //     await Modal.seleccionarBobina(
                                               //         context);
@@ -1278,34 +1571,64 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                             bobina: _reg.bobinaLateral1!,
                                             nro: '1',
                                             onPressed: () async {
-                                              Bobina? bobina = await Modal
-                                                  .seleccionarBobinaPorDeposito(
-                                                      context);
-                                              if (bobina != null) {
-                                                if (bobina
-                                                    .codproducto!.isNotEmpty) {
-                                                  // OPEN NRO SERIE
-                                                  NroSerie? nroSerie = await Modal
-                                                      .seleccionarNumeroSerie(
-                                                          context,
-                                                          bobina.codproducto!);
-                                                  if (nroSerie != null) {
-                                                    bobina.nroSerie =
-                                                        nroSerie.nroserie;
-
-                                                    setState(() {
-                                                      _reg.bobinaLateral1 =
-                                                          bobina;
-                                                    });
-                                                  }
-                                                } else {
-                                                  bobina = Bobina.init();
+                                              if (_tieneBobina(
+                                                  _reg.bobinaLateral1)) {
+                                                _borrarBobina(() {
                                                   setState(() {
                                                     _reg.bobinaLateral1 =
-                                                        bobina;
+                                                        Bobina(
+                                                      id: '',
+                                                      codproducto: '',
+                                                      nombre: '',
+                                                      nroSerie: '',
+                                                    );
                                                   });
+                                                });
+                                              } else {
+                                                try {
+                                                  String? result =
+                                                      await QRScanner
+                                                          .openScanner(context);
+                                                  if (result!.isNotEmpty) {
+                                                    _reg.bobinaLateral1 =
+                                                        await _scanBobina(
+                                                            result);
+                                                    setState(() {});
+                                                  }
+                                                } catch (err) {
+                                                  print(
+                                                      '=== QR SCANNER ERROR === $err');
                                                 }
                                               }
+
+                                              // Bobina? bobina = await Modal
+                                              //     .seleccionarBobinaPorDeposito(
+                                              //         context);
+                                              // if (bobina != null) {
+                                              //   if (bobina
+                                              //       .codproducto!.isNotEmpty) {
+                                              //     // OPEN NRO SERIE
+                                              //     NroSerie? nroSerie = await Modal
+                                              //         .seleccionarNumeroSerie(
+                                              //             context,
+                                              //             bobina.codproducto!);
+                                              //     if (nroSerie != null) {
+                                              //       bobina.nroSerie =
+                                              //           nroSerie.nroserie;
+
+                                              //       setState(() {
+                                              //         _reg.bobinaLateral1 =
+                                              //             bobina;
+                                              //       });
+                                              //     }
+                                              //   } else {
+                                              //     bobina = Bobina.init();
+                                              //     setState(() {
+                                              //       _reg.bobinaLateral1 =
+                                              //           bobina;
+                                              //     });
+                                              //   }
+                                              // }
 
                                               // Bobina? bobina =
                                               //     await Modal.seleccionarBobina(
@@ -1330,34 +1653,64 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                             bobina: _reg.bobinaLateral2!,
                                             nro: '2',
                                             onPressed: () async {
-                                              Bobina? bobina = await Modal
-                                                  .seleccionarBobinaPorDeposito(
-                                                      context);
-                                              if (bobina != null) {
-                                                if (bobina
-                                                    .codproducto!.isNotEmpty) {
-                                                  // OPEN NRO SERIE
-                                                  NroSerie? nroSerie = await Modal
-                                                      .seleccionarNumeroSerie(
-                                                          context,
-                                                          bobina.codproducto!);
-                                                  if (nroSerie != null) {
-                                                    bobina.nroSerie =
-                                                        nroSerie.nroserie;
-
-                                                    setState(() {
-                                                      _reg.bobinaLateral2 =
-                                                          bobina;
-                                                    });
-                                                  }
-                                                } else {
-                                                  bobina = Bobina.init();
+                                              if (_tieneBobina(
+                                                  _reg.bobinaLateral2)) {
+                                                _borrarBobina(() {
                                                   setState(() {
                                                     _reg.bobinaLateral2 =
-                                                        bobina;
+                                                        Bobina(
+                                                      id: '',
+                                                      codproducto: '',
+                                                      nombre: '',
+                                                      nroSerie: '',
+                                                    );
                                                   });
+                                                });
+                                              } else {
+                                                try {
+                                                  String? result =
+                                                      await QRScanner
+                                                          .openScanner(context);
+                                                  if (result!.isNotEmpty) {
+                                                    _reg.bobinaLateral2 =
+                                                        await _scanBobina(
+                                                            result);
+                                                    setState(() {});
+                                                  }
+                                                } catch (err) {
+                                                  print(
+                                                      '=== QR SCANNER ERROR === $err');
                                                 }
                                               }
+
+                                              // Bobina? bobina = await Modal
+                                              //     .seleccionarBobinaPorDeposito(
+                                              //         context);
+                                              // if (bobina != null) {
+                                              //   if (bobina
+                                              //       .codproducto!.isNotEmpty) {
+                                              //     // OPEN NRO SERIE
+                                              //     NroSerie? nroSerie = await Modal
+                                              //         .seleccionarNumeroSerie(
+                                              //             context,
+                                              //             bobina.codproducto!);
+                                              //     if (nroSerie != null) {
+                                              //       bobina.nroSerie =
+                                              //           nroSerie.nroserie;
+
+                                              //       setState(() {
+                                              //         _reg.bobinaLateral2 =
+                                              //             bobina;
+                                              //       });
+                                              //     }
+                                              //   } else {
+                                              //     bobina = Bobina.init();
+                                              //     setState(() {
+                                              //       _reg.bobinaLateral2 =
+                                              //           bobina;
+                                              //     });
+                                              //   }
+                                              // }
                                               // Bobina? bobina =
                                               //     await Modal.seleccionarBobina(
                                               //         context);
@@ -1381,34 +1734,64 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                             bobina: _reg.bobinaLateral3!,
                                             nro: '3',
                                             onPressed: () async {
-                                              Bobina? bobina = await Modal
-                                                  .seleccionarBobinaPorDeposito(
-                                                      context);
-                                              if (bobina != null) {
-                                                if (bobina
-                                                    .codproducto!.isNotEmpty) {
-                                                  // OPEN NRO SERIE
-                                                  NroSerie? nroSerie = await Modal
-                                                      .seleccionarNumeroSerie(
-                                                          context,
-                                                          bobina.codproducto!);
-                                                  if (nroSerie != null) {
-                                                    bobina.nroSerie =
-                                                        nroSerie.nroserie;
-
-                                                    setState(() {
-                                                      _reg.bobinaLateral3 =
-                                                          bobina;
-                                                    });
-                                                  }
-                                                } else {
-                                                  bobina = Bobina.init();
+                                              if (_tieneBobina(
+                                                  _reg.bobinaLateral3)) {
+                                                _borrarBobina(() {
                                                   setState(() {
                                                     _reg.bobinaLateral3 =
-                                                        bobina;
+                                                        Bobina(
+                                                      id: '',
+                                                      codproducto: '',
+                                                      nombre: '',
+                                                      nroSerie: '',
+                                                    );
                                                   });
+                                                });
+                                              } else {
+                                                try {
+                                                  String? result =
+                                                      await QRScanner
+                                                          .openScanner(context);
+                                                  if (result!.isNotEmpty) {
+                                                    _reg.bobinaLateral3 =
+                                                        await _scanBobina(
+                                                            result);
+                                                    setState(() {});
+                                                  }
+                                                } catch (err) {
+                                                  print(
+                                                      '=== QR SCANNER ERROR === $err');
                                                 }
                                               }
+
+                                              // Bobina? bobina = await Modal
+                                              //     .seleccionarBobinaPorDeposito(
+                                              //         context);
+                                              // if (bobina != null) {
+                                              //   if (bobina
+                                              //       .codproducto!.isNotEmpty) {
+                                              //     // OPEN NRO SERIE
+                                              //     NroSerie? nroSerie = await Modal
+                                              //         .seleccionarNumeroSerie(
+                                              //             context,
+                                              //             bobina.codproducto!);
+                                              //     if (nroSerie != null) {
+                                              //       bobina.nroSerie =
+                                              //           nroSerie.nroserie;
+
+                                              //       setState(() {
+                                              //         _reg.bobinaLateral3 =
+                                              //             bobina;
+                                              //       });
+                                              //     }
+                                              //   } else {
+                                              //     bobina = Bobina.init();
+                                              //     setState(() {
+                                              //       _reg.bobinaLateral3 =
+                                              //           bobina;
+                                              //     });
+                                              //   }
+                                              // }
                                               // Bobina? bobina =
                                               //     await Modal.seleccionarBobina(
                                               //         context);
@@ -1447,32 +1830,61 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                             bobina: _reg.bobinaCono1!,
                                             nro: '1',
                                             onPressed: () async {
-                                              Bobina? bobina = await Modal
-                                                  .seleccionarBobinaPorDeposito(
-                                                      context);
-                                              if (bobina != null) {
-                                                if (bobina
-                                                    .codproducto!.isNotEmpty) {
-                                                  // OPEN NRO SERIE
-                                                  NroSerie? nroSerie = await Modal
-                                                      .seleccionarNumeroSerie(
-                                                          context,
-                                                          bobina.codproducto!);
-                                                  if (nroSerie != null) {
-                                                    bobina.nroSerie =
-                                                        nroSerie.nroserie;
-
-                                                    setState(() {
-                                                      _reg.bobinaCono1 = bobina;
-                                                    });
-                                                  }
-                                                } else {
-                                                  bobina = Bobina.init();
+                                              if (_tieneBobina(
+                                                  _reg.bobinaCono1)) {
+                                                _borrarBobina(() {
                                                   setState(() {
-                                                    _reg.bobinaCono1 = bobina;
+                                                    _reg.bobinaCono1 = Bobina(
+                                                      id: '',
+                                                      codproducto: '',
+                                                      nombre: '',
+                                                      nroSerie: '',
+                                                    );
                                                   });
+                                                });
+                                              } else {
+                                                try {
+                                                  String? result =
+                                                      await QRScanner
+                                                          .openScanner(context);
+                                                  if (result!.isNotEmpty) {
+                                                    _reg.bobinaCono1 =
+                                                        await _scanBobina(
+                                                            result);
+                                                    setState(() {});
+                                                  }
+                                                } catch (err) {
+                                                  print(
+                                                      '=== QR SCANNER ERROR === $err');
                                                 }
                                               }
+
+                                              // Bobina? bobina = await Modal
+                                              //     .seleccionarBobinaPorDeposito(
+                                              //         context);
+                                              // if (bobina != null) {
+                                              //   if (bobina
+                                              //       .codproducto!.isNotEmpty) {
+                                              //     // OPEN NRO SERIE
+                                              //     NroSerie? nroSerie = await Modal
+                                              //         .seleccionarNumeroSerie(
+                                              //             context,
+                                              //             bobina.codproducto!);
+                                              //     if (nroSerie != null) {
+                                              //       bobina.nroSerie =
+                                              //           nroSerie.nroserie;
+
+                                              //       setState(() {
+                                              //         _reg.bobinaCono1 = bobina;
+                                              //       });
+                                              //     }
+                                              //   } else {
+                                              //     bobina = Bobina.init();
+                                              //     setState(() {
+                                              //       _reg.bobinaCono1 = bobina;
+                                              //     });
+                                              //   }
+                                              // }
 
                                               // Bobina? bobina =
                                               //     await Modal.seleccionarBobina(
@@ -1497,32 +1909,61 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                             bobina: _reg.bobinaCono2!,
                                             nro: '2',
                                             onPressed: () async {
-                                              Bobina? bobina = await Modal
-                                                  .seleccionarBobinaPorDeposito(
-                                                      context);
-                                              if (bobina != null) {
-                                                if (bobina
-                                                    .codproducto!.isNotEmpty) {
-                                                  // OPEN NRO SERIE
-                                                  NroSerie? nroSerie = await Modal
-                                                      .seleccionarNumeroSerie(
-                                                          context,
-                                                          bobina.codproducto!);
-                                                  if (nroSerie != null) {
-                                                    bobina.nroSerie =
-                                                        nroSerie.nroserie;
-
-                                                    setState(() {
-                                                      _reg.bobinaCono2 = bobina;
-                                                    });
-                                                  }
-                                                } else {
-                                                  bobina = Bobina.init();
+                                              if (_tieneBobina(
+                                                  _reg.bobinaCono2)) {
+                                                _borrarBobina(() {
                                                   setState(() {
-                                                    _reg.bobinaCono2 = bobina;
+                                                    _reg.bobinaCono2 = Bobina(
+                                                      id: '',
+                                                      codproducto: '',
+                                                      nombre: '',
+                                                      nroSerie: '',
+                                                    );
                                                   });
+                                                });
+                                              } else {
+                                                try {
+                                                  String? result =
+                                                      await QRScanner
+                                                          .openScanner(context);
+                                                  if (result!.isNotEmpty) {
+                                                    _reg.bobinaCono2 =
+                                                        await _scanBobina(
+                                                            result);
+                                                    setState(() {});
+                                                  }
+                                                } catch (err) {
+                                                  print(
+                                                      '=== QR SCANNER ERROR === $err');
                                                 }
                                               }
+
+                                              // Bobina? bobina = await Modal
+                                              //     .seleccionarBobinaPorDeposito(
+                                              //         context);
+                                              // if (bobina != null) {
+                                              //   if (bobina
+                                              //       .codproducto!.isNotEmpty) {
+                                              //     // OPEN NRO SERIE
+                                              //     NroSerie? nroSerie = await Modal
+                                              //         .seleccionarNumeroSerie(
+                                              //             context,
+                                              //             bobina.codproducto!);
+                                              //     if (nroSerie != null) {
+                                              //       bobina.nroSerie =
+                                              //           nroSerie.nroserie;
+
+                                              //       setState(() {
+                                              //         _reg.bobinaCono2 = bobina;
+                                              //       });
+                                              //     }
+                                              //   } else {
+                                              //     bobina = Bobina.init();
+                                              //     setState(() {
+                                              //       _reg.bobinaCono2 = bobina;
+                                              //     });
+                                              //   }
+                                              // }
                                               // Bobina? bobina =
                                               //     await Modal.seleccionarBobina(
                                               //         context);
@@ -1546,32 +1987,61 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                             bobina: _reg.bobinaCono3!,
                                             nro: '3',
                                             onPressed: () async {
-                                              Bobina? bobina = await Modal
-                                                  .seleccionarBobinaPorDeposito(
-                                                      context);
-                                              if (bobina != null) {
-                                                if (bobina
-                                                    .codproducto!.isNotEmpty) {
-                                                  // OPEN NRO SERIE
-                                                  NroSerie? nroSerie = await Modal
-                                                      .seleccionarNumeroSerie(
-                                                          context,
-                                                          bobina.codproducto!);
-                                                  if (nroSerie != null) {
-                                                    bobina.nroSerie =
-                                                        nroSerie.nroserie;
-
-                                                    setState(() {
-                                                      _reg.bobinaCono3 = bobina;
-                                                    });
-                                                  }
-                                                } else {
-                                                  bobina = Bobina.init();
+                                              if (_tieneBobina(
+                                                  _reg.bobinaCono3)) {
+                                                _borrarBobina(() {
                                                   setState(() {
-                                                    _reg.bobinaCono3 = bobina;
+                                                    _reg.bobinaCono3 = Bobina(
+                                                      id: '',
+                                                      codproducto: '',
+                                                      nombre: '',
+                                                      nroSerie: '',
+                                                    );
                                                   });
+                                                });
+                                              } else {
+                                                try {
+                                                  String? result =
+                                                      await QRScanner
+                                                          .openScanner(context);
+                                                  if (result!.isNotEmpty) {
+                                                    _reg.bobinaCono3 =
+                                                        await _scanBobina(
+                                                            result);
+                                                    setState(() {});
+                                                  }
+                                                } catch (err) {
+                                                  print(
+                                                      '=== QR SCANNER ERROR === $err');
                                                 }
                                               }
+
+                                              // Bobina? bobina = await Modal
+                                              //     .seleccionarBobinaPorDeposito(
+                                              //         context);
+                                              // if (bobina != null) {
+                                              //   if (bobina
+                                              //       .codproducto!.isNotEmpty) {
+                                              //     // OPEN NRO SERIE
+                                              //     NroSerie? nroSerie = await Modal
+                                              //         .seleccionarNumeroSerie(
+                                              //             context,
+                                              //             bobina.codproducto!);
+                                              //     if (nroSerie != null) {
+                                              //       bobina.nroSerie =
+                                              //           nroSerie.nroserie;
+
+                                              //       setState(() {
+                                              //         _reg.bobinaCono3 = bobina;
+                                              //       });
+                                              //     }
+                                              //   } else {
+                                              //     bobina = Bobina.init();
+                                              //     setState(() {
+                                              //       _reg.bobinaCono3 = bobina;
+                                              //     });
+                                              //   }
+                                              // }
 
                                               // Bobina? bobina =
                                               //     await Modal.seleccionarBobina(

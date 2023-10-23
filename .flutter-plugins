@@ -6,6 +6,7 @@ permission_handler_android=/Users/agusampietro/.pub-cache/hosted/pub.dev/permiss
 permission_handler_apple=/Users/agusampietro/.pub-cache/hosted/pub.dev/permission_handler_apple-9.1.4/
 permission_handler_windows=/Users/agusampietro/.pub-cache/hosted/pub.dev/permission_handler_windows-0.1.3/
 printing=/Users/agusampietro/.pub-cache/hosted/pub.dev/printing-5.11.0/
+qr_code_scanner=/Users/agusampietro/.pub-cache/hosted/pub.dev/qr_code_scanner-1.0.1/
 shared_preferences=/Users/agusampietro/.pub-cache/hosted/pub.dev/shared_preferences-2.2.2/
 shared_preferences_android=/Users/agusampietro/.pub-cache/hosted/pub.dev/shared_preferences_android-2.2.1/
 shared_preferences_foundation=/Users/agusampietro/.pub-cache/hosted/pub.dev/shared_preferences_foundation-2.3.4/

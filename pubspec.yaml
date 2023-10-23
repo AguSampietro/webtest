@@ -32,6 +32,7 @@ dependencies:
   dropdown_button2: ^2.3.9
   printing: ^5.11.0
   # flutter_datetime_picker: ^1.5.1
+  qr_code_scanner: ^1.0.1
   
   
 
