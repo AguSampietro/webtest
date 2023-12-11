@@ -133,7 +133,7 @@ class _LoadingFallo extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           LoadingSpinner(
-            color: Theme.of(context).primaryColor,
+            color: Colors.blue,
             text: 'Buscando fallos',
             height: 3,
           ),

@@ -78,7 +78,7 @@ class RegistroItem extends StatelessWidget {
   Widget build(BuildContext context) {
     var _color = Colors.black54;
     if (registro.estado == RegistroType.CREADO) {
-      _color = Theme.of(context).primaryColor;
+      _color = Colors.blue;
     } else if (registro.estado == RegistroType.PROCESADO) {
       _color = Colors.green;
     } else if (registro.estado == RegistroType.ANULADO) {
@@ -250,7 +250,7 @@ class _LoadingRegistro extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           LoadingSpinner(
-            color: Theme.of(context).primaryColor,
+            color: Colors.blue,
             text: 'Buscando registros de produccion...',
             height: 3,
           ),

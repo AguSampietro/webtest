@@ -41,6 +41,7 @@ import 'package:webtest/src/utils/utils.dart';
 import 'package:webtest/src/views/nuevo_registro/widgets/producto_card.dart';
 
 import 'package:webtest/src/views/scanner/qr_scanner.dart' as QRScanner;
+import 'package:webtest/src/views/scanner/qr_text_scanner.dart';
 
 import 'package:webtest/src/widgets/finish_button.dart';
 
@@ -676,9 +677,10 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                               } else {
                                                 try {
                                                   String? result =
-                                                      await QRScanner
-                                                          .openScanner(context);
-                                                  if (result!.isNotEmpty) {
+                                                      await openTextScanner(
+                                                          context);
+                                                  if (result != null &&
+                                                      result.isNotEmpty) {
                                                     _reg.bobina1 =
                                                         await _scanBobina(
                                                             result);
@@ -745,8 +747,8 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                               } else {
                                                 try {
                                                   String? result =
-                                                      await QRScanner
-                                                          .openScanner(context);
+                                                      await openTextScanner(
+                                                          context);
                                                   if (result!.isNotEmpty) {
                                                     _reg.bobina2 =
                                                         await _scanBobina(
@@ -823,8 +825,8 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                               } else {
                                                 try {
                                                   String? result =
-                                                      await QRScanner
-                                                          .openScanner(context);
+                                                      await openTextScanner(
+                                                          context);
                                                   if (result!.isNotEmpty) {
                                                     _reg.bobina3 =
                                                         await _scanBobina(
@@ -915,8 +917,8 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                               } else {
                                                 try {
                                                   String? result =
-                                                      await QRScanner
-                                                          .openScanner(context);
+                                                      await openTextScanner(
+                                                          context);
                                                   if (result!.isNotEmpty) {
                                                     _reg.bobina4 =
                                                         await _scanBobina(
@@ -984,8 +986,8 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                               } else {
                                                 try {
                                                   String? result =
-                                                      await QRScanner
-                                                          .openScanner(context);
+                                                      await openTextScanner(
+                                                          context);
                                                   if (result!.isNotEmpty) {
                                                     _reg.bobina5 =
                                                         await _scanBobina(
@@ -1062,8 +1064,8 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                               } else {
                                                 try {
                                                   String? result =
-                                                      await QRScanner
-                                                          .openScanner(context);
+                                                      await openTextScanner(
+                                                          context);
                                                   if (result!.isNotEmpty) {
                                                     _reg.bobina6 =
                                                         await _scanBobina(
@@ -1333,8 +1335,8 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                               } else {
                                                 try {
                                                   String? result =
-                                                      await QRScanner
-                                                          .openScanner(context);
+                                                      await openTextScanner(
+                                                          context);
                                                   if (result!.isNotEmpty) {
                                                     _reg.bobinaFondo1 =
                                                         await _scanBobina(
@@ -1413,8 +1415,8 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                               } else {
                                                 try {
                                                   String? result =
-                                                      await QRScanner
-                                                          .openScanner(context);
+                                                      await openTextScanner(
+                                                          context);
                                                   if (result!.isNotEmpty) {
                                                     _reg.bobinaFondo2 =
                                                         await _scanBobina(
@@ -1492,8 +1494,8 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                               } else {
                                                 try {
                                                   String? result =
-                                                      await QRScanner
-                                                          .openScanner(context);
+                                                      await openTextScanner(
+                                                          context);
                                                   if (result!.isNotEmpty) {
                                                     _reg.bobinaFondo3 =
                                                         await _scanBobina(
@@ -1587,8 +1589,8 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                               } else {
                                                 try {
                                                   String? result =
-                                                      await QRScanner
-                                                          .openScanner(context);
+                                                      await openTextScanner(
+                                                          context);
                                                   if (result!.isNotEmpty) {
                                                     _reg.bobinaLateral1 =
                                                         await _scanBobina(
@@ -1669,8 +1671,8 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                               } else {
                                                 try {
                                                   String? result =
-                                                      await QRScanner
-                                                          .openScanner(context);
+                                                      await openTextScanner(
+                                                          context);
                                                   if (result!.isNotEmpty) {
                                                     _reg.bobinaLateral2 =
                                                         await _scanBobina(
@@ -1750,8 +1752,8 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                               } else {
                                                 try {
                                                   String? result =
-                                                      await QRScanner
-                                                          .openScanner(context);
+                                                      await openTextScanner(
+                                                          context);
                                                   if (result!.isNotEmpty) {
                                                     _reg.bobinaLateral3 =
                                                         await _scanBobina(
@@ -1845,8 +1847,8 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                               } else {
                                                 try {
                                                   String? result =
-                                                      await QRScanner
-                                                          .openScanner(context);
+                                                      await openTextScanner(
+                                                          context);
                                                   if (result!.isNotEmpty) {
                                                     _reg.bobinaCono1 =
                                                         await _scanBobina(
@@ -1924,8 +1926,8 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                               } else {
                                                 try {
                                                   String? result =
-                                                      await QRScanner
-                                                          .openScanner(context);
+                                                      await openTextScanner(
+                                                          context);
                                                   if (result!.isNotEmpty) {
                                                     _reg.bobinaCono2 =
                                                         await _scanBobina(
@@ -2002,8 +2004,8 @@ class _NuevoRegistroViewState extends State<NuevoRegistroView> {
                                               } else {
                                                 try {
                                                   String? result =
-                                                      await QRScanner
-                                                          .openScanner(context);
+                                                      await openTextScanner(
+                                                          context);
                                                   if (result!.isNotEmpty) {
                                                     _reg.bobinaCono3 =
                                                         await _scanBobina(

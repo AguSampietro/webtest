@@ -47,7 +47,7 @@ class _LoginViewState extends State<LoginView> {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Colors.blue,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(

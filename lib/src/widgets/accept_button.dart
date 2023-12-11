@@ -15,6 +15,9 @@ class AcceptButton extends StatelessWidget {
         onPressed();
       },
       style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.all(
+          Colors.white,
+        ),
         backgroundColor: MaterialStateProperty.all(
           ThemeApp.acceptButtonColor,
         ),

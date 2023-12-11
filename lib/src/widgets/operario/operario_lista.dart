@@ -105,7 +105,7 @@ class _LoadingOperario extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           LoadingSpinner(
-            color: Theme.of(context).primaryColor,
+            color: Colors.blue,
             text: 'Buscando operarios',
             height: 3,
           ),

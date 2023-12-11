@@ -66,8 +66,19 @@ class MyApp extends StatelessWidget {
         builder: (BuildContext context, Widget? child) {
           return MaterialApp(
             restorationScopeId: 'app',
-            theme: ThemeData(),
-            darkTheme: ThemeData.dark(),
+            theme: ThemeData(
+              brightness: Brightness.light,
+              appBarTheme: AppBarTheme(
+                backgroundColor: Colors.blue,
+                foregroundColor: Colors.white,
+              ),
+              buttonTheme: ButtonThemeData(
+                buttonColor: Colors.blue,
+                textTheme: ButtonTextTheme.normal,
+              ),
+              cardColor: Colors.white,
+            ),
+            // darkTheme: ThemeData.dark(),
             themeMode: settingsController.themeMode,
             debugShowCheckedModeBanner: false,
             onGenerateRoute: (RouteSettings routeSettings) {

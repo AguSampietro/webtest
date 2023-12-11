@@ -1088,7 +1088,7 @@ class _LoadingRegistro extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         LoadingSpinner(
-          color: Theme.of(context).primaryColor,
+          color: Colors.blue,
           text: 'Buscando registro de produccion',
           height: 3,
         ),

@@ -149,7 +149,7 @@ class _LoadingProducto extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           LoadingSpinner(
-            color: Theme.of(context).primaryColor,
+            color: Colors.blue,
             text: 'Buscando maquinas',
             height: 3,
           ),

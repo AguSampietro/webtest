@@ -201,7 +201,8 @@ class _HomeViewState extends State<HomeView> {
               ),
               label: const Text('NUEVO REGISTRO'),
               style: ElevatedButton.styleFrom(
-                primary: Theme.of(context).primaryColor,
+                backgroundColor: Colors.blue,
+                foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 30,
                   vertical: 10,
@@ -209,6 +210,7 @@ class _HomeViewState extends State<HomeView> {
                 textStyle: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
+                  color: Colors.white,
                 ),
               ),
             ),

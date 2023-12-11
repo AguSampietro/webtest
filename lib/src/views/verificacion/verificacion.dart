@@ -36,7 +36,7 @@ class _VerificacionViewState extends State<VerificacionView> {
     final prefs = AppPreferences();
     final double widthScreen = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Colors.blue,
       body: SafeArea(
         child: Column(
           children: [

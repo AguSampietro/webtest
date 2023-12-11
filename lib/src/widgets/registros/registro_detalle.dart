@@ -105,7 +105,7 @@ class _DetalleState extends State<_Detalle> {
     var _color = Colors.black54;
     bool canEdit = false;
     if (widget.registro.estado == RegistroType.CREADO) {
-      _color = Theme.of(context).primaryColor;
+      _color = Colors.blue;
       canEdit = true;
     } else if (widget.registro.estado == RegistroType.PROCESADO) {
       _color = Colors.green;
@@ -924,7 +924,7 @@ class _LoadingRegistro extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         LoadingSpinner(
-          color: Theme.of(context).primaryColor,
+          color: Colors.blue,
           text: 'Buscando registro de produccion',
           height: 3,
         ),

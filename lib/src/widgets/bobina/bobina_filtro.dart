@@ -103,10 +103,7 @@ class _LoadingBobina extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           LoadingSpinner(
-            color: Theme.of(context).primaryColor,
-            text: 'Buscando bobinas',
-            height: 3,
-          ),
+              color: Colors.blue, text: 'Buscando bobinas', height: 3),
         ],
       ),
     );

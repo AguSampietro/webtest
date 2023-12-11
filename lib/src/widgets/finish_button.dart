@@ -18,6 +18,7 @@ class FinishButton extends StatelessWidget {
         backgroundColor: MaterialStateProperty.all(
           ThemeApp.finishButtonColor,
         ),
+        foregroundColor: MaterialStateProperty.all(Colors.white),
         padding: MaterialStateProperty.all(
           const EdgeInsets.symmetric(
             horizontal: 30,
