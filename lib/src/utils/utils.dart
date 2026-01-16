@@ -6,7 +6,7 @@ class Utils {
 
   //static String api_url = 'https://atila.online/dev/hores/api/rest';
 
-  static String api_url = 'http://186.64.93.37:5658/atilasyncro/api/rest';
+  static String api_url = 'http://190.96.116.202:5658/atilasyncro/api/rest';
 
   static Border borderApp = Border.all(color: Colors.black45, width: 0.5);
 
